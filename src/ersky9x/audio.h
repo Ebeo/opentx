@@ -41,6 +41,34 @@
 #define BEEP_KEY_UP_FREQ   (BEEP_DEFAULT_FREQ+5)
 #define BEEP_KEY_DOWN_FREQ (BEEP_DEFAULT_FREQ-5)
 
+
+// --
+#define NUM_VOL_LEVELS	24
+
+extern volatile uint8_t Buzzer_count ;
+
+
+extern void start_sound( void ) ;
+extern void buzzer_on( void ) ;
+extern void buzzer_off( void ) ;
+extern void buzzer_sound( uint8_t time ) ;
+extern void set_frequency( uint32_t frequency ) ;
+extern void start_timer1( void ) ;
+extern void init_dac( void ) ;
+extern "C" void DAC_IRQHandler( void ) ;
+extern void end_sound( void ) ;
+extern void playTone( uint32_t frequency, uint32_t time ) ;
+extern uint32_t queueTone( uint32_t frequency, uint32_t time, uint32_t frequency_increment ) ;
+extern void tone_start( register uint32_t time ) ;
+extern void tone_stop( void ) ;
+extern void init_twi( void ) ;
+extern void set_volume( register uint8_t volume ) ;
+extern "C" void TWI0_IRQHandler (void) ;
+extern void audioDefevent( uint8_t e ) ;
+extern void sound_5ms( void ) ;
+// --
+
+
 class audioQueue
 {
   public:

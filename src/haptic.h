@@ -86,5 +86,9 @@ extern hapticQueue haptic;
 #define IS_HAPTIC_BUSY()     haptic.busy()
 #define HAPTIC_HEARTBEAT()   haptic.heartbeat()
 
+#if defined(PCBARM)
+extern void hapticOff(void) ;
+extern void hapticOn( uint32_t pwmPercent ) ;
+#endif
 
 #endif // haptic_h
