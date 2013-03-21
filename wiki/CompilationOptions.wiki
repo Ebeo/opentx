@@ -1,8 +1,8 @@
-#summary All open9x compilations options
+#summary All openTx compilations options
 
 = Introduction =
 
-We will soon run out of flash, and it will be difficult to enable all options in the same time. Here is the list of all options available in open9x so that you may choose the ones that you need / want.
+We will soon run out of flash, and it will be difficult to enable all options in the same time. Here is the list of all options available in openTx so that you may choose the ones that you need / want.
 
 To compile the firmware here is the syntax:
 {{{

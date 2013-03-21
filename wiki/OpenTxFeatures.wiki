@@ -1,7 +1,7 @@
-#summary List of Open9x Features.
+#summary List of openTx Features.
 #labels Featured
 
-= Features in open9x: =
+= Features in openTx: =
 
 ----
 *`*` * - New in last firmware
@@ -137,56 +137,56 @@
           # [LEFT+DOWN]  = min value
           # [UP+RIGHT]   = max value
           # [UP+DOWN]    = default value
- * Open9x is prepared for _*translations*_ in several languages (done for en, fr, it, se, cz, de)
+ * openTx is prepared for _*translations*_ in several languages (done for en, fr, it, se, cz, de)
 
-*[https://code.google.com/p/open9x/wiki/Open9x_Manual_FR French Wiki User Guide]*
+*[https://code.google.com/p/openTx/wiki/openTx_Manual_FR French Wiki User Guide]*
 
-*[http://9xforums.com/wiki/index.php/Open9x_user_guide 9xforums Wiki User Guide]*
+*[http://9xforums.com/wiki/index.php/openTx_user_guide 9xforums Wiki User Guide]*
 
-*[http://open9x.googlecode.com/files/Open9x%20Manual.pdf English User Guide Download]*
+*[http://openTx.googlecode.com/files/openTx%20Manual.pdf English User Guide Download]*
 
-*[http://open9x.googlecode.com/files/Open9X%20Manual%20CZ.pdf Czech User Guide Download]*
+*[http://openTx.googlecode.com/files/openTx%20Manual%20CZ.pdf Czech User Guide Download]*
 
-*[http://open9x.googlecode.com/files/Open9x%20Manual%20DE.pdf German User Guide Download]*
+*[http://openTx.googlecode.com/files/openTx%20Manual%20DE.pdf German User Guide Download]*
 
 || *MAIN SCREEN* views || || ||
 || _*Two timers*_ and _*THRt*_|| _*Statistics*_ with custom Timers 1 and 2 <br>by press LONG UP on previous screen|| _*Delays*_ <br> press UP on previous screen||
-|| https://open9x.googlecode.com/svn/wiki/images3/snapshot_01.png || https://open9x.googlecode.com/svn/wiki/images3/statistic.png ||https://open9x.googlecode.com/svn/wiki/images3/screenshot-1.png || 
+|| https://openTx.googlecode.com/svn/wiki/images3/snapshot_01.png || https://openTx.googlecode.com/svn/wiki/images3/statistic.png ||https://openTx.googlecode.com/svn/wiki/images3/screenshot-1.png || 
 || _*HW switches display*_<br>and _*shaded ID0/1/2 when TRN*_ || _*Custom switches*_ display<br>pressing LEFT/RIGHT on previous screen || _*Telemetry Bars*_ with _*thresholds*_ <br> press LONG DOWN for Telemetry screens||
-|| https://open9x.googlecode.com/svn/wiki/images3/snapshot_02.png || https://open9x.googlecode.com/svn/wiki/images3/snapshot_14.png || https://open9x.googlecode.com/svn/wiki/images3/snapshot_30.png ||
+|| https://openTx.googlecode.com/svn/wiki/images3/snapshot_02.png || https://openTx.googlecode.com/svn/wiki/images3/snapshot_14.png || https://openTx.googlecode.com/svn/wiki/images3/snapshot_30.png ||
 || _*Telemetry*_ A1/A2, min/max, Cells, RSSI  <br> UP/DOWN to switch telemetry screens || _*Telemetry*_ GPS view HMS or NMEA<br> elective in General Settings  || _*Custom Telemetry*_ view with Timers, <br> min/max values and more ||
-|| https://open9x.googlecode.com/svn/wiki/images3/snapshot_19.png || https://open9x.googlecode.com/svn/wiki/images3/snapshot_20.png || https://open9x.googlecode.com/svn/wiki/images3/snapshot_21.png ||
+|| https://openTx.googlecode.com/svn/wiki/images3/snapshot_19.png || https://openTx.googlecode.com/svn/wiki/images3/snapshot_20.png || https://openTx.googlecode.com/svn/wiki/images3/snapshot_21.png ||
 <br>
 
 || *GENERAL SETTINGS* || || ||
 || _*Radio Setup*_ by press LONG LEFT<br> Speaker, Haptic and other HW settings|| _*Gps*_ settings HMS or NMEA<br> and Time Zone||_*Backlight mode*_ OFF/Keys/Sticks/Both/ON<br> See also fuction switch "Backlight"||
-|| https://open9x.googlecode.com/svn/wiki/images3/snapshot_26.png || https://open9x.googlecode.com/svn/wiki/images3/snapshot_29.png || https://open9x.googlecode.com/svn/wiki/images3/snapshot_71.png ||
+|| https://openTx.googlecode.com/svn/wiki/images3/snapshot_26.png || https://openTx.googlecode.com/svn/wiki/images3/snapshot_29.png || https://openTx.googlecode.com/svn/wiki/images3/snapshot_71.png ||
 <br>
 
 || *MODEL SETTINGS* || || ||
 ||_*T-Trace*_ for statistics and THt/s/% source<br>Changing _*Up/Low case in model name*_<br>by pressing LONG LEFT/RIGHT  || Thr. and Startup _*Model based warnings*_<br>press LONG MENU on S-Warning<br>to store start-up switches position||  ||
-|| https://open9x.googlecode.com/svn/wiki/images3/snapshot_32.png || https://open9x.googlecode.com/svn/wiki/images3/ModelWarnings.png ||  ||
+|| https://openTx.googlecode.com/svn/wiki/images3/snapshot_32.png || https://openTx.googlecode.com/svn/wiki/images3/ModelWarnings.png ||  ||
 || _*Flight Phases*_ <br>with *Bold* active FP1 || _*Switch, selectable Trims, Fade*_ || ||
-|| https://open9x.googlecode.com/svn/wiki/images3/snapshot_03.png || https://open9x.googlecode.com/svn/wiki/images3/snapshot_04.png ||  ||
+|| https://openTx.googlecode.com/svn/wiki/images3/snapshot_03.png || https://openTx.googlecode.com/svn/wiki/images3/snapshot_04.png ||  ||
 ||_*DR/EXPO*_ for Rud/Ele/Thr/Ail<br>Depends on `FlightPhase`, Switch, Side<br>Applied is Weight, Expo, Curve|| _*Channel value 2 Offset*_ (Trim not cleared) <br>press MENU + LONG MENU on Offset|| _*Trims 2 Offset*_ (Trims are cleared)<br>press MENU on *Trims=>Offsets* ||
-|| https://open9x.googlecode.com/svn/wiki/images3/DrExpo.png || https://open9x.googlecode.com/svn/wiki/images3/snapshot_05.png || https://open9x.googlecode.com/svn/wiki/images3/snapshot_27.png ||
+|| https://openTx.googlecode.com/svn/wiki/images3/DrExpo.png || https://openTx.googlecode.com/svn/wiki/images3/snapshot_05.png || https://openTx.googlecode.com/svn/wiki/images3/snapshot_27.png ||
 || _*Curves*_ from 3 to 17 points and<br>_*Custom curves*_ with X and Y values<br>for each point (pt')|| _*Custom Switches*_ with _*Timers1/2,<br>Telemetry, PPM*_ and more sources.<br>*Bold* active CSx || _*Trainer, Trainer per Stick, Play sounds*_,<br>Channel _*Security*_ with value,<br>Channel _*Instant*_ value to _*Trims*_ ||
-|| https://open9x.googlecode.com/svn/wiki/images3/snapshot_06.png || https://open9x.googlecode.com/svn/wiki/images3/CustomSwitches_07.png || https://open9x.googlecode.com/svn/wiki/images3/snapshot_09.png ||
+|| https://openTx.googlecode.com/svn/wiki/images3/snapshot_06.png || https://openTx.googlecode.com/svn/wiki/images3/CustomSwitches_07.png || https://openTx.googlecode.com/svn/wiki/images3/snapshot_09.png ||
 || _*Thr trim*_ like a *_Slider:*_ in Mix select source <br>TrmR/TrmE/TrmT/TrmA || _*Mix Sources*_<br> *_Ail*_ is stick, *_AIL*_ is switch || _*How the FULL was changed*_<br>AIL or other HW/SW switch is 0 or 100 ||
-|| https://open9x.googlecode.com/svn/wiki/images3/snapshot_08.png || https://open9x.googlecode.com/svn/wiki/images3/MixesSources_12.png || https://open9x.googlecode.com/svn/wiki/images3/Full-1.png ||
+|| https://openTx.googlecode.com/svn/wiki/images3/snapshot_08.png || https://openTx.googlecode.com/svn/wiki/images3/MixesSources_12.png || https://openTx.googlecode.com/svn/wiki/images3/Full-1.png ||
 || _*Aileron Diffentiating*_ 1^st^ ability<br>Differentiated curve from -60 to +100|| _*Aileron Diffentiating*_ 1^st^ ability<br>CH1 with *100% Ail* and *curve1*|| _*Aileron Diffentiating*_ 1^st^ ability<br>CH5 with *-100% Ail* and *inverted curve1*||
-|| https://open9x.googlecode.com/svn/wiki/images3/AilDiff01.png || https://open9x.googlecode.com/svn/wiki/images3/AilDiff02.png || https://open9x.googlecode.com/svn/wiki/images3/AilDiff03.png ||
+|| https://openTx.googlecode.com/svn/wiki/images3/AilDiff01.png || https://openTx.googlecode.com/svn/wiki/images3/AilDiff02.png || https://openTx.googlecode.com/svn/wiki/images3/AilDiff03.png ||
 || _*Aileron Diffentiating in MIX*_ 2^nd^ ability<br>CH1 with *100% Ail* and *40% Differential*|| _*Aileron Diffentiating in MIX*_ 2^nd^ ability<br>CH6 with *100% Ail* and *-40% Differential*||  ||
-|| https://open9x.googlecode.com/svn/wiki/images3/AilDiff04.png || https://open9x.googlecode.com/svn/wiki/images3/AilDiff05.png ||  ||
+|| https://openTx.googlecode.com/svn/wiki/images3/AilDiff04.png || https://openTx.googlecode.com/svn/wiki/images3/AilDiff05.png ||  ||
 
 <p align=Center>*TELEMETRY SETUP*</p>
 
 || _*Telemetry*_ A1/A2 settings <br>first alarm in A1/A2 is _*threshold*_ in bars|| _*Telemetry*_ RSSI and Hub <br>first alarm in RSSI is _*threshold*_ in bars|| _*Custom Telemetry*_ with Timers, <br> _*min/max_* values and more||
-|| https://open9x.googlecode.com/svn/wiki/images3/snapshot_22.png || https://open9x.googlecode.com/svn/wiki/images3/snapshot_23.png || https://open9x.googlecode.com/svn/wiki/images3/snapshot_24.png ||
+|| https://openTx.googlecode.com/svn/wiki/images3/snapshot_22.png || https://openTx.googlecode.com/svn/wiki/images3/snapshot_23.png || https://openTx.googlecode.com/svn/wiki/images3/snapshot_24.png ||
 || _*Telemetry Bars*_ || Set Custom Switch threshold <br> for Telemetry Bar (CS4=T1>70°) || And then set Function SW (CS4)<br>for Telemetry Bar threshold||
-|| https://open9x.googlecode.com/svn/wiki/images3/snapshot_25.png || https://open9x.googlecode.com/svn/wiki/images3/snapshot_28.png || https://open9x.googlecode.com/svn/wiki/images3/snapshot_31.png ||
+|| https://openTx.googlecode.com/svn/wiki/images3/snapshot_25.png || https://openTx.googlecode.com/svn/wiki/images3/snapshot_28.png || https://openTx.googlecode.com/svn/wiki/images3/snapshot_31.png ||
 
 <wiki:comment>
 || _*What*_ || _*What*_ || _*What*_ ||
-|| https://open9x.googlecode.com/svn/wiki/images3/statistic.png || https://open9x.googlecode.com/svn/wiki/images3/statistic.png || https://open9x.googlecode.com/svn/wiki/images3/statistic.png ||
+|| https://openTx.googlecode.com/svn/wiki/images3/statistic.png || https://openTx.googlecode.com/svn/wiki/images3/statistic.png || https://openTx.googlecode.com/svn/wiki/images3/statistic.png ||
 </wiki:comment>

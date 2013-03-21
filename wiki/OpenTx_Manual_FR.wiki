@@ -1,4 +1,4 @@
-#summary Manuel d'Open9x en français
+#summary Manuel d'openTx en français
 #labels Featured
 
 <wiki:comment>
@@ -9,14 +9,14 @@ TODO:
  * Liste des sources, éléments de télémétrie etc 
 </wiki:comment>
 <wiki:comment>Marche pas encore....
-[http://open9x.googlecode.com/svn/wiki/gadgets/printwikis.html?_gnpi_subversion="svn"&_gnpi_wikilist="Open9x_Manual_FR" Version imprimable]
+[http://openTx.googlecode.com/svn/wiki/gadgets/printwikis.html?_gnpi_subversion="svn"&_gnpi_wikilist="openTx_Manual_FR" Version imprimable]
 </wiki:comment>
 
-= Open9x - Manuel d'utilisation =
+= openTx - Manuel d'utilisation =
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/9x_header.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/9x_header.png
 
-Manuel écrit par Franck Aguerre sur la base d'open9x r1568 / Nov. 2012
+Manuel écrit par Franck Aguerre sur la base d'openTx r1568 / Nov. 2012
 
 == Table des matières ==
 
@@ -27,7 +27,7 @@ Manuel écrit par Franck Aguerre sur la base d'open9x r1568 / Nov. 2012
 
 CE LOGICIEL EST FOURNI « TEL QUEL » SANS GARANTIE D'AUCUNE SORTE, EXPLICITE OU IMPLICITE, Y COMPRIS ET SANS LIMITATION, LES GARANTIES DE VALEUR MARCHANDE OU D'ADAPTATION À UN USAGE PARTICULIER. VOUS PORTEZ LA TOTALITÉ DU RISQUE DE QUALITÉ ET DE PERFORMANCE DU PROGRAMME. VOUS PRENEZ À VOTRE CHARGE LE COÛT DE TOUTE INTERVENTION, RÉPARATION OU CORRECTION AU CAS OÙ LE PROGRAMME S'AVÉRERAIT DÉFECTUEUX.
 
-[http://code.google.com/p/open9x/wiki/Open9x_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
+[http://code.google.com/p/openTx/wiki/openTx_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
 
 == Introduction ==
 
@@ -35,7 +35,7 @@ La radio IMAX/FLYSKY/TURNIGY/EURGLE 9x est un ensemble d'origine chinoise à mic
 
 Hormis une qualité de réalisation plus qu'honorable et un tarif particulièrement abordable, moins d'une centaine d'euros, sa particularité est d'utiliser une architecture électronique suffisamment simple pour permettre sa rétro-conception. De plus, le micro-contrôleur utilisé (Atmega64A) est flashable (re-programmable), ce qui rend possible le remplacement du logiciel (le firmware, ou FW) d'origine, peu réussi. Il ne restait plus qu'à attendre qu'une personne ayant les compétences nécessaires fasse ce constat pour que naisse le premier firmware alternatif pour 9x.
 
-C'est Thomas Husterer qui fit ce premier pas en avril 2010 avec son logiciel th9x en open-source. Autrement plus élégant, souple et puissant que le logiciel d'origine, celui-ci a entraîné de nouveaux développeurs dans son sillage, toujours dans le principe open-source, avec à chaque fois des améliorations notables (dans l'ordre : er9x par Erez Raviv, gruvin9x par Bryan Rentoul, ersky9x par Mike Blandford, open9x par Bertrand Songis) y compris au niveau matériel : cartes de programmation, cartes mères plus puissantes, vibreur ou sortie audio, adaptateur SD, encodeurs pour navigation à la Multiplex, télémesure, etc.
+C'est Thomas Husterer qui fit ce premier pas en avril 2010 avec son logiciel th9x en open-source. Autrement plus élégant, souple et puissant que le logiciel d'origine, celui-ci a entraîné de nouveaux développeurs dans son sillage, toujours dans le principe open-source, avec à chaque fois des améliorations notables (dans l'ordre : er9x par Erez Raviv, gruvin9x par Bryan Rentoul, ersky9x par Mike Blandford, openTx par Bertrand Songis) y compris au niveau matériel : cartes de programmation, cartes mères plus puissantes, vibreur ou sortie audio, adaptateur SD, encodeurs pour navigation à la Multiplex, télémesure, etc.
 
 Tous ces projets sont hébergés ici :
  * th9x : http://code.google.com/p/th9x/
@@ -44,22 +44,22 @@ Tous ces projets sont hébergés ici :
  * ersky9x : http://code.google.com/p/ersky9x/
 Il y a aussi, avec une logique différente, Radioclone de Rafal Tomczak : http://radioclone.org/
 
-open9x (http://code.google.com/p/open9x/) représente la dernière évolution et aussi, à mon sens, l'arrivée à maturité de ces projets en offrant plus de fonctionnalités et de souplesse de programmation qu'aucune radio commerciale n'est en mesure d'offrir, indépendamment de sa gratuité ou du faible coût d'achat de l'émetteur.
-open9x est épaulé par le logiciel companion9x (http://code.google.com/p/companion9x/, pour Windows, Linux et Mac) qui permet de mettre à jour le FW, mais aussi de sauvegarder, programmer et même simuler les programmes de modèles sur, raffinement s'il en est, une radio virtuelle.
+openTx (http://code.google.com/p/openTx/) représente la dernière évolution et aussi, à mon sens, l'arrivée à maturité de ces projets en offrant plus de fonctionnalités et de souplesse de programmation qu'aucune radio commerciale n'est en mesure d'offrir, indépendamment de sa gratuité ou du faible coût d'achat de l'émetteur.
+openTx est épaulé par le logiciel companion9x (http://code.google.com/p/companion9x/, pour Windows, Linux et Mac) qui permet de mettre à jour le FW, mais aussi de sauvegarder, programmer et même simuler les programmes de modèles sur, raffinement s'il en est, une radio virtuelle.
 
 A noter aussi qu'étant donnée la simplicité de l'architecture électronique de la 9x, il est tout à fait envisageable de réaliser sa propre carte mère... et même sa radio autour !
  * Le schéma d'origine (attention, il s'agit de la V1, quelque peu différente de la V2 actuelle) : http://9xforums.com/forum/viewtopic.php?f=44&t=199
  * Un exemple de circuit perso : http://www.rcgroups.com/forums/showthread.php?t=1631369
 
 Il existe aussi deux cartes mères d'upgrade, adaptables sur la 9x ou sur un émetteur perso : http://gruvin9x.com/shop/ et http://www.ersky9x.net/
-Outre des capacités mémoire et une puissance de calcul nettement plus élevées que celles de la carte mère d'origine, ces cartes mère offrent de nouvelles possibilités : gestion de carte SD, encodeurs rotatifs, enregistrement des chronos à l'extinction, etc. Ces 2 cartes sont également supportées par open9x, avec des fonctionnalités supplémentaires.
+Outre des capacités mémoire et une puissance de calcul nettement plus élevées que celles de la carte mère d'origine, ces cartes mère offrent de nouvelles possibilités : gestion de carte SD, encodeurs rotatifs, enregistrement des chronos à l'extinction, etc. Ces 2 cartes sont également supportées par openTx, avec des fonctionnalités supplémentaires.
 
 === Le principe Open Source ===
 
-open9x et companion9x sont des projets Open Source sous licence GNU v2. Malgré la somme de travail qu'ils représentent, ils sont donc libres de téléchargement, consultation, redistribution, modification (aux risques et périls de l'utilisateur...) et d'utilisation, sous réserve de respecter les termes de la licence GNU v2 notamment en cas de réutilisation du code.
+openTx et companion9x sont des projets Open Source sous licence GNU v2. Malgré la somme de travail qu'ils représentent, ils sont donc libres de téléchargement, consultation, redistribution, modification (aux risques et périls de l'utilisateur...) et d'utilisation, sous réserve de respecter les termes de la licence GNU v2 notamment en cas de réutilisation du code.
 
 Il est possible de contribuer au développement de ces projets en remontant des bugs ou des propositions de nouvelles fonctionnalités sur la page ad-hoc du projet, en ouvrant un « issue » :
- * http://code.google.com/p/open9x/issues/list
+ * http://code.google.com/p/openTx/issues/list
  * http://code.google.com/p/companion9x/issues/list
 
 A cet effet, il est important de :
@@ -70,17 +70,17 @@ A cet effet, il est important de :
 Un forum dédié permet aussi d'échanger sur le sujet :
 http://9xforums.com/forum/viewforum.php?f=45
 
-=== Modifier la 9x pour open9x ===
+=== Modifier la 9x pour openTx ===
 
-Un document décrivant les différentes étapes de modification de la 9x est proposé dans la rubrique téléchargement d'open9x :
-http://code.google.com/p/open9x/downloads/list
+Un document décrivant les différentes étapes de modification de la 9x est proposé dans la rubrique téléchargement d'openTx :
+http://code.google.com/p/openTx/downloads/list
 
 Celui-ci n'est valable que pour la carte mère d'origine, les cartes d'upgrade ayant déjà leur propre interfaces de reprogrammation.
 
-=== Choisir sa "version" d'open9x ===
+=== Choisir sa "version" d'openTx ===
 
-Une fois sa radio modifiée et prête à recevoir un nouveau firmware, il est temps de se procurer une copie d'open9x. 
-Pour ce faire, télécharger [http://code.google.com/p/companion9x/ companion9x], le logiciel multiplateformes Windows / Mac / Linux qui complémente open9x. Après l'installation, ouvrir la boîte de dialogue des préférences. On y trouvera une liste déroulante contenant les différents firmwares supportés (companion9x permet également la gestion des autres firmwares alternatifs courants pour la 9x), et lorsque le firmware sélectionné est open9x, une liste de cases à cocher pour différentes options. 
+Une fois sa radio modifiée et prête à recevoir un nouveau firmware, il est temps de se procurer une copie d'openTx. 
+Pour ce faire, télécharger [http://code.google.com/p/companion9x/ companion9x], le logiciel multiplateformes Windows / Mac / Linux qui complémente openTx. Après l'installation, ouvrir la boîte de dialogue des préférences. On y trouvera une liste déroulante contenant les différents firmwares supportés (companion9x permet également la gestion des autres firmwares alternatifs courants pour la 9x), et lorsque le firmware sélectionné est openTx, une liste de cases à cocher pour différentes options. 
 
 En effet, pour des raisons techniques (la mémoire disponible dans le processeur de la 9x étant limitée), il n'est plus possible sur la carte d'origine d'inclure à la fois toutes les nouvelles fonctionnalités développées récemment. Un système d'options a ainsi été mis en place, permettant à chacun de générer sa propre version de firmware en fonction des fonctionnalités qui lui seront utiles.
 
@@ -116,7 +116,7 @@ Il est un peu prématuré de parler de ces options en détail à ce stade, mais 
 Les points importants pour le choix initial d'un firmware sont les suivants:
  * *HELI*: Bienvenu si l'on prévoit d'utiliser la radio pour commander des modèles d'hélicoptères.
  * *FRSKY*: A choisir en fonction des modifications matérielles effectuées. Si les inters THR et AIL apparaissent toujours actifs sur l'écran de la radio, c'est en général que cette option ne correspond pas au matériel.
- * *TEMPLATES*: Utile pour les débutants qui souhaitent des exemples de programmation sur la radio. Cette option occupant un espace mémoire considérable, et les mêmes gabarits étant disponibles dans companion9x, elle peut être désactivée avec peu de désagrément une fois qu'on a compris le fonctionnement d'open9x.
+ * *TEMPLATES*: Utile pour les débutants qui souhaitent des exemples de programmation sur la radio. Cette option occupant un espace mémoire considérable, et les mêmes gabarits étant disponibles dans companion9x, elle peut être désactivée avec peu de désagrément une fois qu'on a compris le fonctionnement d'openTx.
  * *AUDIO*, *VOICE*, *HAPTIC*, *SP22*, *JETI*, *ARDUPILOT*, *NMEA*: Egalement à choisir en fonction des modifications matérielles.
  * *DSM2*: A choisir si l'on prévoit d'utiliser la 9x pour commander des modèles équipés de récepteurs Spektrum, et de construire le module approprié. 
  * *PPMCA*, *SYMLIMITS*, *GVARS*: Utiles principalement pour des modèles complexes. Les modélistes débutants peuvent les laisser désactivées au début pour éviter trop de confusion. 
@@ -129,14 +129,14 @@ Le firmware peut ensuite être flashé en utilisant Flasher->Ecrire la mémoire 
 
 === Vue de l'émetteur et nomenclature ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/open9x_identification_organes_CMD_9x.jpg
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/openTx_identification_organes_CMD_9x.jpg
 
 || Entrées proportionnelles: || Entrées digitales (interrupteurs): ||
 || 1. Gaz (Thr) : manche de gaz<br> 2. Prf (Ele) : manche de profondeur<br> 3. Ail (Ail) : manche d'ailerons<br> 4. Dir (Rud) : manche de dérive<br> 5. P1/P2/P3 : potentiomètres<br> 6. Trims de manche (impulsion par impulsion ou continu)|| 1. THR<br> 2. RUD<br> 3. ELE<br> 4. ID0/1/2 (3-POS)<br> 5. AIL<br> 6. GEA<br> 7. TRN ||
 
-Tous ces organes sont librement affectables dans open9x, y compris les trims digitaux qui peuvent être utilisés indépendamment des manches auxquels ils se rapportent. 
+Tous ces organes sont librement affectables dans openTx, y compris les trims digitaux qui peuvent être utilisés indépendamment des manches auxquels ils se rapportent. 
 
-Pour tous les interrupteurs, la position « 0 » (inactif, par opposition à actif = 1) est « poussé vers l'avant ». Ils peuvent être utilisés en inverse (activation en position 0) quand leur désignation est précédée du symbole « ! », ce qui signifie dans open9x un « non » logique. Ainsi lorsque lon choisit l'interrupteur ELE, « ELE » indique le fonctionnement normal et « !ELE » indique un fonctionnement inversé. L'option de compilation *AUTOSWITCH* en simplifie l'utilisation, avec une reconnaissance automatique des interrupteurs lors de sa manipulation en phase d'affectation.
+Pour tous les interrupteurs, la position « 0 » (inactif, par opposition à actif = 1) est « poussé vers l'avant ». Ils peuvent être utilisés en inverse (activation en position 0) quand leur désignation est précédée du symbole « ! », ce qui signifie dans openTx un « non » logique. Ainsi lorsque lon choisit l'interrupteur ELE, « ELE » indique le fonctionnement normal et « !ELE » indique un fonctionnement inversé. L'option de compilation *AUTOSWITCH* en simplifie l'utilisation, avec une reconnaissance automatique des interrupteurs lors de sa manipulation en phase d'affectation.
 
 Une désignation d'interrupteur finissant par « m » (ex : TRNm) indique un interrupteur momentané (à « bascule »), associé à l'interrupteur physique du même nom : quand ce dernier est actionné, le premier s'active pendant un court instant.
 
@@ -180,11 +180,11 @@ Si l'option *DBLKEYS* est activée, les raccourcis clavier suivants sont disponi
  * *[**DOWN]* + *[**LEFT]* : met la valeur à -100%.
  * *[**UP]* + *[**DOWN]*: met la valeur à 0.
 
-=== Les écrans d'open9x ===
+=== Les écrans d'openTx ===
 
-Voici un aperçu de la structuration de navigation des menus d'open9x. A noter que les numéros d'écran (en haut à droite) peuvent changer en fonction des options choisies. 
+Voici un aperçu de la structuration de navigation des menus d'openTx. A noter que les numéros d'écran (en haut à droite) peuvent changer en fonction des options choisies. 
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/open9x_synoptique.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/openTx_synoptique.png
 
  * L'écran CONF. HELI n'apparaîtra que si l'option *HELI* est activée. 
  * L'écran PHASES DE VOL n'apparaîtra pas si l'option *NOFP* est sélectionnée.
@@ -196,25 +196,25 @@ https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/open9x_synoptique
 
 === Comment ça marche ===
 
-Tout d'abord, voici un premier aperçu du fonctionnement d'open9x au travers du diagramme de cheminement des ordres depuis les organes de commande et de commutation jusqu'aux servos.
+Tout d'abord, voici un premier aperçu du fonctionnement d'openTx au travers du diagramme de cheminement des ordres depuis les organes de commande et de commutation jusqu'aux servos.
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/open9x_cheminement_ordres.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/openTx_cheminement_ordres.png
 
-Ce diagramme est volontairement simplifié aux principaux cheminements des ordres, les choses peuvent être plus complexes dans le détail. Par exemple, les [http://code.google.com/p/open9x/wiki/Open9x_Manual_FR#Fonctions_personnalis%C3%A9es_(10/12) fonctions personnalisées], non représentées ici, peuvent interagir avec les [http://code.google.com/p/open9x/wiki/Open9x_Manual_FR#Courbes_et_variables_globales_(8/12) variables globales] pour les réglages en vol, ou avec les [http://code.google.com/p/open9x/wiki/Open9x_Manual_FR#Interrupteurs_personnalisables_(9/12) interrupteurs personnalisés]. De même, ces derniers peuvent utiliser des informations issues de la télémesure, ou être conditionnés à des interrupteurs physiques.
+Ce diagramme est volontairement simplifié aux principaux cheminements des ordres, les choses peuvent être plus complexes dans le détail. Par exemple, les [http://code.google.com/p/openTx/wiki/openTx_Manual_FR#Fonctions_personnalis%C3%A9es_(10/12) fonctions personnalisées], non représentées ici, peuvent interagir avec les [http://code.google.com/p/openTx/wiki/openTx_Manual_FR#Courbes_et_variables_globales_(8/12) variables globales] pour les réglages en vol, ou avec les [http://code.google.com/p/openTx/wiki/openTx_Manual_FR#Interrupteurs_personnalisables_(9/12) interrupteurs personnalisés]. De même, ces derniers peuvent utiliser des informations issues de la télémesure, ou être conditionnés à des interrupteurs physiques.
 
 Les entrées analogiques (manches et potentiomètres) ne sont pas utilisées telles quelles, mais après un filtre de calibration garantissant des courses de -100% à +100% de butée à butée (avec 0% pour point milieu). Pour les manches, ces entrées calibrées peuvent ensuite être directement utilisées dans le mixeur ou bien après application d'un formatage (dual-rate, expo, mais aussi courbe).
 
 Les trims digitaux fonctionnent indépendamment des manches auxquels ils se rapportent, ce qui permet au besoin de les différencier par phase de vol (si activées) ou même de les utiliser comme entrée de mixeur.
 
-Le Mixeur est l'articulation majeure d'open9x, sa fonction consistant à mettre en relation les différents organes de commande ou de commutation (= entrées) avec les sorties (= voies =  servos). Cette mise en relation peut être tout aussi bien basique (un manche = une voie) que complexe (plusieurs entrées sur une voie donnée, avec différenciation par phase de vol), suivant le besoin.
+Le Mixeur est l'articulation majeure d'openTx, sa fonction consistant à mettre en relation les différents organes de commande ou de commutation (= entrées) avec les sorties (= voies =  servos). Cette mise en relation peut être tout aussi bien basique (un manche = une voie) que complexe (plusieurs entrées sur une voie donnée, avec différenciation par phase de vol), suivant le besoin.
 
 Les ordres issus du Mixeur ne sont pas directement dirigés vers les servos, mais passent d'abord un formatage de sortie (Limites) qui régule l'ordre envoyé à chaque servo en le décalant (sub-trim), en l'inversant (sens) ou en écrêtant tout dépassement (limite). Puis finalement les voies sont encodées et envoyées aux servos via le couple module HF / récepteur.
 
-[http://code.google.com/p/open9x/wiki/Open9x_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
+[http://code.google.com/p/openTx/wiki/openTx_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
 
 == Écran principal ==
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/01_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/01_1.png
 
 L'écran principal est découpé en 2 parties. La partie supérieure comporte les éléments suivants :
  * Le nom du modèle.
@@ -225,25 +225,25 @@ L'écran principal est découpé en 2 parties. La partie supérieure comporte le
 
 La partie inférieure comporte quatre écrans accessibles par *[**UP]* / *[**DOWN]* :
 
-|| Visualisation des 16 sorties du récepteur sur deux pages<br>(via *[**LEFT]* / *[**RIGHT]*) || https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/01_1.png ||
-|| Valeurs numériques en % des 16 sorties du récepteur sur deux pages<br>(via *[**LEFT]* / *[**RIGHT]*) || https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/01_2.png ||
-|| Position des manches et état des interrupteurs sur deux pages<br>(via *[**LEFT]* / *[**RIGHT]*): d'abord les entrées physiques (manches, pots, inters)<br>puis les interrupteurs virtuels (SW1..SWC) || https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/01_4.png<br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/01_5.png ||
-|| Chrono 2 (paramétrage dans [http://code.google.com/p/open9x/wiki/Open9x_Manual_FR?ts=1352728638&updated=Open9x_Manual_FR#Configuration_du_mod%C3%A8le_(2/12) Configuration du modèle (2/12)]).<br>*[**EXIT]* le remet à zéro || https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/01_3.png ||
+|| Visualisation des 16 sorties du récepteur sur deux pages<br>(via *[**LEFT]* / *[**RIGHT]*) || https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/01_1.png ||
+|| Valeurs numériques en % des 16 sorties du récepteur sur deux pages<br>(via *[**LEFT]* / *[**RIGHT]*) || https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/01_2.png ||
+|| Position des manches et état des interrupteurs sur deux pages<br>(via *[**LEFT]* / *[**RIGHT]*): d'abord les entrées physiques (manches, pots, inters)<br>puis les interrupteurs virtuels (SW1..SWC) || https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/01_4.png<br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/01_5.png ||
+|| Chrono 2 (paramétrage dans [http://code.google.com/p/openTx/wiki/openTx_Manual_FR?ts=1352728638&updated=openTx_Manual_FR#Configuration_du_mod%C3%A8le_(2/12) Configuration du modèle (2/12)]).<br>*[**EXIT]* le remet à zéro || https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/01_3.png ||
 
 Dans la vue principale, un appui sur *[**EXIT]* réinitialise les compteurs de la vue courante tandis que *[**EXIT LONG]* réinitialise tous les compteurs ainsi que les données de télémesure.
 
-[http://code.google.com/p/open9x/wiki/Open9x_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
+[http://code.google.com/p/openTx/wiki/openTx_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
 
 == Écrans de statistiques ==
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/02_1.png  https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/02_2.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/02_1.png  https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/02_2.png
 
 Depuis l'écran principal, presser *[**UP LONG]* donne accès aux écrans de statistiques.
 
 Le premier affiche les différents compteurs :
  * Temps total d'allumage de la radio
- * Chrono 1 (paramétrage dans [http://code.google.com/p/open9x/wiki/Open9x_Manual_FR?ts=1352728638&updated=Open9x_Manual_FR#Configuration_du_mod%C3%A8le_(2/12) Configuration du modèle (2/12)])
- * Chrono 2 (paramétrage dans [http://code.google.com/p/open9x/wiki/Open9x_Manual_FR?ts=1352728638&updated=Open9x_Manual_FR#Configuration_du_mod%C3%A8le_(2/12) Configuration du modèle (2/12)])
+ * Chrono 1 (paramétrage dans [http://code.google.com/p/openTx/wiki/openTx_Manual_FR?ts=1352728638&updated=openTx_Manual_FR#Configuration_du_mod%C3%A8le_(2/12) Configuration du modèle (2/12)])
+ * Chrono 2 (paramétrage dans [http://code.google.com/p/openTx/wiki/openTx_Manual_FR?ts=1352728638&updated=openTx_Manual_FR#Configuration_du_mod%C3%A8le_(2/12) Configuration du modèle (2/12)])
  * Durée d'utilisation moteur absolue (en minutes / secondes)
  * Durée d'utilisation moteur relativement à la durée totale d'allumage de la radio (en %)
 
@@ -253,7 +253,7 @@ Le second montre des compteurs internes de l'émetteur, « tmain » représent
 
 Tous ces compteurs peuvent être remis à zéro par un appui sur *[**MENU]*.
 
-[http://code.google.com/p/open9x/wiki/Open9x_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
+[http://code.google.com/p/openTx/wiki/openTx_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
 
 == Paramètres généraux ==
 
@@ -269,7 +269,7 @@ Les écrans de ce menu sont les suivants :
 
 === Réglages Radio (1/6) ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/04_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/04_1.png
 
 Cet écran permet de régler les paramètres généraux de l'émetteur :
  # Son / mode :
@@ -313,7 +313,7 @@ Cet écran permet de régler les paramètres généraux de l'émetteur :
 
 === Ecolage (2/6) ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/05_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/05_1.png
 
 Cet écran permet d'affecter les voies d'une radio « élève » (signal PPM, via la prise écolage) aux manches de la radio « maître » et de calibrer leur neutre.
  # Mode : 
@@ -330,12 +330,12 @@ Le multiplicateur est un gain global appliqué à tous les ordres issus de l'ém
 *NOTA* 
  * L'émetteur élève doit être non-programmable ou doté d'une programmation neutre (voie = manche).
  * Cet écran ne s'applique qu'aux 4 voies de commande principales. Les autres voies provenant de l'émetteur élève (jusqu'à 8) sont toutefois disponibles, et peuvent être utilisées au travers des mixeurs.
- * L'interrupteur d'activation de l'écolage se définit dans la programmation du modèle (cf. paragraphe [http://code.google.com/p/open9x/wiki/Open9x_Manual_FR#Fonctions_personnalis%C3%A9es_(10/12) Fonctions personnalisées (10/12)]).
- * Le fonctionnement général de la prise d'écolage est identique aux radios JR / Graupner / Spektrum, c'est-à-dire que la prise est une entrée (maître) lorsque linterrupteur de la radio est sur ON, et en sortie (élève) lorsque l'interrupteur est sur OFF. Dans ce deuxième cas, la radio s'allume toute seule à l'insertion du connecteur, et l'écran ci-dessus affiche "Elève". Des exceptions sont néanmoins possibles lors du choix de protocoles spéciaux (cf. paragraphe [http://code.google.com/p/open9x/wiki/Open9x_Manual_FR#Configuration_du_mod%C3%A8le_(2/12) Configuration du modèle (2/12)]).
+ * L'interrupteur d'activation de l'écolage se définit dans la programmation du modèle (cf. paragraphe [http://code.google.com/p/openTx/wiki/openTx_Manual_FR#Fonctions_personnalis%C3%A9es_(10/12) Fonctions personnalisées (10/12)]).
+ * Le fonctionnement général de la prise d'écolage est identique aux radios JR / Graupner / Spektrum, c'est-à-dire que la prise est une entrée (maître) lorsque linterrupteur de la radio est sur ON, et en sortie (élève) lorsque l'interrupteur est sur OFF. Dans ce deuxième cas, la radio s'allume toute seule à l'insertion du connecteur, et l'écran ci-dessus affiche "Elève". Des exceptions sont néanmoins possibles lors du choix de protocoles spéciaux (cf. paragraphe [http://code.google.com/p/openTx/wiki/openTx_Manual_FR#Configuration_du_mod%C3%A8le_(2/12) Configuration du modèle (2/12)]).
 
 === Info version (3/6) ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/06_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/06_1.png
 
 Cet écran affiche la version du firmware utilisé :
  * SVN : La révision SVN du firmware. C'est cette ligne qui représente la version utilisée, à mentionner en cas de questions ou de rapport de bug.
@@ -345,13 +345,13 @@ Cet écran affiche la version du firmware utilisé :
 
 === Diagnostics (4/6) ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/07_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/07_1.png
 
 Cet écran permet de vérifier le bon fonctionnement des boutons, interrupteurs et trims en affichant leur état (on = passage de 0 à 1 et mise en surbrillance).
 
 === Entrées analogiques (5/6) ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/08_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/08_1.png
 
 Cet écran affiche les valeurs brutes des entrées analogiques en hexadécimal, de 0 à 0x03FF (0..1023), ainsi que la valeur en % après calibration. Les entrées sont les suivantes :
  * A1..A4 : manches
@@ -361,18 +361,18 @@ Il est aussi possible d'étalonner la mesure de la tension batterie : *[**DOWN]*
 
 === Calibration des entrées analogiques (6/6) ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/09_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/09_1.png
 
 Cet écran permet de calibrer les entrées analogiques A1  A7.
 
 Pour effectuer la calibration :
- # Presser *[**MENU]*.<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/09_2.png
+ # Presser *[**MENU]*.<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/09_2.png
  # Mettre les manches et les potentiomètres au neutre.
- # Presser *[**MENU]*.<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/09_3.png
+ # Presser *[**MENU]*.<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/09_3.png
  # Bouger les manches et les potentiomètres de butée à butée (sans forcer...).
  # Presser *[**MENU]*, les valeurs sont sauvegardées.
 
-[http://code.google.com/p/open9x/wiki/Open9x_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
+[http://code.google.com/p/openTx/wiki/openTx_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
 
 == Réglages des modèles ==
 
@@ -392,7 +392,7 @@ Depuis l'écran principal, presser *[**RIGHT LONG]* donne accès au menu de sél
 
 === Mémoires des modèles (1/12) ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/10_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/10_1.png
 
 Cet écran liste les modèles déjà existants (jusqu'à 16), et permet de charger, dupliquer, déplacer ou effacer un modèle existant ou d'en créer un nouveau.
 
@@ -405,39 +405,39 @@ Un appui sur *[**MENU LONG]* permet le chargement du modèle sélectionné ou la
 
 ==== Pour créer un modèle : ====
 
- * Se positionner sur la ligne vierge à utiliser avec les touches *[**UP]* / *[**DOWN]*.<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/10_2.png
- * Appuyer sur la touche *[**MENU LONG]* pour demander la création.<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/10_3.png
- * Le nouveau modèle est automatiquement chargé, son nom par défaut (modifiable) étant attribué sous la forme « MODELE » + numéro de ligne.<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/10_4.png
+ * Se positionner sur la ligne vierge à utiliser avec les touches *[**UP]* / *[**DOWN]*.<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/10_2.png
+ * Appuyer sur la touche *[**MENU LONG]* pour demander la création.<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/10_3.png
+ * Le nouveau modèle est automatiquement chargé, son nom par défaut (modifiable) étant attribué sous la forme « MODELE » + numéro de ligne.<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/10_4.png
 
 ==== Pour supprimer un modèle : ====
 
  * Se positionner sur la ligne à supprimer avec les touches *[**UP]* / *[**DOWN]*.
- * Appuyer sur la touche *[**MENU]* pour sélectionner la ligne (elle passe en surbrillance).<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/13_1.png
- * Appuyer sur la touche *[**EXIT LONG]* pour demander la suppression (non autorisée, par sécurité, sur le modèle en cours).<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/13_2.png
+ * Appuyer sur la touche *[**MENU]* pour sélectionner la ligne (elle passe en surbrillance).<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/13_1.png
+ * Appuyer sur la touche *[**EXIT LONG]* pour demander la suppression (non autorisée, par sécurité, sur le modèle en cours).<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/13_2.png
  * Confirmer avec la touche *[**MENU]* ou annuler avec la touche *[**EXIT]*.
 
 ==== Pour dupliquer un modèle : ====
 
  * Se positionner sur la ligne à copier avec les touches *[**UP]* / *[**DOWN]*.
- * Appuyer sur la touche *[**MENU]* pour sélectionner la ligne (elle passe en surbrillance).<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/11_1.png
- * Appuyer sur *[**UP]* ou *[**DOWN]* pour la dupliquer vers le haut ou vers le bas.<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/11_2.png
- * Une fois l'emplacement de destination choisi, appuyer sur *[**MENU]* pour confirmer ou *[**EXIT]* pour annuler l'opération.<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/11_3.png
+ * Appuyer sur la touche *[**MENU]* pour sélectionner la ligne (elle passe en surbrillance).<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/11_1.png
+ * Appuyer sur *[**UP]* ou *[**DOWN]* pour la dupliquer vers le haut ou vers le bas.<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/11_2.png
+ * Une fois l'emplacement de destination choisi, appuyer sur *[**MENU]* pour confirmer ou *[**EXIT]* pour annuler l'opération.<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/11_3.png
 
 ==== Pour déplacer un modèle : ====
 
  * Se positionner sur la ligne à copier avec les touches *[**UP]* / *[**DOWN]*.
- * Appuyer deux fois sur la touche *[**MENU]* pour sélectionner la ligne (elle passe en surbrillance entourée d'un pointillé).<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/12_1.png
- * Appuyer sur *[**UP]* ou *[**DOWN]* la déplacer vers le haut ou vers le bas.<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/12_2.png
- * Une fois l'emplacement de destination choisi, appuyer sur *[**MENU]* pour confirmer ou *[**EXIT]* pour annuler l'opération.<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/12_3.png
+ * Appuyer deux fois sur la touche *[**MENU]* pour sélectionner la ligne (elle passe en surbrillance entourée d'un pointillé).<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/12_1.png
+ * Appuyer sur *[**UP]* ou *[**DOWN]* la déplacer vers le haut ou vers le bas.<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/12_2.png
+ * Une fois l'emplacement de destination choisi, appuyer sur *[**MENU]* pour confirmer ou *[**EXIT]* pour annuler l'opération.<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/12_3.png
 
 *NOTA*
 
-Les fonctions créer / effacer / déplacer / dupliquer des lignes sont particulièrement importantes dans open9x, car elles sont aussi utilisées dans d'autres écrans (« manches » et « mixeurs ») pour gérer à la carte leur fonctionnement.
+Les fonctions créer / effacer / déplacer / dupliquer des lignes sont particulièrement importantes dans openTx, car elles sont aussi utilisées dans d'autres écrans (« manches » et « mixeurs ») pour gérer à la carte leur fonctionnement.
 Une opération de copie ou de déplacement peut être annulée en cours d'exécution en appuyant sur la touche *[**EXIT]*.
 
 === Configuration du modèle (2/12) ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/14_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/14_1.png
 
 Voici le détail des options :
  # Nom :  pour l'éditer, presser *[**MENU]*.<br>Après appui sur *[**MENU]* le premier caractère est en surbrillance. *[**UP]* / *[**DOWN]* change le caractère. *[**RIGHT]* / *[**LEFT]* déplacer le curseur. *[**RIGHT LONG]* ou *[**LEFT LONG]* bascule la lettre en majuscule / minuscule. *[**MENU]* / *[**EXIT]* termine l'édition.<br>Nota : le numéro de modèle est indiqué dans la ligne supérieure, à côté de CONF.
@@ -446,7 +446,7 @@ Voici le détail des options :
    * ABS : actif en permanence.
    * GZ%/GZs/GZt : actif en fonction du régime moteur (voir plus loin pour sa configuration). GZ% indique que la vitesse de défilement est proportionnelle à la consigne de gaz. GZt indique que le chrono démarre dès que la consigne moteur est supérieure à -100% (moteur stoppé) et ne s'arrête plus, alors que GZs s'arrête quand le manche des gaz revient à -100%.
    * Interrupteur : chaque chrono peut être déclenché / arrêté par un interrupteur.
- # Limites Et. (étendues) : autorise des débattements jusqu'à 125% au lieu de 100%. A réserver à des besoins spécifiques, car un débattement de 100% sur open9x correspond déjà au débattement maxi de la plupart des radiocommandes commerciales (de par la gestion différente des fins de courses).
+ # Limites Et. (étendues) : autorise des débattements jusqu'à 125% au lieu de 100%. A réserver à des besoins spécifiques, car un débattement de 100% sur openTx correspond déjà au débattement maxi de la plupart des radiocommandes commerciales (de par la gestion différente des fins de courses).
  # Trims Et. (étendus) : étend la course des trims de 25% de la course du manche à 100%. A noter que si le réglage du trim dépasse +/-25%, il clignotera sur l'écran principal pour notifier au pilote qu'un réglage mécanique est fortement conseillé.
  # Pas trim : mode de fonctionnement des trims digitaux.
    * Expo : exponentiel, réglage fin autour du neutre puis avec des pas de + en + élevés.
@@ -480,7 +480,7 @@ Voici le détail des options :
 
 === Réglages hélicoptère (3/12) ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/15_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/15_1.png
 
 Cet écran (si l'option *HELI* est activée) est dédié au réglage d'un hélicoptère CCPM (servos de cyclique agissant aussi sur le pas).
 
@@ -493,18 +493,18 @@ Les options sont les suivantes :
  # Collectif : définit la source du pas collectif, soit directement le manche de gaz soit une voie (non utilisée par un servo) permettant ainsi de bénéficier d'une ou plusieurs courbe(s) de pas (via un ou plusieurs ligne(s) de mixage associée(s) à cette voie).
  # Limite Cyclique : limitations de l'amplitude de mouvement du plateau cyclique en tangage et roulis.
  # Direction PRF / AIL / COL : permet d'inverser le sens d'action des fonctions tangage / roulis / pas collectif. A utiliser de concert avec les sens de rotation des servos et le signe des mixeurs pour obtenir les bons sens de déplacement des servos pour chaque fonction.<br>La méthodologie de réglage est la suivante :
-   * Attribuer à chaque voie un mixeur (cf. paragraphe [http://code.google.com/p/open9x/wiki/Open9x_Manual_FR?ts=1352728638&updated=Open9x_Manual_FR#Mixeur_(6/12) Mixeur (6/12)]) avec comme entrée CYC1, 2 et 3.
+   * Attribuer à chaque voie un mixeur (cf. paragraphe [http://code.google.com/p/openTx/wiki/openTx_Manual_FR?ts=1352728638&updated=openTx_Manual_FR#Mixeur_(6/12) Mixeur (6/12)]) avec comme entrée CYC1, 2 et 3.
    * Régler le sens des servos dans le menu Servos (ou Limites) pour que le manche de pas actionne tous les servos dans le même sens.
    * Régler le sens des fonctions dans le menu décrit ici.
 
 === Phases de vol (4/12) ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/16_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/16_1.png
 
 Cet écran (si l'option *PHASES* est activée) permet de gérer cinq phases de vol dont une par défaut (PV0), chacune pouvant être librement nommée. La phase active est affichée en gras (sauf si l'option *NOBOLD* est activée).
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/16_2.png     
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/16_3.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/16_2.png     
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/16_3.png
 
 Pour modifier les paramètres d'une phase de vol, choisissez-la avec les touches *[**UP]* et *[**DOWN]* et appuyez sur *[**MENU]* :
  # Nom : libellé de la phase (jusqu'à 6 caractères).
@@ -516,7 +516,7 @@ Pour revenir à l'écran précédent, appuyer sur *[**EXIT]*.
 
 === Formatage des manches (DR/EXPO) (5/12) ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/17_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/17_1.png
 
 Cet écran permet de formater l'ordre de chaque manche (Dérive / Profondeur / Gaz / Ailerons), via un gain (historiquement appelé Dual-Rate, pour double-débattement), une fonction exponentielle ou même une courbe.
 
@@ -535,20 +535,20 @@ Se placer sur la ligne à supprimer avec *[**UP]* / *[**DOWN]*, la sélectionner
 
 ==== Pour dupliquer une ligne : ====
 
- * Se placer sur la ligne à copier avec *[**UP]* / *[**DOWN]*, la sélectionner avec *[**MENU]* (elle passe en surbrillance).<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/18_1.png
- * Se positionner sur la ligne de destination avec *[**UP]* / *[**DOWN]*.<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/18_2.png
+ * Se placer sur la ligne à copier avec *[**UP]* / *[**DOWN]*, la sélectionner avec *[**MENU]* (elle passe en surbrillance).<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/18_1.png
+ * Se positionner sur la ligne de destination avec *[**UP]* / *[**DOWN]*.<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/18_2.png
 Appuyer sur *[**MENU]* pour effectuer la duplication.
 
 ==== Pour déplacer une ligne : ====
 
- * Se placer sur la ligne à déplacer avec *[**UP]* / *[**DOWN]*, la sélectionner en appuyant deux fois sur *[**MENU]* (elle passe en surbrillance entourée en pointillé).<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/19_1.png
- * Se positionner sur la ligne de destination avec *[**UP]* / *[**DOWN]*.<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/19_2.png
+ * Se placer sur la ligne à déplacer avec *[**UP]* / *[**DOWN]*, la sélectionner en appuyant deux fois sur *[**MENU]* (elle passe en surbrillance entourée en pointillé).<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/19_1.png
+ * Se positionner sur la ligne de destination avec *[**UP]* / *[**DOWN]*.<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/19_2.png
  * Appuyer sur *[**MENU]* pour effectuer le déplacement.
 Il est possible d'interrompre à tout moment une opération de duplication ou déplacement en appuyant sur la touche *[**EXIT]*.
 
 ==== Pour éditer les valeurs d'une ligne : ====
 
-Se placer sur la ligne à éditer avec *[**UP]* / *[**DOWN]* et appuyer sur *[**MENU LONG]* pour ouvrir l'écran de paramétrage.<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/17_2.png
+Se placer sur la ligne à éditer avec *[**UP]* / *[**DOWN]* et appuyer sur *[**MENU LONG]* pour ouvrir l'écran de paramétrage.<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/17_2.png
 
 Cet écran est composé de deux parties : à gauche les paramètres et à droite la courbe de sortie avec le curseur graphique (et ses coordonnées) associé à la position du manche. Le graphique affiche toujours l'ordre de sortie final du manche, y compris si la ligne en cours d'édition est inactive.
 
@@ -556,7 +556,7 @@ Les paramètres sont les suivants :
  # Ratio : gain appliqué à l'ordre (0 à +100%).
  # Expo: taux d'exponentiel (-100% à +100%).
  # Courbe : remplace l'exponentiel par une courbe
-   * soit prédéfinie : x>0, x<0, |x|, f>0, f<0, |f| (voir [http://code.google.com/p/open9x/wiki/Open9x_Manual_FR#Edition_d%27un_mixage Edition d'un mixage] pour la signification des différents choix).
+   * soit prédéfinie : x>0, x<0, |x|, f>0, f<0, |f| (voir [http://code.google.com/p/openTx/wiki/openTx_Manual_FR#Edition_d%27un_mixage Edition d'un mixage] pour la signification des différents choix).
    * soit personnalisée : CB1..CB8 (3 à 17 points, détails ci-après), à éditer avec *[**MENU]*.
  # Phase : phase(s) pour laquelle la ligne est active (actif = en surbrillance).
  # Interrupteur : activation spécifique de la ligne (en complément de la phase).
@@ -564,13 +564,13 @@ Les paramètres sont les suivants :
 
 === Mixeur (6/12) ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/20_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/20_1.png
 
 Le rôle du mixeur est de relier des entrées (appelées aussi sources : manches, potentiomètres, interrupteurs physique ou virtuel, trims digitaux, valeur statique) aux sorties (= voies = servos), avec la possibilité de croiser / modifier les ordres donnés par ces entrées.
 
-Pour bien situer le fonctionnement d'open9x :
- * La majorité des radiocommandes commerciales, excepté Multiplex dont la logique est similaire à celle d'open9x, proposent un panel de mixages pré-définis et à la structure figée (delta, etc.). Ces mixages sont activés au besoin et épaulés par quelques mixages libres, généralement basiques et souvent peu pratiques à cause de l'ambigüité souvent présente entre voies et fonctions (ailerons par ex.). Le tout part généralement des organes de commande avec une réaffectation éventuelles des voies.
- * A contrario, open9x autorise un routage totalement libre, partant de la finalité (les gouvernes, via les voies) et offrant la possibilité de chaîner ou d'intriquer les mixages pour créer des fonctions complexes. Par exemple, la sortie d'un mixage peut ne pas être affectée physiquement à un servo mais servir comme entrée à un ou plusieurs autres mixages (par ex. pour gérer la courbure d'une aile). Ou bien, un mixage peut influencer son voisin en le multipliant ou le remplaçant suivant le contexte. De plus, open9x permet la différenciation des mixages par phase de vol, ce que très peu de radiocommandes commerciales, même très haut de gamme, offrent.
+Pour bien situer le fonctionnement d'openTx :
+ * La majorité des radiocommandes commerciales, excepté Multiplex dont la logique est similaire à celle d'openTx, proposent un panel de mixages pré-définis et à la structure figée (delta, etc.). Ces mixages sont activés au besoin et épaulés par quelques mixages libres, généralement basiques et souvent peu pratiques à cause de l'ambigüité souvent présente entre voies et fonctions (ailerons par ex.). Le tout part généralement des organes de commande avec une réaffectation éventuelles des voies.
+ * A contrario, openTx autorise un routage totalement libre, partant de la finalité (les gouvernes, via les voies) et offrant la possibilité de chaîner ou d'intriquer les mixages pour créer des fonctions complexes. Par exemple, la sortie d'un mixage peut ne pas être affectée physiquement à un servo mais servir comme entrée à un ou plusieurs autres mixages (par ex. pour gérer la courbure d'une aile). Ou bien, un mixage peut influencer son voisin en le multipliant ou le remplaçant suivant le contexte. De plus, openTx permet la différenciation des mixages par phase de vol, ce que très peu de radiocommandes commerciales, même très haut de gamme, offrent.
 
 Le bénéfice de cette approche est triple :
  * La structure de mixage est univoque, un seul coup d'oeil dans le menu Mixeur permet de déterminer exhaustivement la provenance des ordres reçus par chaque servo.
@@ -585,7 +585,7 @@ Il y a une contrepartie à cette latitude quasi totale de programmation. En effe
 
 ==== Écran principal ====
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/20_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/20_1.png
 
 Chaque ligne du mixeur correspond à un mixage. Les fonctions d'édition, de suppression, de copie et déplacement des lignes sont exactement les mêmes que pour le formatage des manches (DR/expo), permettant de créer à la carte sa propre structure de mixages.
 La aussi, les lignes actives sont indiquées en gras.
@@ -596,7 +596,7 @@ Les gains sont directement modifiables avec *[**LEFT]* / *[**RIGHT]* après y av
 
 Pour aller plus loin, voici un exemple de programmation un peu plus complexe, en l'occurence un motoplaneur avec un servo par aileron et une fonction snap-flap (entrée profondeur ajoutée sur les deux servos d'ailerons) :
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/22_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/22_1.png
 
 A l'image des formatages de manches, plusieurs lignes (jusqu'à 32) peuvent être actives simultanément.
 
@@ -614,7 +614,7 @@ En l'absence d'ordre (pas de mixage ou mixage inactif) sur une voie, sa valeur d
 ==== Edition d'un mixage ====
 
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/21_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/21_1.png
 
 Les options disponibles sont les suivantes :
  # Source : ordre utilisé en entrée par le mixage
@@ -650,7 +650,7 @@ Les options disponibles sont les suivantes :
 
 === Formatage des sorties (Limites) (7/12) ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/23_1.png  
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/23_1.png  
 
 Cet écran permet de définir, pour chaque voie (CH1...CH16), les paramètres suivants (de gauche à droite dans l'écran) :
  # Offset (ou subtrim) : décale le centre de la voie.<br>Les manches peuvent être utilisés pour le régler : mettre la valeur en surbrillance, déplacer le manche de manière à mettre le servo à la position voulue, puis presser *[**MENU LONG]*.
@@ -659,13 +659,13 @@ Cet écran permet de définir, pour chaque voie (CH1...CH16), les paramètres su
  # 1500 (si option *PPMCA*) : neutre de servo (en µs). Décale la course entière du servo pour corriger par exemple un mauvais centrage de palonnier. Contrairement au subtrim l'amplitude de la course n'est pas modifiée, et le décalage n'apparaît pas sur l'écran de position des servos.
  # ^ / =  (si option *SYMLIMITS*) : détermine l'effet du subtrim.
    * ^ (par défaut) : décale uniquement le centre de la courbe de réponse du servo, sans déplacer les limites (gains relatifs, en rouge sur le graphique ci-dessous).
-   * = : Décale toute la courbe (gains absolus, en bleu ci-dessous). <br>L'utilisation de « = » est indispensable dès que la voie reçoit plus d'un mixage pour conserver la linéarité de réponse de toutes les fonctions qui pilotent cette voie. Dans ce cas, l'utilisation d'un dual-rate inférieur à 100% est encore plus conseillée pour éviter un écrêtage en fin de course.<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/open9x_décalages_subtrim.png
+   * = : Décale toute la courbe (gains absolus, en bleu ci-dessous). <br>L'utilisation de « = » est indispensable dès que la voie reçoit plus d'un mixage pour conserver la linéarité de réponse de toutes les fonctions qui pilotent cette voie. Dans ce cas, l'utilisation d'un dual-rate inférieur à 100% est encore plus conseillée pour éviter un écrêtage en fin de course.<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/openTx_décalages_subtrim.png
 
 La fonction « Trims => Offsets » transfère la position des trims de manches vers les offsets (avec prise en compte du mixeur et du formatage de manches), puis remet les trims à zéro.
 
 Lors de la sélection d'une voie, sa valeur de sortie (en µs si option *PPMCA*, sinon en %) est affichée en haut de l'écran :
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/23_3.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/23_3.png
 
 *NOTA*
 
@@ -673,7 +673,7 @@ Hormis le neutre et le sens de rotation, la fonction principale des limites est 
 
 === Courbes et variables globales (8/12) ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/24_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/24_1.png
 
 Les courbes (de 3 à 17 points) sont utilisées par les formatages de manches ou les mixages pour définir des réactions personnalisées.
 
@@ -683,11 +683,11 @@ Chaque courbe ou variable globale est utilisable par autant de fonctions que né
 
 ==== Pour éditer une courbe : ====
 
- # Se placer sur la ligne souhaitée avec *[**UP]* / *[**DOWN]*, la courbe correspondante apparaît.<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/25_1.png
+ # Se placer sur la ligne souhaitée avec *[**UP]* / *[**DOWN]*, la courbe correspondante apparaît.<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/25_1.png
  # Appuyer une fois sur *[**MENU]* pour l'éditer.
- # Appuyer sur *[**EXIT]* pour éditer le nombre de points et le type de la courbe (le signe « ' »indique que l'abscisse de chaque point est modifiable, en plus de l'ordonnée).<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/25_2.png
+ # Appuyer sur *[**EXIT]* pour éditer le nombre de points et le type de la courbe (le signe « ' »indique que l'abscisse de chaque point est modifiable, en plus de l'ordonnée).<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/25_2.png
  # Appuyer sur *[**MENU]* pour passer en édition des coordonnées du point (Y uniquement ou X et Y avec « ' »).
- # Déplacer le curseur d'un point à l'autre avec *[**LEFT]* / *[**RIGHT]*, et modifier l'ordonnée du point avec *[**UP]* / *[**DOWN]*. Si « ' », appuyer sur *[**MENU]* pour éditer le point et modifier ses coordonnées avec *[**LEFT]* / *[**RIGHT]* et *[**UP]* / *[**DOWN]*. *[**EXIT]* permet de sortir de l'édition pour passer au point suivant.<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/25_3.png
+ # Déplacer le curseur d'un point à l'autre avec *[**LEFT]* / *[**RIGHT]*, et modifier l'ordonnée du point avec *[**UP]* / *[**DOWN]*. Si « ' », appuyer sur *[**MENU]* pour éditer le point et modifier ses coordonnées avec *[**LEFT]* / *[**RIGHT]* et *[**UP]* / *[**DOWN]*. *[**EXIT]* permet de sortir de l'édition pour passer au point suivant.<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/25_3.png
 
 N.B. : Quelques courbes préenregistrées sont disponibles. Pour les choisir, appuyer sur *[**MENU LONG]*
 
@@ -700,12 +700,12 @@ N.B. : Quelques courbes préenregistrées sont disponibles. Pour les choisir, ap
 
  * Se placer sur le taux (ici un différentiel d'ailerons) à lier à une variable globale.
  * Appuyer une fois sur *[**MENU LONG]* pour basculer en liste de variables globales.
- * Sélectionner la variable globales souhaitées avec *[**LEFT]* / *[**RIGHT]*.<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/21_3.png
+ * Sélectionner la variable globales souhaitées avec *[**LEFT]* / *[**RIGHT]*.<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/21_3.png
  * Pour désactiver l'association du taux avec une variable globale, appuyer une fois sur *[**MENU LONG]*. La valeur réglée est bien entendu conservée.
 
 === Interrupteurs personnalisables (9/12) ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/26_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/26_1.png
 
 Les interrupteurs personnalisables, au nombre de 12 (IP1...IPC) sont des interrupteurs virtuels utilisant des conditions logiques pour leur activation. Comme pour les mixages, il est possible de réaliser des chaînages entre interrupteurs virtuels.
 
@@ -719,7 +719,7 @@ Pour chaque interrupteur, les paramètres sont les suivants (de gauche à droite
 
 === Fonctions personnalisées (10/12) ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/27_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/27_1.png
 
 Cet écran permet de créer des fonctions personnalisées et, au besoin, de les associer à un interrupteur (physique, virtuel, activation permanente):
  # Securité : forçage à une valeur prédéfinie de n'importe quelle voie CH1..CH16.
@@ -744,7 +744,7 @@ Les interrupteurs associés sont les suivants :
 === Paramétrage de la télémesure (11/12) ===
 
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/28_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/28_1.png
 
 Cet écran (si l'option *FRSKY* est activée) permet le paramétrage de la télémesure !FrSky, ainsi que la configuration des alarmes associées.
 
@@ -776,7 +776,7 @@ Lorsqu'une valeur est modifiée, elle est immédiatement envoyée au module !FrS
 
 ==== Affichage personnalisé des capteurs sur l'écran de télémesure : ====
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/28_4.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/28_4.png
 
 Il est possible d'afficher jusqu'à 8 capteurs sur l'écran de télémesure, avec les paramètres suivants:
  # Source : mesure à afficher.
@@ -787,7 +787,7 @@ Ces sources sont aussi utilisables pour définir des interrupteurs virtuels. Les
 
 === Gabarits (12/12) ===
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/29_1.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/29_1.png
 
 Les gabarits (si option *TEMPLATES*) permettent de mettre en place les mixages de base d'une configuration de modèle donnée. La navigation se fait dans l'écran, comme à l'habitude avec *[**UP]* / *[**DOWN]*, puis *[**MENU LONG]* pour activer le gabarit. Cela ajoutera le gabarit aux mixages existants du modèle courant, ou les remplacera suivant le cas.
 
@@ -801,7 +801,7 @@ Les gabarits disponibles sont les suivants :
 06 : configuration hélicoptère, à utiliser en amont d'ECCPM pour réinitialiser les mixage et les courbes.
 07 : servo test, sur la voie 15. A mettre en entrée des voies à tester, les servos se déplaçant lentement de -100% à +100%.
 
-[http://code.google.com/p/open9x/wiki/Open9x_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
+[http://code.google.com/p/openTx/wiki/openTx_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
 
 == Écrans de télémesure ==
 
@@ -809,13 +809,13 @@ Ces écrans sont accessibles  (si l'option FRSKY est activée) en appuyant sur l
 Le défilement des écrans est assuré par les touches *[**UP]* et *[**DOWN]* , tandis que la touche *[**MENU]* réinitialise les données de télémesure. Enfin *[**EXIT]* renvoie au menu principal.
 
 || Les jauges graphiques : || Les tensions d'accu(s) ||
-|| https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/03_3.png || https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/03_4.png ||
+|| https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/03_3.png || https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/03_4.png ||
 || Les données de l'altimètre, compte-tours... || Les données GPS : ||
-|| https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/03_5.png || https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/03_6.png ||
+|| https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/03_5.png || https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/03_6.png ||
 
 Sont affichées ici la latitude, la longitude et l'altitude du modèle, ainsi que la distance du modèle au pilote. En réinitialisant les données de télémesure, la première position GPS reçue devient alors la position de départ pour les futurs calculs.
 
-[http://code.google.com/p/open9x/wiki/Open9x_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
+[http://code.google.com/p/openTx/wiki/openTx_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
 
 == Exemples de mixages et bonnes pratiques associées ==
 
@@ -824,7 +824,7 @@ Sont affichées ici la latitude, la longitude et l'altitude du modèle, ainsi qu
  # Presser *[**MENU]* pour sélectionner la ligne, *[**RIGHT LONG]* pour la dupliquer en-dessous, puis éditer le mixage avec *[**MENU LONG]*.
  # Changer la source par « MAX », le ratio par -100 et sélectionner un interrupteur (ou une phase de vol) pour son activation.
  # Mettre Remplace dans le champ « Opération ».
- # Sortir de l'édition avec *[**EXIT]*. Le résultat est le suivant :<br><br>https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/22_2.png
+ # Sortir de l'édition avec *[**EXIT]*. Le résultat est le suivant :<br><br>https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/22_2.png
 CH3 est maintenant pilotée par deux mixages :
  * le premier transmet la valeur du manche des gaz et est actif tout le temps.
  * le second remplace le premier par la valeur de -100% quand l'interrupteur GAZ est à ON.
@@ -928,12 +928,12 @@ La course mécanique de chaque servo est ainsi répartie d'une manière adaptée
 
 Le calcul des ratios se fait par trigonométrie, en considérant comme débattement de référence celui qui donne le plus petit débattement angulaire du plateau pour un débattement de servo donné (= servo frontal en fonction profondeur).
 
-[http://code.google.com/p/open9x/wiki/Open9x_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
+[http://code.google.com/p/openTx/wiki/openTx_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
 
 == Introduction à companion9x ==
 
-Companion9x est le logiciel (sous Windows, Linux ou  Mac) associé à open9x, permettant de :
- * télécharger les firmwares open9x avec les options de compilation souhaitées
+Companion9x est le logiciel (sous Windows, Linux ou  Mac) associé à openTx, permettant de :
+ * télécharger les firmwares openTx avec les options de compilation souhaitées
  * lire / écrire la mémoire flash de la radio (firmware)
  * lire / écrire la mémoire eeprom de la radio (mémoires modèles)
  * créer / modifier des fichiers eeprom (effacer, ajouter, glisser / déposer depuis un autre fichier)
@@ -943,25 +943,25 @@ Companion9x est le logiciel (sous Windows, Linux ou  Mac) associé à open9x, pe
  
 Ecran principal :
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/c9x_main_window.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/c9x_main_window.png
 
 Ecran de paramétrage des firmwares, accessible depuis le menu « Fichier » (passer la souris sur les cases permet d'afficher une étiquette explicative de l'option) :
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/c9x_preferences.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/c9x_preferences.png
 
-Ecran de programmation d'un modèle (structure identique à celle d'open9x), accessible en double-cliquant sur le nom du modèle dans la liste de l'eeprom :
+Ecran de programmation d'un modèle (structure identique à celle d'openTx), accessible en double-cliquant sur le nom du modèle dans la liste de l'eeprom :
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/c9x_mixer_screen.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/c9x_mixer_screen.png
 
 Un très bel écran d'assistant de configuration automatique de modèles (gabarit) :
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/c9x_model_wizard.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/c9x_model_wizard.png
 
 L'écran de simulation de la radio, on peut même naviguer dans le soft comme sur la vraie radio (!) :
 
-https://open9x.googlecode.com/svn/wiki/images_open9x_manual_FR/c9x_simu.png
+https://openTx.googlecode.com/svn/wiki/images_openTx_manual_FR/c9x_simu.png
 
-[http://code.google.com/p/open9x/wiki/Open9x_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
+[http://code.google.com/p/openTx/wiki/openTx_Manual_FR#Table_des_mati%C3%A8res Retour à la table des matières]
 
 == Pour conclure ==
 

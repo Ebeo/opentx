@@ -1,7 +1,7 @@
-#summary Historique des changements d'Open9x en français
+#summary Historique des changements d'OpenTx en français
 #labels Featured
 
-= Historique des versions d'open9x =
+= Historique des versions d'openTx =
 
 <wiki:toc max_depth="2" />
 
@@ -55,7 +55,7 @@
  * Amélioration de la génération des sons
  * Réglage du nombre de pas de l'encodeur rotatif
 
-=== [**FrSky Taranis] ===
+=== [**!FrSky Taranis] ===
  * Première version pour le show de Toledo, USA!
 
 ----
