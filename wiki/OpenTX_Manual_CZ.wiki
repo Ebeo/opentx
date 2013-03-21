@@ -16,7 +16,7 @@ Poté, co jsem, víceméně z nouze, vytvořil anglický překlad původního fr
 
 Česká verze vychází ze mnou průběžně aktualizované anglické verze s doplněním některých informací a postřehů, na které jsem mezitím narazil při používání vysílače s firmware openTx a při psaní manuálu. Od původního francouzského se proto již značně odchyluje.
 
-[http://code.google.com/p/openTx/downloads/detail?name=openTx%20Manual%20CZ.pdf Tisknutelná verze] tohoto manuálu je k dispozici (ve formátu PDF) na webu projektu openTx v sekci download.
+[http://code.google.com/p/opentx/downloads/detail?name=openTx%20Manual%20CZ.pdf Tisknutelná verze] tohoto manuálu je k dispozici (ve formátu PDF) na webu projektu openTx v sekci download.
 
 Protože udržování tohoto manuálu v aktuálním stavu a jeho rozšiřování o další potřebné kapitoly (hlavně chybí jednoduché i komplexnější příklady použití) je již nad síly jednotlivce, rozhodl jsem se pokusit se umožnit udržování a rozvoj tím, že text zveřejním jako základ obsahu stránky Wiki manuálu. 
 
@@ -26,7 +26,7 @@ S jedním z členů týmu openTx (birkym) jsme se dohodli, že se pokusíme tent
 
 Stejně jako původní francouzská a přeložená anglická, je i tato (česká a slovenská) verze poskytována bez jakékoli záruky a používáte ji výhradně na vlastní zodpovědnost a nesete veškerá rizika.
 
-[http://code.google.com/p/openTx/people/detail?u=ztrojanek Zdeněk] Trojánek
+[http://code.google.com/p/opentx/people/detail?u=ztrojanek Zdeněk] Trojánek
 
 = Introduction =
 
