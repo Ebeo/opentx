@@ -139,7 +139,7 @@
           # [UP+DOWN]    = default value
  * openTx is prepared for _*translations*_ in several languages (done for en, fr, it, se, cz, de)
 
-*[https://code.google.com/p/opentx/wiki/openTx_Manual_FR French Wiki User Guide]*
+*[https://code.google.com/p/opentx/wiki/OpenTx_Manual_FR French Wiki User Guide]*
 
 *[http://9xforums.com/wiki/index.php/openTx_user_guide 9xforums Wiki User Guide]*
 
