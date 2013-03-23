@@ -87,6 +87,7 @@ En effet, pour des raisons techniques (la mémoire disponible dans le processeur
 Il est un peu prématuré de parler de ces options en détail à ce stade, mais étant donné que le choix est présenté au nouvel utilisateur avant même le flashage du firmware, et certains des écrans présentés plus tard dépendant de leur choix, nous allons les décrire brièvement ici avant de les détailler plus tard. Le manuel s'y référera en *GRAS*.
 
 || frsky || A utiliser si l'on a modifié sa radio pour afficher les données de télémesure !FrSky selon le guide.<br>Ne s'applique *pas* si l'on utilise un module d'émission frsky sans pour autant avoir fait la modification en question. ||
+|| telemetrez || Support de la carte telemetrEZ de smartieParts.com ||
 || jeti || Permet à la 9x d'émuler une jetibox pour l'affichage de données et la configuration de matériel Jeti.<br>Nécessite également une modification matérielle pour raccorder le module Jeti à la radio. ||
 || ardupilot || Implémente l'affichage des données de télémesure d'un aéronef équipé d'ardupilot.<br>Nécessite également la modification matérielle pour la connexion du modem radio. ||
 || nmea || Permet l'affichage de données GPS sur l'écran de la radio.<br>Nécessite également la modification matérielle pour la réception des données. ||
@@ -101,13 +102,16 @@ Il est un peu prématuré de parler de ces options en détail à ce stade, mais 
 || PXX || Support du protocole PCM !FrSky (expérimental) ||
 || DSM2 || Support des protocoles DSM2 / DSMX Spektrum. Nécessite l'installation d'un module d'émission Spektrum. ||
 || ppmca || Ajoute un réglage permettant l'ajustage des neutres de servos sans influer sur leurs courses. ||
+|| ppmus || Affiche les positions de servos en us au lieu des % habituels. ||
 || gvars || Ajoute le support de variables globales, qui peuvent être ensuite utilisées en remplacement des réglages<br>individuels des paramètres numériques. ||
 || symlimits || Permet de changer le comportement par défaut des subtrims, les rendant plus adaptés aux modèles<br>complexes où plusieurs fonctions influent sur le même servo. ||
 || potscroll || Permet la navigation dans les menus et l'édition de valeurs à l'aide des potentiomètres P1, P2 et P3 de la radio. ||
+|| rotenc || Ajoute le sopport de l'encodeur rotatif (nécessite une modification hardware) ||
 || sp22 || A cocher en cas d'utilisation d'un programmeur !SmartieParts version 2.2 ou plus récente, le contrôle du<br>rétroéclairage étant autrement inversé. ||
 || autoswitch || Permet la sélection simplifiée des interrupteurs dans les champs y relatifs.<br>Au lieu de défiler la liste avec les touches, il suffit de basculer l'interrupteur souhaité. ||
 || dblkeys || Permet d'accélérer l'entrée de paramètres numériques avec des combinaisons de 2 touches. ||
 || nographics || Désactive les cases à cocher, les remplaçant par un simple ON/OFF. ||
+|| battgraph || Ajoute un affichage de la tension batterie sous forme graphique ||
 || nobold || Désactive la mise en gras des mixeurs, inters et autres éléments actifs. ||
 || nottrace || Désactive l'affichage graphique de l'historique des gaz dans l'écran des statistiques .||
 || pgbar || Affiche une petite barre de progression montrant la sauvegarde des paramètres en mémoire. ||

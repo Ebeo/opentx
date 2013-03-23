@@ -73,6 +73,7 @@ In fact, for technical reasons (the available memory in the processor of 9x is l
 
 It's a bit premature to discuss these options in detail at this stage, but given the choice is presented to new users before flashing the firmware, and some of the screens presented later depending on their choice, we will describe briefly here before covering them in detail later. The manual will refer them in *BOLD*. 
 || frsky || Use it when modified for !FrSky telemetry data according to the guide. Does *not* apply if you use a !FrSky transmitter module without the !FrSky telemetry modification to the board. ||
+|| telemetrez || Support for the telemetrEZ board from smartieParts.com ||
 || jeti || Allows the 9x to emulate a JETIBOX to display data and Jeti hardware configuration.  Also requires a hardware modification to connect the module to the Jeti radio. ||
 || ardupilot || Implements the display of telemetry data from an aircraft equipped with !ArduPilot. Also requires hardware modification to connect the radio modem. ||
 || nmea || Allows the display of GPS data on the screen of the radio.  Also requires hardware modification for data reception. ||
@@ -87,13 +88,16 @@ It's a bit premature to discuss these options in detail at this stage, but given
 || PXX || Support new proprietary !FrSky PXX modulation (Experimental). Will support model match and lower latency when compatible transmitters and receivers become available ||
 || DSM2 || Support DSM2 / DSMX Spektrum protocol. Requires hardware mod to install Spektrum RF module ||
 || ppmca || Adds a setting for adjusting the servo neutral without affecting their travel ||
+|| ppmus || Displays servo positions in us instead of the usual % ||
 || gvars || Adds support for global variables (GVars) which can be used as numerical values in settings ||
 || symlimits || Symetric limits (see details below) ||
 || potscroll || Allows navigation through menus and editing values ​​using potentiometers P1, P2 and P3. ||
+|| rotenc || Adds rotary encoder support (requires hardware modification) ||
 || sp22 || Tick if you use !SmartieParts programmer version 2.2 or later, otherwise backlight function will be inverted ||
 || autoswitch ||  Allows simplified selection of switches in related fields. Instead of scrolling through the list with keys, simply toggle the desired switch. ||
 || dblkeys || Accelerates the entry of numerical parameters with key combinations ||
 || nographics || Deactivate graphical on/off checkboxes and replace with text ||
+|| battgraph || Adds a graphic representation of transmitter battery voltage ||
 || nobold || Do not highlight in bold active mizes, flight phases and other settings ||
 || nottrace || Disable graphical trace in statistics screen ||
 || pgbar || Display a progress bar when writing settings in memory ||
