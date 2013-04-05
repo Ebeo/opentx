@@ -5,6 +5,31 @@
 
 <wiki:toc max_depth="2" />
 
+== 2215 / Apr 05 2013 ==
+
+=== [**all] ===
+ * New option AUTOSOURCE to automatically select the stick / pot / switch which is moved when editing a Mix source
+
+=== [**stock] ===
+ * All prompts renumbered to have the "custom" prompts starting at 0 and to be able to use PlayTrack(GVAR) with Adjust(GVAR) to play tracks sequences
+  
+
+=== [**gruvin9x] ===
+ * Possibility to have both BEEPER and SPEAKER enable in the same time
+
+=== [**sky9x] ===
+ * Fixed a bug with audio stopped until next reboot in BackgroundMusic with no track selected
+ * Imperial is now an option selectable in the menus
+ * Possibility to have both BEEPER and SPEAKER enable in the same time
+ * New menu in Main Views / Telemetry Views
+ * Vario sounds improved!
+ * SD Folders renamed. "9XSOUNDS" becomes "SOUNDS", don't forget to update your cards!
+
+=== [**!FrSky Taranis]===
+ * Too many things to list them all!
+
+----
+
 == 2129 / Mar 21 2013 ==
 
 === [**all] ===

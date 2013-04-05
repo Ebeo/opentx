@@ -5,6 +5,30 @@
 
 <wiki:toc max_depth="2" />
 
+== 2215 / 05 Avr 2013 ==
+
+=== [**Tous] ===
+ * Nouvelle option AUTOSOURCE, permet de sélectionner les sources de mixages en bougeant la commande désirée  
+
+=== [**stock] ===
+ * Tous les fichiers sons renommés pour augmenter le nombre de sons personnalisés disponibles, et permettre la lecture de fichiers en séquence à l'aide de PlayTrack(GVAR) et Adjust(GVAR) 
+
+=== [**gruvin9x] ===
+ * Possibilité d'utiliser le BEEPER en même temps que le SPEAKER.
+
+=== [**sky9x] ===
+ * Correction d'un blocage de l'audio avec la fonction spécial Musique si aucun fichier n'était sélectionné
+ * Le choix des unités métriques/impériales est maintenant un réglage radio et plus une option de compilation
+ * Possibilité d'utiliser le BEEPER en même temps que le SPEAKER.
+ * Nouveau menu de remise à zéro des timers/données de télémesure
+ * Sons du vario améliorés
+ * Dossiers de la carte SD renommés, "9XSOUNDS" devient "SOUNDS" etc, attention à bien renommer vos dossiers!
+
+=== [**!FrSky Taranis]===
+ * Bien trop de choses pour faire une liste!
+
+----
+
 == 2129 / 21 Mar 2013 ==
 
 === [**Tous] ===
