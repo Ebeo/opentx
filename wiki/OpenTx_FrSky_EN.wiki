@@ -1,7 +1,7 @@
 #summary openTx for FrSky radios 
 #labels Featured
 
-= openTx for FrSky Taranis =
+= openTx for !FrSky Taranis =
 
 DISCLAIMER: The content below is still subject to change before the radio is available on the shelves.
 
@@ -26,7 +26,7 @@ Use of some advanced features (voice announcements, telemetry data logging, cust
 
 == The radio ==
 
-The FrSky Taranis is a ground-breaking radio because it's the first time a renowned player in the R/C industry and the creators of an open-source radio control firmware collaborate closely to improve both the hardware and software sides of a product, and come up with an open-source radio targeting the mainstream market. This means that while the Taranis is a low cost radio, it is free of the usual "marketing-driven" limitations that most manufacturers place on their offerings, and as such offers features that match and even exceed those of the highest end radios in the industry.
+The !FrSky Taranis is a ground-breaking radio because it's the first time a renowned player in the R/C industry and the creators of an open-source radio control firmware collaborate closely to improve both the hardware and software sides of a product, and come up with an open-source radio targeting the mainstream market. This means that while the Taranis is a low cost radio, it is free of the usual "marketing-driven" limitations that most manufacturers place on their offerings, and as such offers features that match and even exceed those of the highest end radios in the industry.
 It is also future-proof, as both teams are always there to respond to questions and suggestions. Things can evolve quickly to follow the needs of the various users! And should you have some programming experience - the entire source code of the firmware is available for you to play with and change to your liking.
 
 === An overview of the features ===
@@ -37,7 +37,7 @@ It is also future-proof, as both teams are always there to respond to questions 
  * 60 model memories
  * 32 logical channels
  * Internal telemetry-enabled RF module capable of transmitting up to 16 channels, with a refresh rate of 9ms for up to 8 channels, 18ms for 9-16 channels. Supports the existing D8 protocol (useable with all D-type and VxR-II receivers) as well as the new D16 and LR12 modes.
- * JR-compatible external RF module slot (no 6V supply) supporting transmission of up to 16 channels (depending on module) in various common protocols (PXX for FrSky modules, PPM for 3rd-party modules, serial DSM2 for DIY Spektrum modules). 
+ * JR-compatible external RF module slot (no 6V supply) supporting transmission of up to 16 channels (depending on module) in various common protocols (PXX for !FrSky modules, PPM for 3rd-party modules, serial DSM2 for DIY Spektrum modules). 
  * Mapping of the transmitted channels is free, so once an external module is added you have the choice of either creating a redundant system where the same channels are transmitted via both internal and external RF, transmitting up to 32 independent channels simultaneously, or anything in between.
  * Internal RF supports receiver match, and allows configuring failsafe conveniently from the radio with 3 modes: Hold, Stop pulses, Custom positions. 
  * Telemetry with 3 customisable screens and fully configurable speech announcements, supports existing receivers and sensors as well as new Smart Port sensors. Configurable metric or imperial units. Integrated audio variometer (sensor required on the model). Data logging.
@@ -45,7 +45,7 @@ It is also future-proof, as both teams are always there to respond to questions 
  * 2 timers, values can be stored when the radio is powered off
  * 64 mixers
  * 9 flight phases
- * 16 custom curves with 3-17 points each, configurable X positions
+ * 16 custom curves with 3-17 points each, freely definable x coordinates
  * 32 logic switches
  * Standard JR-type trainer jack
  * [http://code.google.com/p/companion9x/ companion9x] Windows/Mac/Linux software to save, edit and share your models and settings as well as simulate your model setup
@@ -99,7 +99,7 @@ Another handy feature is the auto selection of physical inputs in the relevant f
 === Main views ===
 
 We have 3 main views showing the same basic information in the top part and different inputs/outputs on the lower part. On the main views a long press of the ENTER key brings up a menu where you can reset the timers, telemetry data (min/max), all of those, or bring up a statistics view (throttle graph, timers). As mentioned above, a short press of the PAGE key switches views.
-The new title bar includes radio battery voltage, receiver signal strength (for FrSky receivers), main onboard voltage (can be receiver battery, flight battery, or anything else depending on sensors the "Voltage" parameter in the telmetry settings), status icons (SD present, USB connected, trainer port mode, logging in progress), audio volume and time.
+The new title bar includes radio battery voltage, receiver signal strength (for !FrSky receivers), main onboard voltage (can be receiver battery, flight battery, or anything else depending on sensors the "Voltage" parameter in the telmetry settings), status icons (SD present, USB connected, trainer port mode, logging in progress), audio volume and time.
 The other "always present" items are model name, flight phase, and trim/pot positions.
 The logo is of course customisable - if you have a microSD card in your radio, you'll be able to load your model's photo there!
 
@@ -249,8 +249,8 @@ For each mixer line, several parameters are available:
  * Response of the output can be delayed and/or slowed down compared to the input change. Slow could for example be used to slow retracts that are actuated by a normal proportional servo. The time is how many seconds the output will take to cover the -100 to +100% range.
 
 As a little example, if you wanted to add some compensation on the elevator channel when you increase throttle, you would go through a simple path:
- * What's the control surface I want this to act on? [i]Elevator, which is connected to CH2[/i].
- * When do I want it to move? [i]When I move the throttle stick.[/i]
+ * What's the control surface I want this to act on? _Elevator, which is connected to CH2._
+ * When do I want it to move? _When I move the throttle stick._
 
 So you would simply go on CH2, and insert a new line with Thr as source. As the required compensation is likely small, you will dial in a small weight, maybe 5%. On the ground with motor disconnected, you will check the elevator compensates in the correct direction. If not, you'll invert the weight to -5%. 
 You could then assign a switch, in order to be able to activate/deactivate it in flight to see if the amount of compensation is actually appropriate. If the correction is more complicated, you might want to assign and create a curve that matches what's required.
@@ -267,7 +267,7 @@ For each channel, we can define:
  * Low and high limits. These are "hard" limits, i.e. they will never be overridden, so as long as they are set so that your servo never forces, it really never will. They also serve as gain or "end point settings", so reducing limit will reduce throw rather than induce clipping.
  * Servo reverse.
  * Center adjustment. This is similar to subtrim, with the difference that an adjustement done here will shift the entire servo throw (including limits), and won't be visible on the channel monitor. 
- * Subtrim behavior: When set to ^, adjusting subtrim will only shift the center of the servo throw. Given a -100% to +100% order from the mixer, the servo will still move exactly between the lower and upper limits, without clipping or dead band. This introduces a different stick to servo movement relation for both sides of the stick. Depending on the situation it can be either convenient or probematic, so the = setting changes subtrim effect to rather shift the servo throw "symmetrically". A full throw order from the mixer can now be clipped by the limit that is on the same side as the subtrim, while on the other side the servo will not reach the limit anymore. That way on both sides of the stick a given stick movement always results in the same servo movement. Typically using ^ allows for faster setup of servos that are driven by a single control input, while = is required to keep correct response of control surfaces using differential and/or mixing several inputs together. The = mode typically requires reducing D/R so that a margin is left between full "control" throw and the defined limits.
+ * Subtrim behavior: When set to !^, adjusting subtrim will only shift the center of the servo throw. Given a -100% to +100% order from the mixer, the servo will still move exactly between the lower and upper limits, without clipping or dead band. This introduces a different stick to servo movement relation for both sides of the stick. Depending on the situation it can be either convenient or probematic, so the = setting changes subtrim effect to rather shift the servo throw "symmetrically". A full throw order from the mixer can now be clipped by the limit that is on the same side as the subtrim, while on the other side the servo will not reach the limit anymore. That way on both sides of the stick a given stick movement always results in the same servo movement. Typically using !^ allows for faster setup of servos that are driven by a single control input, while = is required to keep correct response of control surfaces using differential and/or mixing several inputs together. The = mode typically requires reducing D/R so that a margin is left between full "control" throw and the defined limits.
 The last line after CH32 is the "Trims to Offsets" function. It is used to take the trims of the currently selected flight phase, transfer their content to the subtrims, reset them, and adjust all other flight phases' trims. If you're close to running out of trim, instead of having to adjust every value one after the other, all it takes is to LONG press ENTER on this line and everything is done magically. Beware that you should still check if it would not be wiser to correct the problem mechanically, especially with large values, as depending on the subtrim behavior setting it might lead to either unsufficient and assymetric throws, or clipping/dead band. 
 
 ==== Curves ====
@@ -329,7 +329,7 @@ The available functions are:
  * SD Logs: Logs the telemetry values to SD card at the specified interval
  * Volume: Adjusts sound volume using the selected source
  * Backlight: Turns backlight on
- * BgMusic, BgMusic ||: Plays a selected soundtrack from the SD card. The BgMusic || item pauses the track and resumes it once inactive again, while switching BgMusic off stops the track completely.
+ * !BgMusic, !BgMusic ||(pause): Plays a selected soundtrack from the SD card. The !BgMusic Pause item pauses the track and resumes it once inactive again, while switching !BgMusic off stops the track completely.
  * Adjust GVx: When active, sets the relevant global variable to the value of the specified source. The adjustment source can be one of 4 groups cycled through using a LONG press of the MENU key:
    * A fixed value
    * A proportional control, or a channel with for example specified curve/weight/offset to limit the adjustment range
@@ -342,7 +342,7 @@ This page groups all the basic telemetry-related settings.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/25_telemetry.png
 
- * A1 and A2 are the 2 analog ports available on D8R* receivers. X8R receivers only have A1, which measures the receiver's power supply. Range sets the maximum measureable voltage, i.e. 3.3V / (divider ratio). For example with the receivers' internal sensor (1:4), this would be 13.2V. For the FBVS-01 sensor with the default ratio of 1:6, this would be 19.8V. The number next to "Ax channel" will show the currently measured value, and can be used to confirm or correct the Range setting. Offset and custom units (A, m/s, m, °, %...) can be used in addition to help scaling the input to accomodate 3rd-party analog sensors.
+ * A1 and A2 are the 2 analog ports available on D8R receivers. X8R receivers only have A1, which measures the receiver's power supply. Range sets the maximum measureable voltage, i.e. 3.3V / (divider ratio). For example with the receivers' internal sensor (1:4), this would be 13.2V. For the FBVS-01 sensor with the default ratio of 1:6, this would be 19.8V. The number next to "Ax channel" will show the currently measured value, and can be used to confirm or correct the Range setting. Offset and custom units (A, m/s, m, °, %...) can be used in addition to help scaling the input to accomodate 3rd-party analog sensors.
  * Blades: Number of blades for the RPM sensor.
  * Voltage/current: Allows choosing the input for the power calculation and MAH count features. These should match the input you've connected the corresponding sensors to.
  * Variometer source: sensor type that is installed in your model. Limit sets respectively the maximum expected sink rate, low and high dead band (no sound), and maximum climb rate.
@@ -400,13 +400,13 @@ The control order path starts from the sticks, goes through the STICKS screen (a
 We'll start with this as it is the center of the radio. The mixer screen lists the 32 output channels to which you can link one or more inputs from a long list of physical controls (sticks, pots, trims, switches), logic sources, other channels and trainer inputs. Each assignation is done with a [i]mixer line[/i]. A new model will have 4 predefined mixer lines on channels 1,2,3 and 4 that link the 4 sticks to them according to the channel order preference you have set. These are there purely for convenience, and can of course be edited or deleted. 
 Let's delete them all by highlighting them, pressing ENTER LONG and choosing "Delete". Your mixer screen is now empty, which means the radio does nothing at all. Well it does, it sends out the number of channels that are defined on the model setup page to the receiver (channels 1-8 by default), but as those channels are empty in the mixer screen no servo will respond, they'll all be centered. You won't go very far with that, so you'll want to add control inputs to those channels. You'll create a mixer line on CH1 by highlighting it and pressing ENTER LONG, and will end up in the INSERT MIX page. Scroll to the "Source" field, press ENTER, and select the control you want to act on CH1. You can do it by browsing the list with the + and - keys, or take the easy route and just move the desired control (if it's a physical one, of course). Move the aileron stick, and the field will change to Ail (it might have already been there if your channel order preference set in the general settings had A for the first channel, as that's taken into account). You can leave the other parameters at their default settings, which mean: 
  * The mix ratio of this input is 100%, so the scaling of the mixer line's output will be equal to its input. A value of -50% would mean the output would be half of the input, and inverted.
- * There is no offset, so with an input of 0 the output of the mixer line will also be 0. A value here would shift the response by that much percentage of (input * weight).
+ * There is no offset, so with an input of 0 the output of the mixer line will also be 0. A value here would shift the response by that much percentage of (input x weight).
  * Trim is ON, it could instead be excluded from the calculation (OFF), or one of the other trims could be used (for cross-trimming for example). D/R and expo (the entries on the STICKS screen for that channel) are used. Unticking the box would mean the mix receives the raw stick input even if a D/R is active.
  * Differential is 0, so the mixer output will be symmetrical on both sides. A value of 20% would mean the line's output would be 20% less on the negative side than on the positive one. The "Diff" field is editable, and by using the +/- keys on it you'll be able to select a curve instead (predefined or custom).
  * The mixer line is active for all flight phases. By "unticking" some of the numbers, you would disable that line whenever the corresponding flight phase is selected.
  * No switch is assigned to the line, so it's always active (as long as the phases setting above allows it). Selecting a switch (physical or logical) would allow activating or deactivating the line whenever needed.
  * Warning is off. If set to 1,2 or 3 the radio would emit 1,2 or 3 short beeps every few seconds to let you know that line is active.
- * Multiplex is Add, so this line is just added to the previous ones on the same channel. If set to multiply it would multiply the [b]calculated result[/b] of the lines above it, and if set to replace it would replace anything that's above it whenever it's active.
+ * Multiplex is Add, so this line is just added to the previous ones on the same channel. If set to multiply it would multiply the *calculated result* of the lines above it, and if set to replace it would replace anything that's above it whenever it's active.
  * Delays are 0, so if that line had a switch assigned it would be activated/deactivated instantly when the switch is toggled. Time is in seconds.
  * There is no slowing down, so the line's output reacts instantly to input changes. Times set here are expressed in seconds to cover the entire range (-100 to +100). If 2 seconds are selected, the line's output will take 0.5 second to gradually sweep from 0 to +50% if the input was moved by that much. Note that slow up/down are not applicable to mix activation and deactivation, only for changes of the input. One would use a flight phase for that instead. 
  * You can also name the mixer line. This name is shown on the main mixer screen, so setting names is a good idea to help maintain complex setups where you might have many lines on each channel. 
@@ -447,7 +447,7 @@ We're done for this screen. You've already named your channels of course ;)
 
 You've probably noticed there's one thing we haven't done yet - adjust throws. That's what we'll do now.
 For each stick, create a rate line. Set the weight to achieve the desired throws. Add expo if desired. This is your default rate, so don't choose a switch.
-If you want multiple rates, create a new line [b]Before[/b] the default one, enter the new rate/expo, choose a switch. Repeat as many times as desired. What's important to know is that the [b]first line[/b] that has its switch on (starting from the top) will be the active one. So if you create rates below one with no switch - it will never be active. Think about the priority if you choose switch combinations that can lead to 2 rates having their switch on - the top one will override the other. Ideally you should choose your switches so that never happens. 
+If you want multiple rates, create a new line *Before* the default one, enter the new rate/expo, choose a switch. Repeat as many times as desired. What's important to know is that the *first line* that has its switch on (starting from the top) will be the active one. So if you create rates below one with no switch - it will never be active. Think about the priority if you choose switch combinations that can lead to 2 rates having their switch on - the top one will override the other. Ideally you should choose your switches so that never happens. 
 
 There, we can go and fly!
 
@@ -483,8 +483,8 @@ One of the major features of the radio is the speech output function. Providing 
 Audio operation is relatively simple as it only consists of 5 "and a half" Custom Functions:
  * Play Track: Just play an audio file from the SD card when the associated switch is active. A repeat option is available, when set the sound will repeat at the set interval as long as the switch is active. This can be used to announce flight phases, gear position, flap position etc when the associated switch is activated or on request.
  * Play Value: Say the value of the selected parameter when the switch is active. The repeat parameter is available too.
- * BgMusic: Starts playback of a background music track (that can of course also be a timed flight program announcement). The switch must stay on in order to continue playback.
- * BgMusic ||: This pauses the background track while active, and resumes playback when deactivated. The BgMusic switch must stay active the whole time or the track will start from the beginning again.
+ * !BgMusic: Starts playback of a background music track (that can of course also be a timed flight program announcement). The switch must stay on in order to continue playback.
+ * !BgMusic ||: This pauses the background track while active, and resumes playback when deactivated. The !BgMusic switch must stay active the whole time or the track will start from the beginning again.
  * Vario: Reproduces the sound of a glider variometer using the altitude or Vertical speed telemetry data.
  * Volume: Adjusts the audio volume for the entire radio to the value of an input, e.g. a pot.
 
