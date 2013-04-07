@@ -44,7 +44,7 @@ It is also future-proof, as both teams are always there to respond to questions 
  * Selectable flight mode (1-4), totally free output channel assignment
  * 2 timers, values can be stored when the radio is powered off
  * 64 mixers
- * 9 flight phases
+ * 9 flight modes
  * 16 custom curves with 3-17 points each, freely definable x coordinates
  * 32 logic switches
  * Standard JR-type trainer jack
@@ -191,14 +191,14 @@ The inputs of this mixer are the Ail and Ele sticks, plus the virtual channel se
 The outputs of the CCPM mixer are CYC1, CYC2 and CYC3, which need to be assigned on the MIXER page to the channels you will connect your servos to. 
 Note that the settings made here have no effect unless you are using those CYC1, CYC2 and CYC3 sources. A multirotor or flybarless helicopter which uses onboard computers/mixers will NOT use them.
 
-==== Flight phases ====
+==== Flight modes ====
 
-Next up is the flight phases screen. 
+Next up is the flight modes screen. 
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/15_FP.png
 
-8 flight phases plus the default one are available for use. Each of them can be named, has a selectable activation switch (physical or logical), a trim selection array (R, E, T, A when shown mean the phase has its own trim setting for that control, but each can be changed to a number from 0 to 9 and thus use the same value as the specified phase), and slow up/down parameters for smooth transitions between phases. 
-The priority of the flight phases is such as the first FP of 1-8 that has its switch ON is the active one. When none has its switch ON, the default FP0 is active. 
+8 flight modes plus the default one are available for use. Each of them can be named, has a selectable activation switch (physical or logical), a trim selection array (R, E, T, A when shown mean the phase has its own trim setting for that control, but each can be changed to a number from 0 to 9 and thus use the same value as the specified phase), and slow up/down parameters for smooth transitions between modes. 
+The priority of the flight modes is such as the first FP of 1-8 that has its switch ON is the active one. When none has its switch ON, the default FP0 is active. 
 
 ==== Sticks ====
 
@@ -208,7 +208,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/16_inputs.png
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/17_dr.png
 
 As many lines as required can be assigned to each stick (LONG press ENTER brings up a popup menu), and again the first one that has its switch on (starting from the top) will be the active one. This is commonly used to create dual, triple,... rates. A name can be defined for each entry, as well as the rate and exponential ratio. A curve (built-in or custom) can also be used instead of the "simple" exponential function. 
-The Phases line allows to choose in which phase(s) (highlighted numbers) that line can be active. If the current phase is not selected, turning on the switch will not activate that formatting line. 
+The Modes line allows to choose in which phase(s) (highlighted numbers) that line can be active. If the current phase is not selected, turning on the switch will not activate that formatting line. 
 The Side parameter limits the effect of that formatting line to only one side of the stick.
 
 ==== Mixer ====
@@ -242,7 +242,7 @@ For each mixer line, several parameters are available:
  * An offset on the input value can be added. 
  * A trim can be used, for sticks this is by default the trim assiciated to the stick, but can be chosen to be one of the other trims (for cross-trimming for example) or disabled altogether. For other inputs the trim defaults to OFF, but can of course be set to one if required.
  * Either a differential setting can be set (resuces response by the specified percentage on one side of the throw) or a curve (built-in or custom) can be assigned. When a custom curve is selected, a press of the MENU key will bring you to the curve editor.
- * The phases the mixer line is active in can be selected (see D/Rs).
+ * The modes the mixer line is active in can be selected (see D/Rs).
  * A switch (physical or virtual) can be used to activate the mixer line.
  * A sound warning (1, 2 or 3 beeps) can be set to play when the line is active.
  * The Multpx setting defines how the current mixer line interacts with the others on the same channels. "Add" will simply add its output to them, "Multip" will multiply the result of the lines above it, and "Replac" will replace anything that was done before it with its output. The combination of these operation allows creating complex mathematical operations. 
@@ -268,7 +268,7 @@ For each channel, we can define:
  * Servo reverse.
  * Center adjustment. This is similar to subtrim, with the difference that an adjustement done here will shift the entire servo throw (including limits), and won't be visible on the channel monitor. 
  * Subtrim behavior: When set to default, adjusting subtrim will only shift the center of the servo throw. Given a -100% to +100% order from the mixer, the servo will still move exactly between the lower and upper limits, without clipping or dead band. This introduces a different stick to servo movement relation for both sides of the stick. Depending on the situation it can be either convenient or probematic, so the = setting changes subtrim effect to rather shift the servo throw "symmetrically". A full throw order from the mixer can now be clipped by the limit that is on the same side as the subtrim, while on the other side the servo will not reach the limit anymore. That way on both sides of the stick a given stick movement always results in the same servo movement. Typically using the default mode allows for faster setup of servos that are driven by a single control input, while = is required to keep correct response of control surfaces using differential and/or mixing several inputs together. The = mode typically requires reducing D/R so that a margin is left between full "control" throw and the defined limits.
-The last line after CH32 is the "Trims to Offsets" function. It is used to take the trims of the currently selected flight phase, transfer their content to the subtrims, reset them, and adjust all other flight phases' trims. If you're close to running out of trim, instead of having to adjust every value one after the other, all it takes is to LONG press ENTER on this line and everything is done magically. Beware that you should still check if it would not be wiser to correct the problem mechanically, especially with large values, as depending on the subtrim behavior setting it might lead to either unsufficient and assymetric throws, or clipping/dead band. 
+The last line after CH32 is the "Trims to Offsets" function. It is used to take the trims of the currently selected flight phase, transfer their content to the subtrims, reset them, and adjust all other flight modes' trims. If you're close to running out of trim, instead of having to adjust every value one after the other, all it takes is to LONG press ENTER on this line and everything is done magically. Beware that you should still check if it would not be wiser to correct the problem mechanically, especially with large values, as depending on the subtrim behavior setting it might lead to either unsufficient and assymetric throws, or clipping/dead band. 
 
 ==== Curves ====
 
@@ -286,7 +286,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/21_curves.png
 Global variables are values that can be substituted to the usual number on every Weight, Offset, Differential or Expo setting. Their main use is to group the adjustment of several parameters that should have the same value. For example, aileron differential on a glider with 4 surfaces responding to the aileron function. When trying to find the sweet spot for the differential value, instead of having to repeatedly edit the differential value in 4 mixers, all 4 can be set to use a global variable (e.g. GV1 resp. -GV1, selected by a LONG press of the ENTER key on the Differential field). Then adjusting GV1 on this page is all it takes for all differentials to be updated.
 Global variables are also flight-phase specific, so instead of having to create separate mixer lines with different values depending on the flight phase one can simply use a global variable with different values for each flight phase. This can significantly help simplifying the mixer screen by avoiding many duplicate entries.
 Global variables can also be adjusted in flight thanks to the Adjust GVx Custom Function that will be described later, and help adjusting those parameters that are easier to tweak in flight like D/R ratios, expos or again differential.
-The Global variables screen allows setting a name for each of the 5 available variables for conveniency, and seeing/setting the value each of them will have in each of the 9 flight phases.
+The Global variables screen allows setting a name for each of the 5 available variables for conveniency, and seeing/setting the value each of them will have in each of the 9 flight modes.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/22_gvars.png
 
@@ -403,8 +403,8 @@ Let's delete them all by highlighting them, pressing ENTER LONG and choosing "De
  * There is no offset, so with an input of 0 the output of the mixer line will also be 0. A value here would shift the response by that much percentage of (input x weight).
  * Trim is ON, it could instead be excluded from the calculation (OFF), or one of the other trims could be used (for cross-trimming for example). D/R and expo (the entries on the STICKS screen for that channel) are used. Unticking the box would mean the mix receives the raw stick input even if a D/R is active.
  * Differential is 0, so the mixer output will be symmetrical on both sides. A value of 20% would mean the line's output would be 20% less on the negative side than on the positive one. The "Diff" field is editable, and by using the +/- keys on it you'll be able to select a curve instead (predefined or custom).
- * The mixer line is active for all flight phases. By "unticking" some of the numbers, you would disable that line whenever the corresponding flight phase is selected.
- * No switch is assigned to the line, so it's always active (as long as the phases setting above allows it). Selecting a switch (physical or logical) would allow activating or deactivating the line whenever needed.
+ * The mixer line is active for all flight modes. By "unticking" some of the numbers, you would disable that line whenever the corresponding flight phase is selected.
+ * No switch is assigned to the line, so it's always active (as long as the modes setting above allows it). Selecting a switch (physical or logical) would allow activating or deactivating the line whenever needed.
  * Warning is off. If set to 1,2 or 3 the radio would emit 1,2 or 3 short beeps every few seconds to let you know that line is active.
  * Multiplex is Add, so this line is just added to the previous ones on the same channel. If set to multiply it would multiply the *calculated result* of the lines above it, and if set to replace it would replace anything that's above it whenever it's active.
  * Delays are 0, so if that line had a switch assigned it would be activated/deactivated instantly when the switch is toggled. Time is in seconds.
@@ -469,9 +469,9 @@ Once the flight is over, the "Trims -> Offsets" function at the bottom of the SE
 
 == Advanced features ==
 
-=== Flight phases ===
+=== Flight modes ===
 
-Flight phases in openTx are relatively simple compared to most radios. The settings are simple: A name (dispalyed on the main views), a switch to activate them, a trim setting and 2 fade in/out settings. Yet they are very powerful, because the main settings are actually just located somewhere else: in the D/Rs and mixers. Each of these has a phase selection list, that will determine in which one(s) they are active. So (nearly) everything is done through dedicated mixers. The mixers that are controlled by a phase will see their activation fade in/out according to the phase's settings. This can be used to create interesting functions: For example, in our example earlier we had flaps controlled by a 3-position switch. If we wanted to slow them down, we could just use the Slow setting in the mixer. With the gear example though, as we use the MAX source and activate/deactivate a mixer line, the Slow parameter would not do anything. One solution is to leave the Switch for our second line empty, and instead assign that switch to a flight phase. The mixer line would now see its flight phase selector set to only the flight phase in question. Slow up/down is set in the flight phase paramaters, and we get our nice slow gear operation. A "side effect" is that we can now also use the separate set of trims that comes with the flight phase, and take advantage of it to counter the extra drag from the gear that often causes a pitch down action.
+Flight modes in openTx are relatively simple compared to most radios. The settings are simple: A name (dispalyed on the main views), a switch to activate them, a trim setting and 2 fade in/out settings. Yet they are very powerful, because the main settings are actually just located somewhere else: in the D/Rs and mixers. Each of these has a phase selection list, that will determine in which one(s) they are active. So (nearly) everything is done through dedicated mixers. The mixers that are controlled by a phase will see their activation fade in/out according to the phase's settings. This can be used to create interesting functions: For example, in our example earlier we had flaps controlled by a 3-position switch. If we wanted to slow them down, we could just use the Slow setting in the mixer. With the gear example though, as we use the MAX source and activate/deactivate a mixer line, the Slow parameter would not do anything. One solution is to leave the Switch for our second line empty, and instead assign that switch to a flight phase. The mixer line would now see its flight phase selector set to only the flight phase in question. Slow up/down is set in the flight phase paramaters, and we get our nice slow gear operation. A "side effect" is that we can now also use the separate set of trims that comes with the flight phase, and take advantage of it to counter the extra drag from the gear that often causes a pitch down action.
 
 === Telemetry ===
 
@@ -481,7 +481,7 @@ This subject in itself has actually mostly been covered already. The telemetry s
 
 One of the major features of the radio is the speech output function. Providing a microSD card (FAT12/16/32 format) loaded with the sound pack available for download from within companion9x is inserted in the slot in the battery compartment, the radio will be able to play audio files in response to various events like reaching trim center/ends and activation of a switch (physical or custom), to play a background music file, and last but not least to announce every available value (telemetry, parameter, stick position) in clear voice. Custom sounds can be placed in the SOUNDS folder of the card and will be avilable for use.
 Audio operation is relatively simple as it only consists of 5 "and a half" Custom Functions:
- * Play Track: Just play an audio file from the SD card when the associated switch is active. A repeat option is available, when set the sound will repeat at the set interval as long as the switch is active. This can be used to announce flight phases, gear position, flap position etc when the associated switch is activated or on request.
+ * Play Track: Just play an audio file from the SD card when the associated switch is active. A repeat option is available, when set the sound will repeat at the set interval as long as the switch is active. This can be used to announce flight modes, gear position, flap position etc when the associated switch is activated or on request.
  * Play Value: Say the value of the selected parameter when the switch is active. The repeat parameter is available too.
  * !BgMusic: Starts playback of a background music track (that can of course also be a timed flight program announcement). The switch must stay on in order to continue playback.
  * !BgMusic ||: This pauses the background track while active, and resumes playback when deactivated. The !BgMusic switch must stay active the whole time or the track will start from the beginning again.
