@@ -1,5 +1,4 @@
 #summary Download Latest openTx
-#labels Featured
 
 = Download the latest openTx versions =
 
