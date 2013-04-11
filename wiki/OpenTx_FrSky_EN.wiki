@@ -317,6 +317,8 @@ This is the place where switches can be used to trigger special functions such a
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/24_CF.png
 
 The first column selects the trigger, which can be any switch (physical or custom) or ON (always on). A LONG press of the ENTER key will switch to "toggle" mode (ending with t), i.e. the selected input will be turned on when the selected switch is activated, and will remain on until it is deactivated and reactivated again. 
+Scrolling through the list you will also find a few more options: One (triggers just once when loading a model or turning the radio on), SH?s (short press of the momentary switch), SH?l (long press of the momentary switch).
+
 The available functions are:
  * Safety CHx: When active, the output of CHx is forced to the selected value. A checkbox is there to enable the function, which you would typically do after ensuring the value is set correctly and the switch is off if your model is powered.
  * Trainer, TrainerXXX: Enables trainer mode globally, and for individual functions. Unless a custom function is set for an individual function, turning the one set for Trainer automatically activates all 4 sticks.
