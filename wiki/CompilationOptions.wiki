@@ -177,6 +177,18 @@ make OPTION1=VALUE1 OPTION2=VALUE2...
 		<td>Frsky Hub supported (when EXT=FRSKY) </td>
 	</tr>
 	<tr>
+		<td>GAUGES</td>
+		<td><b>YES</b></td>
+		<td>NO</td>
+		<td>Telemetry screen also as GAUGES</td>
+	</tr>
+	<tr>
+		<td>GPS</td>
+		<td><b>YES</b></td>
+		<td>NO</td>
+		<td>GPS data support (saves 1.5k flash if disabled)</td>
+	</tr>
+	<tr>
 		<td>WS_HOW_HIGH</td>
 		<td><b>YES</b></td>
 		<td>NO</td>
