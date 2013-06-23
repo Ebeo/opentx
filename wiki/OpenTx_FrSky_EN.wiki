@@ -1,6 +1,13 @@
 #summary openTx for FrSky radios 
 #labels Featured
 
+<wiki:comment>
+TODO: 
+ * Flashing
+ * audio pack download
+ * c9x  
+</wiki:comment>
+
 = openTx for !FrSky Taranis =
 
 DISCLAIMER: The content below is still subject to change before the radio is available on the shelves.
@@ -21,8 +28,8 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/Taranis-3.jpg
  * A 6-cell NiMH battery pack
  * A charger that connects to the radio's charge port
  * A nice neck strap
- * Depending on the pack, an X8R receiver 
-Use of some advanced features (voice announcements, telemetry data logging, custom model logos) will require adding a microSD card (not supplied).
+ * Depending on the chosen combo, an X8R receiver 
+Use of some advanced features (voice announcements, telemetry data logging, custom model logos) will require adding a microSD card (not supplied). The openTx team strongly recommends using one, as the voice announcements are a key in making use of the radio's unique ability to warn you of dangerous conditions such as low signal or a broken antenna. All alarms will sound a different beep pattern if a voice pack is not available, but the large number of possible alarms makes it difficult to remember what sounds how to react accordingly if they sound in flight.  
 
 == The radio ==
 
@@ -33,21 +40,21 @@ It is also future-proof, as both teams are always there to respond to questions 
 
  * Large 212*64 backlit LCD screen
  * Quad ball-bearing gimbals with high quality potentiometers 
- * Numerous inputs (4 sticks, 4 trims, 2 sliders, 2 pots, 8 switches), all freely assignable
+ * Numerous input controls (4 sticks, 4 trims, 2 sliders, 2 pots, 8 switches), all freely assignable
  * 60 model memories
  * 32 logical channels
- * Internal telemetry-enabled RF module capable of transmitting up to 16 channels, with a refresh rate of 9ms for up to 8 channels, 18ms for 9-16 channels. Supports the existing D8 protocol (useable with all D-type and VxR-II receivers) as well as the new D16 and LR12 modes.
- * JR-compatible external RF module slot (no 6V supply) supporting transmission of up to 16 channels (depending on module) in various common protocols (PXX for !FrSky modules, PPM for 3rd-party modules, serial DSM2 for DIY Spektrum modules). 
+ * Internal telemetry-enabled RF module capable of transmitting up to 16 channels, with a refresh rate of 9ms. Supports the existing D8 protocol (useable with all D-type and VxR-II receivers) as well as the new X16 and LR12 modes
+ * JR-compatible external RF module slot (no 6V supply) supporting transmission of up to 16 channels (depending on module) in various common protocols (PXX for !FrSky modules and PPM for 3rd-party modules). Support for serial DSM2 for DIY Spektrum modules will be added via firmware upgrades post-launch.
  * Mapping of the transmitted channels is free, so once an external module is added you have the choice of either creating a redundant system where the same channels are transmitted via both internal and external RF, transmitting up to 32 independent channels simultaneously, or anything in between.
- * Internal RF supports receiver match, and allows configuring failsafe conveniently from the radio with 3 modes: Hold, Stop pulses, Custom positions. 
- * Telemetry with 3 customisable screens and fully configurable speech announcements, supports existing receivers and sensors as well as new Smart Port sensors. Configurable metric or imperial units. Integrated audio variometer (sensor required on the model). Data logging.
- * Selectable flight mode (1-4), totally free output channel assignment
+ * Internal RF (and external RF when an !FrSky XJT module is fitted) supports receiver match, and allows configuring failsafe conveniently from the radio with 3 modes: Hold, Stop pulses, Custom positions. 
+ * Telemetry with 3 customisable screens and fully configurable speech announcements, supports existing receivers and sensors as well as new Smart Port sensors. Configurable metric or imperial units. Integrated audio variometer (sensor required on the model). Data logging (requires microSD card).
+ * Selectable stick mode (1-4), totally free output channel assignment.
  * 2 timers, values can be stored when the radio is powered off
  * 64 mixers
  * 9 flight modes
  * 16 custom curves with 3-17 points each, freely definable x coordinates
  * 32 logic switches
- * Standard JR-type trainer jack
+ * Standard JR-type trainer jack (PPM signal), capable of receiving up to 8 channels as input, and sending up to 16 channels when configured as output. Master/slave mode and signal parameters are conveniently stored separately for each model.
  * [http://code.google.com/p/companion9x/ companion9x] Windows/Mac/Linux software to save, edit and share your models and settings as well as simulate your model setup
  * USB connection for firmware upgrades, microSD card and companion9x access
  * Sticks can be calibrated by the end user
@@ -58,14 +65,14 @@ It is also future-proof, as both teams are always there to respond to questions 
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/Taranis.jpg
 
-The radio has a relatively standard control layout, namely:
- * 2 sticks and their associated trims, labelled in the software as Thr, Rud, Ele, Ail and TrmT, TrmR, TrmE, TrmA respectively. The mapping matches the selected stick mode. Trims are freely assignable, and can also be used as independent controls.
+The radio has a relatively standard design and control layout, namely:
+ * 2 sticks and their associated trims, labelled in the software as Thr, Rud, Ele, Ail and TrmT, TrmR, TrmE, TrmA respectively. The stick to name mapping matches the selected stick mode. Trims are freely assignable (e.g. for cross-trimming), and can also be used as independent controls.
  * 2 adjustment pots, S1 and S2
  * 2 lateral sliders, LS and RS
  * 6 3-position switches (SA-SE, SG)
  * 1 2-position switch (SF)
  * 1 momentary switch (SH)
-Switches when used to activate functions are referred to as their name and position (SAup, SC-, SFdown). A ! before the name means NOT, so !SBdown would mean SB is NOT down = SB is either up or in the middle.
+When selecting a switch position to activate functions, it is referred to as the switch name folowed by the physical position (SAup, SC-, SFdown). A ! before the name means NOT, so !SBdown would mean that the function is active when SB is NOT down, i.e. when SB is either up or in the middle.
 
 A swiveling antenna is installed for the internal RF module, and a speech-capable speaker is located under the round grill. The large backlit, grayscale LCD and 6 edit keys take most of the lower part. 
 
@@ -74,7 +81,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/photo06.jpg
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/photo07.jpg
 
 The back of the radio shows the JR-compatible module slot, along with a JR-style jack trainer port, USB connector and earphone jack. The battery bay houses a microSD card slot, a serial port and of course the battery connection. 
-The supplied battery is a 6-cell NiMH, but the plug will also accept a JST-style balance plug for a 2s Li-Po battery. Battery compartment dimensions are 108x31x23mm. Voltage range is 5.5-13V for the internal components, but be aware that external modules might require up to 12V. So observe your module's requirements when using one and choose the appropriate battery. 
+The supplied battery is a 6-cell NiMH, but the plug will also accept a JST-style balance plug for a 2s Li-Po battery. Battery compartment dimensions are 108x31x23mm. Voltage range is 5.5-13V for the internal components, but be aware that external modules might require up to 12V, so observe your module's requirements when using one and choose the appropriate battery. 
 
 == Software overview ==
 
@@ -83,14 +90,14 @@ Now might be the time to put the battery on charge, so that after reading this s
 === Button navigation ===
 
 The Taranis has 6 input keys: a standard set of +/-/ENTER/EXIT, plus 2 contextual MENU and PAGE keys.
-On the main views, the PAGE key will switch between the different views described in the next section. A LONG press of the PAGE key will bring up the telemetry display. A SHORT press of the MENU key will call the model menu, while a LONG press will call the radio settings menu. In those 2 menus, a SHORT press of the PAGE key goes to the next page, while a LONG press goes back to the previous one. EXIT goes back to the main views. On the STICKS and MIXER model menu pages, a long press of the MENU key will bring up a channel monitor to allow quickly looking at the result of a change in settings.
+On the main views, the PAGE key will switch between the different views described in the next section. A LONG press of the PAGE key will bring up the telemetry display. A SHORT press of the MENU key will call the model menu, while a LONG press will call the radio settings menu. In those 2 menus, a SHORT press of the PAGE key goes to the next page, while a LONG press goes back to the previous one. EXIT goes back to the main views. In all model menu pages a long press of the MENU key will bring up a channel monitor to allow quickly checking the influence of a change in settings on the outputs.
 
 The navigation in a menu is simple: The +/- keys will navigate up/down between editable fields, or lines of fields depending on the screen.
 ENTER will enter the line of fields when applicable, then edit mode. In edit mode, +/- will change the value, ENTER or EXIT will validate the input and return to navigation. EXIT always goes back to the previous navigation level.
 
 In edit mode, we have four 2-key shortcuts available: 
 +/- together: Invert value
--/ENTER : Set value to 100
+-/ENTER: Set value to 100
 EXIT/PAGE: Set value to -100
 MENU/PAGE: Set value to 0
 
@@ -98,7 +105,7 @@ Another handy feature is the auto selection of physical inputs in the relevant f
 
 === Main views ===
 
-We have 3 main views showing the same basic information in the top part and different inputs/outputs on the lower part. On the main views a long press of the ENTER key brings up a menu where you can reset the timers, telemetry data (min/max), all of those, or bring up a statistics view (throttle graph, timers). As mentioned above, a short press of the PAGE key switches views.
+We have 3 main views showing the same basic information in the top part and different inputs/outputs on the lower part. On the main views a long press of the ENTER key brings up a menu where you can reset the timers, telemetry data (min/max, altitude, GPS home...), all of those, bring up a statistics view (throttle graph, timers), or show the development credits. As mentioned above, a short press of the PAGE key switches views.
 The new title bar includes radio battery voltage, receiver signal strength (for !FrSky receivers), main onboard voltage (can be receiver battery, flight battery, or anything else depending on sensors the "Voltage" parameter in the telmetry settings), status icons (SD present, USB connected, trainer port mode, logging in progress), audio volume and time.
 The other "always present" items are model name, flight mode, and trim/pot positions.
 The logo is of course customisable - if you have a microSD card in your radio, you'll be able to load your model's photo there!
@@ -136,18 +143,65 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/08_radio_setup.png
 
  * Date/Time: To be set, they serve as info but also to give a correct timestamp to files and logs saved by the radio. 
  * Battery range: range of the graphical radio battery meter on the main views. To be set accordingly with the battery type you use (2s lipo here).
- * Alarms -> Sound off: if "Sound Mode" is "Quiet", the radio will not even sound warnings like a low battery. This alarm will remind you of that when turning the radio on.
- * Throttle reverse: Ensures correct operation of throttle-based timers and functions for people who like having full throttle with the stick down.
+ * Sound settings: Mode, Master volume, individual volumes of all mixed sources (Beeps, sound files, variometer, background music), beep duration and pitch. 
+ * Alarms -> Sound off: if "Sound Mode" is "Quiet", the radio will not even sound warnings like a low battery. This alarm will remind you of that when turning the radio on. Inactivity alarm will remind you if you have forgotten to turn the radio off.
  * Backlight -> Mode: If set to Stks, Keys or Both, the backlight will turn on when a stick is moved and/or a key is pressed, for the duration set below.
- * Backlight -> Alarm: Backlight will flash when an alarm sounds if it's not already on at that time.
+ * Backlight -> Alarm: Backlight will flash when an alarm sounds.
  * Splash screen: On Taranis the splash will always be shown as the EEPROM takes some time to load. Setting this on will just show it for longer. 
+ * GPS time zone is there to show you the correct time when a GPS is present, and coordinate format lets you adjust display format to your liking. 
  * Country code: Must match your geographical location to keep RF transmission parameters within regulatory requirements.
+ * Voice language: Allows you to choose the language of the voice announcements. Note that the list contains all supported languages, but you also need to ensure a voice pack for that language has been loaded onto the SD card (in a subfolder of the SOUNDS directory).  
  * Default channel order: Defines the order of the 4 default mixers that are inserted on channels 1-4 when creating a new model. Set this to your preference. They can of course always be moved later, this is just a time-saving option.
  * Mode: This is your stick mode, e.g. Mode 1 for throttle and aileron on the right stick, Mode 2 for throttle and rudder on the left stick. 
 
-Other pages reachable by pressing the PAGE key include an SD card browser where you can copy/rename/delete files and preview sounds, a version info page, trainer setup, key/stick/pot diagnostics, and stick/pot calibration.
+==== SD browser ====
+
+A SHORT press of the PAGE key brings up the SD card browser page:
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/09_SD.png
+
+This allows you to browse the SD card contents. 
+
+On each file or folder, pressing ENTER will bring up a contextual menu with some basic file operations (copy/delete), as well as others depending on the file type.
+
+Folders are organised as such:
+
+ * BMP folder: This is where you should place the 64x32, 4-bit grayscale .bmp files that you want to use as model logos. Filenames must be 10 chars long or less (not including extension). A collection of files is available [http://openrcforums.com/forum/viewtopic.php?f=92&t=3530 here]. Placing the cursor over a valid file in this folder will show it on the right side of the screen, and in the contextual menu you will find an entry to assign the selected image to the current model. 
+ * LOGS folder: This is where you will find telemetry logs if enabled. Files will be created with the same name as the model they were saved from, and logging further flights just appends the data to the same file.  
+ * MODELS folder: Model files saved by the "Archive model" command of the model selection screen will be placed here. Similarly, models you want to reload using the "Restore model" of the same page need to be placed there beforehand.
+ * SOUNDS folder: This is where voice packs need to be placed. ZIP files with the standard voice packs can be downloaded from within companion9x, or [http://85.18.253.250/voices/opentx-taranis/ here]. Extract the ZIP file to the root of the SD card, and it will create the necessary subdirectories (e.g. SOUNDS/en for the English pack). Any file you want to have available for the "Play Track" custom function needs to be placed within the language's directory as well. In this folder, the contextual menu includes a preview function.
+
+==== Trainer ====
+
+A SHORT press of the PAGE key calls the trainer settings page:
+
+https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/09b_trainer.png
+
+This page allows you to configure the trainer function for "master" use. For each of the 4 main functions you will be able to set the mode (OFF, += for Add, := for Replace), ratio and input channel. 
+Start by setting the mode for each function (the "standard" way is Replace i.e. when the trainer function is activated the function is fully transferred to the student, Add allows both master and student to act upon the function together). Then select the source channel accordingly to the brand/model of the student radio, and set the ratio to 100% for now. Now ensure the student radio is connected and recognised (moving the sticks of the student radio should change the 4 numbers at the bottom of the screen) make sure all its trims are neutral, all its sticks are centered (including throttle). Select the CAL field and press ENTER twice. The numbers should now be 0.0 or very close.
+Now move the student radio's sticks and check the numbers vary from -100 to +100. Should they reach those values before the stick hits the end of its travel, reduce the ratio so that the throws match. Should they never reach -100 to +100 even with full stick deflection, use the Multiplier field to increase it. 
+
+Trainer input is now configured. Note that this setting is global, because it depends on the student radio regardless of the selected model. In order to use the Trainer function on a specific model you will need to assign the switch you want to the "Trainer" Custom Function for that model. More about this further.
+
+==== Version ====
+
+This screen allows you to see the version of your currently loaded openTx firmware.
+
+https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/09c_version.png    
+
+When reporting a bug, please be sure to include the revision number you see on the SVN line.
+
+==== Diagnostics ====
+
+The next 2 pages are the switch and analog diagnostics, they will show you what the firmware reads from the radio's keys and potentiometers. This is the first place to go to if you run into issues with badly responding sticks / pots / switches. If things are wrong here (inconsistent stick centering or end point readings, flickering value,...) then you can be sure the problem is hardware-related and not due to wrong model setup. 
+
+https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/09d_switchdiag.png    
+
+https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/09e_anadiag.png    
+
+==== Calibration ====
+
+This is the place where you can calibrate sticks and pots. Follow the on-screen instructions, and note that when asked to center the sticks this includes the throttle stick. Pots however do not need to be centered, only the extremes are calibrated.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/10_calib.png
 
@@ -168,6 +222,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/12_model_setup.png
  * Extended limits allow setting servo movement limits up to 125% instead of 100%.
  * Extended trims allows trims to cover the full stick range instead of +/-25%. The "Reset" item will reset all trims (for all flight modes).
  * Trim step sets the precision of trim clicks. Exponential means very fine steps close to the trim center, but larger one the farther you get from center. 
+ * Throttle reverse: Ensures correct operation of throttle-based timers and functions for people who like having full throttle with the stick down.
  * Throttle source defines what triggers the THx functions of the timers. It's common to set it to the throttle channel instead of the stick, so that throttle cut or other modifiers are taken into account.
  * Throttle trim: IC engine mode, where trim only affects the idle part of the throw without touching the full throttle point.
  * Switch warning: Defines whether the radio requests the switches to be in predefined positions on power on/model change. To set them, arrange your switches the way you like, and LONG press ENTER.
