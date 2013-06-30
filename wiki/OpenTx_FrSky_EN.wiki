@@ -9,7 +9,7 @@ TODO:
 
 = openTx for !FrSky Taranis =
 
-Based on openTx r2563.
+Manual by Andre Bernet, based on openTx r2563.
 
 So as everybody probably knows now, !FrSky have chosen openTx as the operating system for their new [http://www.frsky-rc.com/NewProducts/ Taranis] radio :)
 
@@ -150,7 +150,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/08_radio_setup.png
  * GPS time zone is there to show you the correct time when a GPS is present, and coordinate format lets you adjust display format to your liking. 
  * Country code: Must match your geographical location to keep RF transmission parameters within regulatory requirements.
  * Voice language: Allows you to choose the language of the voice announcements. Note that the list contains all supported languages, but you also need to ensure a voice pack for that language has been loaded onto the SD card (in a subfolder of the SOUNDS directory).  
- * Units: Allows choosing between metric and imperial units for telemtry values. 
+ * Units: Allows choosing between metric and imperial units for telemetry values. 
  * Default channel order: Defines the order of the 4 default mixers that are inserted on channels 1-4 when creating a new model. Set this to your preference. They can of course always be moved later, this is just a time-saving option.
  * Mode: This is your stick mode, e.g. Mode 1 for throttle and aileron on the right stick, Mode 2 for throttle and rudder on the left stick. 
 
@@ -379,6 +379,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/23_CS.png
  * a<b,a>b,a=b: See above, but with 2 variables
  * AND, OR, XOR: Logical and, or, exclusive or between 2 binary inputs
  * d>x, |d|>x: Active when the selected variable, repectively its absolute value has changed by more than x since last time. For example, d>x Alt 10 would trigger once every time Altitude goes up by 10m. |d|>x Alt 10 would trigger once everytime Altitude goes up OR down by 10m. 
+ * TIM: A timer, TIM 0.5 2.0 would be active for 0.5s, inactive for 2s, and repeat. 
 
 Custom switches offer 3 more parameters: An extra AND condition (if selected, must be on for the custom switch to become active), a Duration parameter (the minimum time a custom switch will be active for even if its conditions become false instantly), and a delay parameter (that affects both activation and deactivation). See the title bar header to see the function of the field the cursor is on.
 
@@ -429,7 +430,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/07b_telem_bars.png
 Each field can be one of the various available parameters, of course the corresponding sensors and/or hub must be installed in the model:
 
  * Tmr1,2: Both timers
- * SWR: Transmitter antenna quality. Should always be below 51, or a popup warning will appear and an audio alarm will sound and warn you to check the radio's antenna. The value itself is of little meaning.
+ * SWR: Transmitter antenna quality. Should always be below 51, or a popup warning will appear and an audio alarm will sound to warn you to check the radio's antenna. The value itself is of little meaning.
  * RSSI: Lowest of the RSSI values from the radio and receiver in D8 mode. In X16 mode, RSSI of the receiver.
  * A1,2: Analog ports on D receivers (only A1 available on X8R receivers, with receiver voltage)
  * Alt: Barometric altitude sensor
@@ -585,13 +586,53 @@ But as we know that custom switches can be used anywhere a switch is definable, 
 As we have briefly mentioned, openTx comes with a computer-based conterpart that runs on Windows, Mac OS and Linux, [http://code.google.com/p/companion9x/ companion9x].
 This software will allow you to backup, edit and share your radio's settings. It can also simulate both a model's setup and the radio's own interface on the computer, so it's a great tool to try things even without a radio. When you have one, it can speed up new model setups significantly thanks to the PC interface that's not limited to a small screen and a few buttons.
 
-=== Previewing the radio ===
+=== Basic concepts ===
 
-To have a go, start by downloading and installing the appropriate version for your system. Once the program is launched, you will find the main window. Open the Preferences Dialog with File->Preferences.
+Companion9x handles 2 main tasks:
+ * Managing radio settings and models
+ * Downloading new radio firmwares, and transferring them to the radio. 
+
+An important thing to understand is how things are stored on the radio. We will regularly talk of 2 different types of memories, Flash and EEPROM.
+ * Flash is the memory where the radio's firmware, or "operating system" resides. "Flashing the radio" means replacing the firmware, which you would usually do either to upgrade to a newer version or to change language. Models and settings are not affected when flashing the firmware.
+ * EEPROM is the separate settings/model memory. Reading it allows backing up and editing in companion9x, writing it sends the result of the edits back to the radio.
+
+Companion9x will thus handle 2 different types of files. Firmware files, that can be downloaded from the Preferences dialog, which are non-editable and can just be transferred to/from the radio, and EEPROM files for which companion9x provides an editor that allows to change anything in the same way that would be done on the radio itself.
+When creating (File->New) or opening (either by dragging it onto the main window or via the File->Open menu command) an EEPROM file, a document window will appear. Several of those windows can be open at the same time, allowing you to copy models or settings between files.      
+ 
+https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/document.png
+
+The document window consists in a "General Settings" entry on which you can double-click to access the radio settings, and a number of model slots (60 for the Taranis). The model slot that is displayed in *bold* is the one that is currently selected on the radio. It can be chosen in companion9x by right-clicking on the model slot, and choosing "Use as default". Double-clicking on a model slot will open the editor for that model, creating one if it was empty.
+
+Memory operations to/from the radio are handled by the different entries of the "Burn" menu:
+
+https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/read_write.png
+
+ * Read EEPROM from TX will read the EEPROM contents from the radio, and open them in a new document in companion9x. The document is opened for editing, but is not saved to disk automatically. 
+ * Write EEPROM to TX sends a currently open and selected document (if you have more than one open, make sure to ckick on the one you want to transfer) to the radio.
+ * Read EEPROM memory to File will read the EEPROM contents from the radio directly into a file. This is the preferred way to back up your radio's settings, click the entry, choose a location and filename, and save.
+ * Write EEPROM memory from File will allow you to select a file, and will transfer it as is to the radio. This is the preferred way to restore a backup.
+ * Write Flash memory will flash the radio's firmware from the selected file. Once the file is selected, you have the option to replace the default splash screen with an image of your choice, or the image selected in the preferences.      
+ * Read Flash memory will back up the firmware that is currently in the radio to a file.  
+
+=== Setting up companion9x for the Taranis ===
+
+The first thing is of course to download and install the appropriate version of companion9x for your system from the [http://code.google.com/p/companion9x/downloads/list downloads] page. Once the program is launched, you will see the main window. Open the Preferences Dialog with File->Preferences.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/28_c9x_prefs.png
 
-Select "openTx for !FrSky Taranis" in the firmware dropdown. Select your firmware language, and the voice language. A few option checkboxes are there to allow some customisation of the firmware, such as removing the heli, templates and global variable pages, or changing the percentage displays into microsecond units. The top Download button will compile and download the latest available firmware version with the selected language and options.
+There are quite a few settings there:
+ * Software language
+ * Automatic update check at launch for both companion9x itself and the selected firmware 
+ * A choice of whether to display the welcome screen when launching companion9x
+ * Simulator options: Whether to remember switch positions between 2 sessions (useful when closing the simulator to edit something and coming back), backlight color, and screenshot save location
+ * Splash screen replacement settings: The splash screen is the image that is displayed on the radio's screen when powering it up. You can select a folder where you store your own splash screens, and select a default one either from a file or from companion9x's library (note the library doesn't have Taranis-sized ones yet). Splash screens need to be 212x64 pixels for Taranis, up to 16 grayscales.
+ * EEPROM backup folder: This allows you to select a backup folder, and ticking the checkbox next to it enables an automatic backup to be saved every time an EEPROM read/write operation is done. It is of course recommended to do regular backups whether with this option or manually. Should you do a mistake when editing a model or a wrong manipulation, being able to get back to an older known good state is always welcome.   
+// Everything below here is TODO
+ * Firmware type, language and options: this is where you will choose which firmware and radio type you will be using with companion9x. It is important that these setting always match the firmware type and options currently on the radio.
+ * Sound samples: The lower language selection dropdown and Download button 
+
+     
+Select "openTx for !FrSky Taranis" in the firmware dropdown. Select your firmware language, and the voice language. A few option checkboxes are there to allow some customisation of the firmware, namely removing the heli, templates and global variable pages, or changing the percentage displays into microsecond units. The top Download button will compile and download the latest available firmware version with the selected language and options. The bottom Download button will open your web browser on a page showing you a selection of voice packs available for the selected language.
 Set your flight mode and preferred channel order in the dropdowns below, and dismiss the Preferences dialog with OK for now.
 
 You can now create a new document. A window will appear, with the first line being the radio's general settings, and the next being the model slots. You can have a look in the general settings and create a model by double-clicking in an empty slot. 
