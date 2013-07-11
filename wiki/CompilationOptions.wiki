@@ -26,7 +26,7 @@ make OPTION1=VALUE1 OPTION2=VALUE2...
 		<td>PCB</td>
 		<td><b>9X</b></td>
 		<td>9X128, 9XR, 9XR128,
-<br>GRUVIN9X, SKY9X, X9D</br></td>
+<br>GRUVIN9X, SKY9X, TARANIS</br></td>
 		<td>Stock 9X/9XR or with Atmega 128,
 <br>gruvin9x, ersky9x, X9D boards</br></td>
 	</tr>
