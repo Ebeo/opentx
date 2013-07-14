@@ -89,6 +89,11 @@ void menuStatisticsView(uint8_t event)
 #define MENU_DEBUG_COL_OFS (14*FW)
 #endif
 
+#if defined(CPUARM) && !defined(SIMU)
+register unsigned char * stack_ptr asm ("sp");
+extern unsigned char *heap;
+#endif
+
 void menuStatisticsDebug(uint8_t event)
 {
   TITLE(STR_MENUDEBUG);
@@ -167,6 +172,9 @@ void menuStatisticsDebug(uint8_t event)
     putsTelemetryValue(MENU_DEBUG_COL_OFS, 4*FH, Coproc_temp, UNIT_DEGREES, 0);
     putsTelemetryValue(20*FW+2, 4*FH, Coproc_maxtemp, UNIT_DEGREES, 0);
   }
+#elif defined(PCBTARANIS) && !defined(SIMU)
+  lcd_putsLeft(4*FH, "Free Mem");
+  lcd_outdezAtt(MENU_DEBUG_COL_OFS, 4*FH, stack_ptr-heap, LEFT);
 #endif
 
 #if defined(CPUARM)

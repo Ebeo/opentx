@@ -77,6 +77,7 @@
   #define MAX_EXPOS  32
   #define NUM_CSW    32 // number of custom switches
   #define NUM_CFN    32 // number of functions assigned to switches
+  #define MAX_SCRIPTS 6
 #elif defined(PCBGRUVIN9X)
   #define MAX_MODELS 30
   #define NUM_CHNOUT 16 // number of real output channels CH1-CH16
@@ -234,6 +235,14 @@ PACK(typedef struct t_ModuleData {
 
 #define SET_DEFAULT_PPM_FRAME_LENGTH(idx) g_model.moduleData[idx].ppmFrameLength = 4 * max((int8_t)0, g_model.moduleData[idx].channelsCount)
 
+#define MAX_SCRIPT_INPUTS  10
+#define MAX_SCRIPT_OUTPUTS 10
+PACK(typedef struct t_ScriptData {
+  char    file[10];
+  char    name[10];
+  int8_t  inputs[MAX_SCRIPT_INPUTS];
+}) ScriptData;
+
 #if defined(PCBTARANIS)
 enum ModuleIndex {
   INTERNAL_MODULE,
@@ -241,7 +250,7 @@ enum ModuleIndex {
   TRAINER_MODULE
 };
 #define MODELDATA_BITMAP  char bitmap[LEN_BITMAP_NAME];
-#define MODELDATA_EXTRA   uint8_t externalModule; uint8_t trainerMode; ModuleData moduleData[NUM_MODULES+1]; char curveNames[MAX_CURVES][6];
+#define MODELDATA_EXTRA   uint8_t externalModule; uint8_t trainerMode; ModuleData moduleData[NUM_MODULES+1]; char curveNames[MAX_CURVES][6]; ScriptData scriptsData[MAX_SCRIPTS];
 #define LIMITDATA_EXTRA   char name[6];
 #define swstate_t         uint16_t
 #elif defined(PCBSKY9X)
@@ -1168,12 +1177,23 @@ enum MixSources {
   MIXSRC_CH16,
   MIXSRC_LAST_CH = MIXSRC_CH1+NUM_CHNOUT-1,
 
+#if defined(CPUARM)
+  MIXSRC_FIRST_LUA,
+  MIXSRC_LAST_LUA = MIXSRC_FIRST_LUA+(MAX_SCRIPTS*MAX_SCRIPT_OUTPUTS)-1,
+#endif
+
   MIXSRC_GVAR1,
   MIXSRC_LAST_GVAR = MIXSRC_GVAR1+MAX_GVARS-1,
 
   MIXSRC_FIRST_TELEM,
-  MIXSRC_LAST_TELEM = MIXSRC_FIRST_TELEM+NUM_TELEMETRY-1,
+  MIXSRC_LAST_TELEM = MIXSRC_FIRST_TELEM+NUM_TELEMETRY-1
 };
+
+#if defined(LUA)
+ #define MIXSRC_LAST MIXSRC_LAST_LUA
+#else
+ #define MIXSRC_LAST MIXSRC_LAST_CH
+#endif
 
 #define MIN_POINTS 3
 #define MAX_POINTS 17

@@ -11,6 +11,8 @@
 #include <limits.h>
 #include <stddef.h>
 
+// #define LUA_LIB
+#define USE_FATFS
 
 /*
 ** ==================================================================
@@ -209,18 +211,24 @@
 ** They are only used in libraries and the stand-alone program. (The #if
 ** avoids including 'stdio.h' everywhere.)
 */
-#if defined(LUA_LIB) || defined(lua_c)
-#include <stdio.h>
-#define luai_writestring(s,l)	fwrite((s), sizeof(char), (l), stdout)
-#define luai_writeline()	(luai_writestring("\n", 1), fflush(stdout))
-#endif
 
 /*
 @@ luai_writestringerror defines how to print error messages.
 ** (A format string with one argument is enough for Lua...)
 */
+
+#if defined(LUA_LIB) || defined(lua_c)
+#include <stdio.h>
+#define luai_writestring(s,l)	fwrite((s), sizeof(char), (l), stdout)
+#define luai_writeline()	(luai_writestring("\n", 1), fflush(stdout))
 #define luai_writestringerror(s,p) \
-	(fprintf(stderr, (s), (p)), fflush(stderr))
+        (fprintf(stderr, (s), (p)), fflush(stderr))
+#else
+#define luai_writestring(s,l)
+#define luai_writeline()
+#define luai_writestringerror(s,p)
+#endif
+
 
 
 /*
@@ -369,7 +377,11 @@
 @@ LUAL_BUFFERSIZE is the buffer size used by the lauxlib buffer system.
 ** CHANGE it if it uses too much C-stack space.
 */
+#if defined(USE_FATFS)
+#define LUAL_BUFFERSIZE         512
+#else
 #define LUAL_BUFFERSIZE		BUFSIZ
+#endif
 
 
 

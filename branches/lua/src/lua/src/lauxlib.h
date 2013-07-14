@@ -10,7 +10,6 @@
 
 
 #include <stddef.h>
-#include <stdio.h>
 
 #include "lua.h"
 
@@ -186,7 +185,11 @@ LUALIB_API char *(luaL_buffinitsize) (lua_State *L, luaL_Buffer *B, size_t sz);
 
 
 typedef struct luaL_Stream {
+#if defined(USE_FATFS)
+  FIL *f;  /* stream (NULL for incompletely created streams) */
+#else
   FILE *f;  /* stream (NULL for incompletely created streams) */
+#endif
   lua_CFunction closef;  /* to close stream (NULL for closed streams) */
 } luaL_Stream;
 

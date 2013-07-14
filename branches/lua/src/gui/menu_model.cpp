@@ -54,6 +54,9 @@ enum EnumTabModel {
 #endif
   e_CustomSwitches,
   e_CustomFunctions,
+#if defined(LUA)
+  e_CustomScripts,
+#endif
   IF_FRSKY(e_Telemetry)
   IF_TEMPLATES(e_Templates)
 };
@@ -69,6 +72,7 @@ void menuModelCurvesAll(uint8_t event);
 void menuModelGVars(uint8_t event);
 void menuModelCustomSwitches(uint8_t event);
 void menuModelCustomFunctions(uint8_t event);
+void menuModelCustomScripts(uint8_t event);
 void menuModelTelemetry(uint8_t event);
 void menuModelTemplates(uint8_t event);
 void menuModelExpoOne(uint8_t event);
@@ -87,6 +91,9 @@ const MenuFuncP_PROGMEM menuTabModel[] PROGMEM = {
 #endif
   menuModelCustomSwitches,
   menuModelCustomFunctions,
+#if defined(LUA)
+  menuModelCustomScripts,
+#endif
   IF_FRSKY(menuModelTelemetry)
   IF_TEMPLATES(menuModelTemplates)
 };
@@ -894,7 +901,7 @@ enum menuModelSetupItems {
 #endif
 
 #if defined(PCBTARANIS) && defined(SDCARD)
-void onModelSetupMenu(const char *result)
+void onModelSetupBitmapMenu(const char *result)
 {
   if (result == STR_UPDATE_LIST) {
     if (!listSdFiles(BITMAPS_PATH, BITMAPS_EXT, sizeof(g_model.header.bitmap), NULL)) {
@@ -904,7 +911,10 @@ void onModelSetupMenu(const char *result)
   }
   else {
     // The user choosed a bmp file in the list
-    memcpy(g_model.header.bitmap, result, sizeof(g_model.header.bitmap));
+    if (memcmp(result, "---", 3) == 0)
+      memset(g_model.header.bitmap, 0, sizeof(g_model.header.bitmap));
+    else
+      memcpy(g_model.header.bitmap, result, sizeof(g_model.header.bitmap));
     LOAD_MODEL_BITMAP();
     memcpy(modelHeaders[g_eeGeneral.currModel].bitmap, g_model.header.bitmap, sizeof(g_model.header.bitmap));
     eeDirty(EE_MODEL);
@@ -984,14 +994,14 @@ void menuModelSetup(uint8_t event)
 #if defined(PCBTARANIS) && defined(SDCARD)
       case ITEM_MODEL_BITMAP:
         lcd_putsLeft(y, STR_BITMAP);
-        if (ZLEN(g_model.header.bitmap) > 0)
+        if (ZEXIST(g_model.header.bitmap))
           lcd_putsnAtt(MODEL_SETUP_2ND_COLUMN, y, g_model.header.bitmap, sizeof(g_model.header.bitmap), attr);
         else
           lcd_putsiAtt(MODEL_SETUP_2ND_COLUMN, y, STR_VCSWFUNC, 0, attr);
         if (attr && event==EVT_KEY_BREAK(KEY_ENTER)) {
           s_editMode = 0;
           if (listSdFiles(BITMAPS_PATH, BITMAPS_EXT, sizeof(g_model.header.bitmap), g_model.header.bitmap, LIST_NONE_SD_FILE)) {
-            menuHandler = onModelSetupMenu;
+            menuHandler = onModelSetupBitmapMenu;
           }
           else {
             POPUP_WARNING(STR_NO_BITMAPS_ON_SD);
@@ -1222,7 +1232,6 @@ void menuModelSetup(uint8_t event)
           }
         }
         break;
-
 
       case ITEM_MODEL_INTERNAL_MODULE_CHANNELS:
       case ITEM_MODEL_EXTERNAL_MODULE_CHANNELS:
@@ -2870,7 +2879,7 @@ void menuModelMixOne(uint8_t event)
       case MIX_FIELD_SOURCE:
         lcd_putsColumnLeft(COLUMN_X, y, NO_INDENT(STR_SOURCE));
         putsMixerSource(COLUMN_X+MIXES_2ND_COLUMN, y, md2->srcRaw, attr);
-        if (attr) CHECK_INCDEC_MODELSOURCE(event, md2->srcRaw, 1, MIXSRC_LAST_CH);
+        if (attr) CHECK_INCDEC_MODELSOURCE(event, md2->srcRaw, 1, MIXSRC_LAST);
         break;
       case MIX_FIELD_WEIGHT:
         lcd_putsColumnLeft(COLUMN_X, y, STR_WEIGHT);
@@ -2987,6 +2996,8 @@ static uint8_t s_copySrcCh;
 #define _STR_MAX(x) PSTR("/" #x)
 #define STR_MAX(x) _STR_MAX(x)
 
+#define MIX_LINE_SRC_POS     4*FW-1
+
 #if LCD_W >= 212
   #define EXPO_LINE_WEIGHT_POS 7*FW+1
   #define EXPO_LINE_EXPO_POS   11*FW+5
@@ -2995,7 +3006,6 @@ static uint8_t s_copySrcCh;
   #define EXPO_LINE_SELECT_POS 18
   #define EXPO_LINE_FM_POS     LCD_W-LEN_EXPOMIX_NAME*FW-MENUS_SCROLLBAR_WIDTH-FW-1
   #define EXPO_LINE_NAME_POS   LCD_W-LEN_EXPOMIX_NAME*FW-MENUS_SCROLLBAR_WIDTH
-  #define MIX_LINE_SRC_POS     4*FW
   #define MIX_LINE_WEIGHT_POS  11*FW+5
   #define MIX_LINE_CURVE_POS   12*FW+4
   #define MIX_LINE_SWITCH_POS  16*FW+1
@@ -3008,7 +3018,6 @@ static uint8_t s_copySrcCh;
   #define EXPO_LINE_SELECT_POS 24
   #define EXPO_LINE_FM_POS
   #define EXPO_LINE_NAME_POS   LCD_W-sizeof(ed->name)*FW-MENUS_SCROLLBAR_WIDTH
-  #define MIX_LINE_SRC_POS     4*FW
   #define MIX_LINE_WEIGHT_POS  11*FW+3
   #define MIX_LINE_CURVE_POS   12*FW+2
   #define MIX_LINE_SWITCH_POS  16*FW
@@ -3024,7 +3033,6 @@ static uint8_t s_copySrcCh;
   #endif
   #define EXPO_LINE_FM_POS     LCD_W-FW-MENUS_SCROLLBAR_WIDTH
   #define EXPO_LINE_SELECT_POS 24
-  #define MIX_LINE_SRC_POS     4*FW
   #define MIX_LINE_WEIGHT_POS  11*FW+3
   #define MIX_LINE_CURVE_POS   12*FW+2
   #define MIX_LINE_SWITCH_POS  16*FW
@@ -3916,9 +3924,7 @@ void menuModelCustomSwitches(uint8_t event)
 #if defined(ROTARY_ENCODER_NAVIGATION)
     case EVT_ROTARY_BREAK:
 #endif
-#if !defined(PCBTARANIS)
     case EVT_KEY_FIRST(KEY_RIGHT):
-#endif
     case EVT_KEY_FIRST(KEY_ENTER):
       if (sub >= 0) {
         s_currIdx = sub;
@@ -3971,16 +3977,25 @@ void menuModelCustomSwitches(uint8_t event)
     }
   }
 }
+
 #else
 
 void menuModelCustomSwitches(uint8_t event)
 {
-#if defined(CPUM64)
+#if defined(CPUARM)
+  uint8_t incdecFlag;
+  IsValueAvailable isValueAvailable = NULL;
+  #define INCDEC_SET_FLAG(f) incdecFlag = (EE_MODEL|(f))
+  #define INCDEC_ENABLE_SOURCE_CHECK(b) isValueAvailable = (b ? isSourceAvailable : NULL)
+  #define CHECK_INCDEC_CSPARAM(event, var, min, max) var = checkIncDec(event, var, min, max, incdecFlag, isValueAvailable)
+#elif defined(CPUM64)
   #define INCDEC_SET_FLAG(f)
+  #define INCDEC_ENABLE_SOURCE_CHECK(...)
   #define CHECK_INCDEC_CSPARAM(event, var, min, max) CHECK_INCDEC_MODELVAR(event, var, min, max)
 #else
   uint8_t incdecFlag;
   #define INCDEC_SET_FLAG(f) incdecFlag = (EE_MODEL|(f))
+  #define INCDEC_ENABLE_SOURCE_CHECK(...)
   #define CHECK_INCDEC_CSPARAM(event, var, min, max) var = checkIncDec(event, var, min, max, incdecFlag)
 #endif
 
@@ -4014,7 +4029,11 @@ void menuModelCustomSwitches(uint8_t event)
 
     // CSW params
     uint8_t cstate = cswFamily(cs->func);
+#if defined(CPUARM)
+    int16_t v1_min=0, v1_max=MIXSRC_LAST_TELEM, v2_min=0, v2_max=MIXSRC_LAST_TELEM;
+#else
     int8_t v1_min=0, v1_max=MIXSRC_LAST_TELEM, v2_min=0, v2_max=MIXSRC_LAST_TELEM;
+#endif
 
     if (cstate == CS_VBOOL) {
       putsSwitches(CSW_2ND_COLUMN, y, cs->v1, attr1);
@@ -4022,11 +4041,13 @@ void menuModelCustomSwitches(uint8_t event)
       v1_min = SWSRC_OFF+1; v1_max = SWSRC_ON-1;
       v2_min = SWSRC_OFF+1; v2_max = SWSRC_ON-1;
       INCDEC_SET_FLAG(INCDEC_SWITCH);
+      INCDEC_ENABLE_SOURCE_CHECK(false);
     }
     else if (cstate == CS_VCOMP) {
       putsMixerSource(CSW_2ND_COLUMN, y, cs->v1, attr1);
       putsMixerSource(CSW_3RD_COLUMN, y, cs->v2, attr2);
       INCDEC_SET_FLAG(INCDEC_SOURCE);
+      INCDEC_ENABLE_SOURCE_CHECK(true);
     }
     else if (cstate == CS_VTIMER) {
       lcd_outdezAtt(CSW_2ND_COLUMN, y, cswTimerValue(cs->v1), LEFT|PREC1|attr1);
@@ -4034,13 +4055,18 @@ void menuModelCustomSwitches(uint8_t event)
       v1_min = v2_min = -128;
       v1_max = v2_max = 122;
       INCDEC_SET_FLAG(0);
+      INCDEC_ENABLE_SOURCE_CHECK(false);
     }
     else {
       putsMixerSource(CSW_2ND_COLUMN, y, cs->v1, attr1);
-      if (horz == 1)
+      if (horz == 1) {
         INCDEC_SET_FLAG(INCDEC_SOURCE);
-      else
+        INCDEC_ENABLE_SOURCE_CHECK(true);
+      }
+      else {
         INCDEC_SET_FLAG(0);
+        INCDEC_ENABLE_SOURCE_CHECK(false);
+      }
 #if defined(FRSKY)
       if (cs->v1 >= MIXSRC_FIRST_TELEM) {
         putsTelemetryChannel(CSW_3RD_COLUMN, y, cs->v1 - MIXSRC_FIRST_TELEM, convertCswTelemValue(cs), LEFT|attr2);
@@ -4272,7 +4298,7 @@ void menuModelCustomFunctions(uint8_t event)
 #else
               xcoord_t x = (CFN_FUNC(sd) == FUNC_PLAY_TRACK ? MODEL_CUSTOM_FUNC_2ND_COLUMN + FW + FW*strlen(TR_PLAY_TRACK) : MODEL_CUSTOM_FUNC_3RD_COLUMN);
 #endif
-              if (ZLEN(sd->param.name))
+              if (ZEXIST(sd->param.name))
                 lcd_putsnAtt(x, y, sd->param.name, sizeof(sd->param.name), attr);
               else
                 lcd_putsiAtt(x, y, STR_VCSWFUNC, 0, attr);
@@ -4433,6 +4459,153 @@ void menuModelCustomFunctions(uint8_t event)
     }
   }
 }
+
+#if defined(LUA)
+void onModelCustomScriptMenu(const char *result)
+{
+  ScriptData &sd = g_model.scriptsData[s_currIdx];
+
+  if (result == STR_UPDATE_LIST) {
+    if (!listSdFiles(SCRIPTS_PATH, SCRIPTS_EXT, sizeof(sd.file), NULL)) {
+      POPUP_WARNING(STR_NO_BITMAPS_ON_SD);
+      s_menu_flags = 0;
+    }
+  }
+  else {
+    // The user choosed a lua file in the list
+    if (memcmp(result, "---", 3) == 0)
+      memset(sd.file, 0, sizeof(sd.file));
+    else
+      memcpy(sd.file, result, sizeof(sd.file));
+    memset(sd.inputs, 0, sizeof(sd.inputs));
+    eeDirty(EE_MODEL);
+    RELOAD_LUA_SCRIPTS();
+  }
+}
+
+enum menuModelCustomScriptItems {
+  ITEM_MODEL_CUSTOMSCRIPT_FILE,
+  ITEM_MODEL_CUSTOMSCRIPT_NAME,
+  ITEM_MODEL_CUSTOMSCRIPT_PARAMS_LABEL,
+};
+
+#define SCRIPT_ONE_2ND_COLUMN_POS  (16*FW)
+
+void menuModelCustomScriptOne(uint8_t event)
+{
+  TITLE(STR_MENUCUSTOMSCRIPT);
+
+  ScriptData &sd = g_model.scriptsData[s_currIdx];
+
+  putsStrIdx(lcdLastPos+FW, 0, "LUA", s_currIdx+1, 0);
+
+  SUBMENU_NOTITLE(4+scriptInternalData[s_currIdx].inputsCount+scriptInternalData[s_currIdx].outputsCount, { 0, 0, LABEL(inputs), 0/*repeated*/ });
+
+  int8_t sub = m_posVert;
+
+  for (uint8_t k=0; k<LCD_LINES-1; k++) {
+    uint8_t y = 1 + (k+1)*FH;
+    uint8_t i = k + s_pgOfs;
+    uint8_t attr = (sub==i ? (s_editMode>0 ? BLINK|INVERS : INVERS) : 0);
+
+    if (i == ITEM_MODEL_CUSTOMSCRIPT_FILE) {
+      lcd_putsLeft(y, "Script");
+      if (ZEXIST(sd.file) > 0)
+        lcd_putsnAtt(SCRIPT_ONE_2ND_COLUMN_POS, y, sd.file, sizeof(sd.file), attr);
+      else
+        lcd_putsiAtt(SCRIPT_ONE_2ND_COLUMN_POS, y, STR_VCSWFUNC, 0, attr);
+      if (attr && event==EVT_KEY_BREAK(KEY_ENTER)) {
+        s_editMode = 0;
+        if (listSdFiles(SCRIPTS_PATH, SCRIPTS_EXT, sizeof(sd.file), sd.file, LIST_NONE_SD_FILE)) {
+          menuHandler = onModelCustomScriptMenu;
+        }
+        else {
+          POPUP_WARNING(STR_NO_SCRIPTS_ON_SD);
+          s_menu_flags = 0;
+        }
+      }
+    }
+    else if (i == ITEM_MODEL_CUSTOMSCRIPT_NAME) {
+      lcd_putsLeft(y, "Name");
+      editName(SCRIPT_ONE_2ND_COLUMN_POS, y, sd.name, sizeof(sd.name), event, attr);
+    }
+    else if (i == ITEM_MODEL_CUSTOMSCRIPT_PARAMS_LABEL) {
+      lcd_putsLeft(y, "Inputs");
+    }
+    else if (i <= ITEM_MODEL_CUSTOMSCRIPT_PARAMS_LABEL+scriptInternalData[s_currIdx].inputsCount) {
+      int inputIdx = i-ITEM_MODEL_CUSTOMSCRIPT_PARAMS_LABEL-1;
+      lcd_puts(INDENT_WIDTH, y, scriptInternalData[s_currIdx].inputs[inputIdx].name);
+      if (scriptInternalData[s_currIdx].inputs[inputIdx].type == 0) {
+        lcd_outdezAtt(SCRIPT_ONE_2ND_COLUMN_POS, y, g_model.scriptsData[s_currIdx].inputs[inputIdx]+scriptInternalData[s_currIdx].inputs[inputIdx].def, attr|LEFT);
+        if (attr) {
+          CHECK_INCDEC_MODELVAR(event, g_model.scriptsData[s_currIdx].inputs[inputIdx], scriptInternalData[s_currIdx].inputs[inputIdx].min-scriptInternalData[s_currIdx].inputs[inputIdx].def, scriptInternalData[s_currIdx].inputs[inputIdx].max-scriptInternalData[s_currIdx].inputs[inputIdx].def);
+        }
+      }
+      else {
+        putsMixerSource(SCRIPT_ONE_2ND_COLUMN_POS, y, g_model.scriptsData[s_currIdx].inputs[inputIdx]+scriptInternalData[s_currIdx].inputs[inputIdx].def, attr);
+        if (attr) {
+          uint8_t *source = (uint8_t *)&g_model.scriptsData[s_currIdx].inputs[inputIdx];
+          CHECK_INCDEC_MODELSOURCE(event, *source, scriptInternalData[s_currIdx].inputs[inputIdx].min-scriptInternalData[s_currIdx].inputs[inputIdx].def, scriptInternalData[s_currIdx].inputs[inputIdx].max-scriptInternalData[s_currIdx].inputs[inputIdx].def);
+        }
+      }
+    }
+    else if (i == ITEM_MODEL_CUSTOMSCRIPT_PARAMS_LABEL+scriptInternalData[s_currIdx].inputsCount+1) {
+      lcd_putsLeft(y, "Outputs");
+    }
+    else if (i <= ITEM_MODEL_CUSTOMSCRIPT_PARAMS_LABEL+scriptInternalData[s_currIdx].inputsCount+1+scriptInternalData[s_currIdx].outputsCount) {
+      putsStrIdx(INDENT_WIDTH, y, "LUA", s_currIdx+1, 0);
+      lcd_putc(INDENT_WIDTH+4*FW-1, y, 'a'+i-(ITEM_MODEL_CUSTOMSCRIPT_PARAMS_LABEL+scriptInternalData[s_currIdx].inputsCount+1)-1);
+      int outputIdx = i-(ITEM_MODEL_CUSTOMSCRIPT_PARAMS_LABEL+scriptInternalData[s_currIdx].inputsCount+1)-1;
+      lcd_puts(SCRIPT_ONE_2ND_COLUMN_POS, y, scriptInternalData[s_currIdx].outputs[outputIdx].name);
+      lcd_outdezNAtt(30*FW, y, calcRESXto1000(scriptInternalData[s_currIdx].outputs[outputIdx].value), PREC1);
+    }
+  }
+}
+
+void menuModelCustomScripts(uint8_t event)
+{
+  MENU(STR_MENUCUSTOMSCRIPTS, menuTabModel, e_CustomScripts, MAX_SCRIPTS+1, {0, NAVIGATION_LINE_BY_LINE|3/*repeated*/});
+
+  uint8_t y;
+  int8_t  sub = m_posVert - 1;
+
+  switch (event) {
+#if defined(ROTARY_ENCODER_NAVIGATION)
+    case EVT_ROTARY_BREAK:
+#endif
+#if !defined(PCBTARANIS)
+    case EVT_KEY_FIRST(KEY_RIGHT):
+#endif
+    case EVT_KEY_FIRST(KEY_ENTER):
+      if (sub >= 0) {
+        s_currIdx = sub;
+        pushMenu(menuModelCustomScriptOne);
+      }
+      break;
+  }
+
+  for (int i=0; i<MAX_SCRIPTS; i++) {
+    y = 1 + (i+1)*FH;
+
+    ScriptData &sd = g_model.scriptsData[i];
+
+    // LUAx header
+    putsStrIdx(0, y, "LUA", i+1, sub==i ? INVERS : 0);
+
+    // LUA script
+    if (ZEXIST(sd.file)) {
+      lcd_putsnAtt(5*FW, y, sd.file, sizeof(sd.file), 0);
+      if (!scriptInternalData[i].state) lcd_puts(27*FW+2, y, "(killed)");
+    }
+    else {
+      lcd_putsiAtt(5*FW, y, STR_VCSWFUNC, 0, 0);
+    }
+
+    // Script name
+    lcd_putsnAtt(16*FW, y, sd.name, sizeof(sd.name), ZCHAR);
+  }
+}
+#endif
 
 enum menuModelTelemetryItems {
   ITEM_TELEMETRY_A1_LABEL,

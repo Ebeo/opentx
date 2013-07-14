@@ -37,7 +37,7 @@
 #ifndef board_taranis_h
 #define board_taranis_h
 
-#include <stdio.h>
+// #include <stdio.h>
 
 #include "STM32F2xx_StdPeriph_Lib_V1.1.0/Libraries/STM32F2xx_StdPeriph_Driver/inc/stm32f2xx_rcc.h"
 #include "STM32F2xx_StdPeriph_Lib_V1.1.0/Libraries/STM32F2xx_StdPeriph_Driver/inc/stm32f2xx_gpio.h"

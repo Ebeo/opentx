@@ -40,6 +40,7 @@
 #define MIXER_STACK_SIZE    500
 #define MENUS_STACK_SIZE    1000
 #define AUDIO_STACK_SIZE    500
+#define LUA_STACK_SIZE      1000
 #define BT_STACK_SIZE       500
 #define DEBUG_STACK_SIZE    500
 
@@ -51,6 +52,11 @@ OS_STK menusStack[MENUS_STACK_SIZE];
 
 OS_TID audioTaskId;
 OS_STK audioStack[AUDIO_STACK_SIZE];
+
+#if defined(LUA)
+OS_TID luaTaskId;
+OS_STK luaStack[LUA_STACK_SIZE];
+#endif
 
 #if defined(BLUETOOTH)
 OS_TID btTaskId;
@@ -97,13 +103,18 @@ ModelData  g_model;
 uint8_t modelBitmap[MODEL_BITMAP_SIZE];
 void loadModelBitmap(char *name, uint8_t *bitmap)
 {
-  char lfn[] = BITMAPS_PATH "/xxxxxxxxxx.bmp";
-  strncpy(lfn+sizeof(BITMAPS_PATH), name, LEN_BITMAP_NAME);
-  lfn[sizeof(BITMAPS_PATH)+LEN_BITMAP_NAME] = '\0';
-  strcat(lfn+sizeof(BITMAPS_PATH), BITMAPS_EXT);
-  if (bmpLoad(bitmap, lfn, MODEL_BITMAP_WIDTH, MODEL_BITMAP_HEIGHT)) {
-    memcpy(bitmap, logo_taranis, MODEL_BITMAP_SIZE);
+  uint8_t len = zlen(name, LEN_BITMAP_NAME);
+  if (len > 0) {
+    char lfn[] = BITMAPS_PATH "/xxxxxxxxxx.bmp";
+    strncpy(lfn+sizeof(BITMAPS_PATH), name, len);
+    strcpy(lfn+sizeof(BITMAPS_PATH)+len, BITMAPS_EXT);
+    if (bmpLoad(bitmap, lfn, MODEL_BITMAP_WIDTH, MODEL_BITMAP_HEIGHT) == 0) {
+      return;
+    }
   }
+
+  // In all error cases, we set the default logo
+  memcpy(bitmap, logo_taranis, MODEL_BITMAP_SIZE);
 }
 #endif
 
@@ -178,6 +189,15 @@ char idx2char(int8_t idx)
 }
 
 #if defined(CPUARM)
+bool zexist(const char *str, uint8_t size)
+{
+  for (int i=0; i<size; i++) {
+    if (str[i] != 0)
+      return true;
+  }
+  return false;
+}
+
 uint8_t zlen(const char *str, uint8_t size)
 {
   while (size > 0) {
@@ -868,6 +888,16 @@ getvalue_t getValue(uint8_t i)
 #endif
   else if (i<MIXSRC_LAST_PPM) { int16_t x = g_ppmIns[i+1-MIXSRC_PPM1]; if (i<MIXSRC_PPM1+NUM_CAL_PPM) { x-= g_eeGeneral.trainer.calib[i+1-MIXSRC_PPM1]; } return x*2; }
   else if (i<MIXSRC_LAST_CH) return ex_chans[i+1-MIXSRC_CH1];
+#if defined(CPUARM)
+  else if (i<MIXSRC_LAST_LUA) {
+#if defined(LUA)
+    div_t qr = div(i-MIXSRC_FIRST_LUA+1, MAX_SCRIPT_OUTPUTS);
+    return scriptInternalData[qr.quot].outputs[qr.rem].value;
+#else
+    return 0;
+#endif
+  }
+#endif
 #if defined(GVARS)
   else if (i<MIXSRC_LAST_GVAR) return GVAR_VALUE(i+1-MIXSRC_GVAR1, getGVarFlightPhase(s_perout_flight_phase, i+1-MIXSRC_GVAR1));
 #endif
@@ -1568,9 +1598,7 @@ void doSplash()
 
 #if defined(PCBSTD)
     lcdSetContrast();
-#elif defined(PCBTARANIS)
-    bool secondSplash = false;
-#else
+#elif !defined(PCBTARANIS)
     tmr10ms_t curTime = get_tmr10ms() + 10;
     uint8_t contrast = 10;
     lcdSetRefVolt(contrast);
@@ -1599,17 +1627,7 @@ void doSplash()
 
       if (pwrCheck()==e_power_off) return;
 
-#if defined(PCBTARANIS)
-      if (!secondSplash && get_tmr10ms() >= tgtime-200) {
-        secondSplash = true;
-        static uint8_t sdSplash[2+4*(LCD_W*LCD_H/8)];
-        if (!bmpLoad(sdSplash, BITMAPS_PATH "/splash.bmp", LCD_W, LCD_H)) {
-          lcd_clear();
-          lcd_bmp(0, 0, sdSplash);
-          lcdRefresh();
-        }
-      }
-#elif !defined(PCBSTD)
+#if !defined(PCBTARANIS) && !defined(PCBSTD)
       if (curTime < get_tmr10ms()) {
         curTime += 10;
         if (contrast < g_eeGeneral.contrast) {
@@ -4482,6 +4500,10 @@ int main(void)
   mixerTaskId = CoCreateTask(mixerTask, NULL, 5, &mixerStack[MIXER_STACK_SIZE-1], MIXER_STACK_SIZE);
   menusTaskId = CoCreateTask(menusTask, NULL, 10, &menusStack[MENUS_STACK_SIZE-1], MENUS_STACK_SIZE);
   audioTaskId = CoCreateTask(audioTask, NULL, 7, &audioStack[AUDIO_STACK_SIZE-1], AUDIO_STACK_SIZE);
+
+#if defined(LUA)
+  luaTaskId = CoCreateTask(luaTask, NULL, 12, &luaStack[LUA_STACK_SIZE-1], LUA_STACK_SIZE);
+#endif
 
   audioMutex = CoCreateMutex();
   mixerMutex = CoCreateMutex();

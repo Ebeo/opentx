@@ -35,7 +35,7 @@
  */
 
 #include "opentx.h"
-#include "stdio.h"
+//#include "stdio.h"
 #include "inttypes.h"
 #include "string.h"
 
@@ -977,6 +977,8 @@ void eeLoadModel(uint8_t id)
     LOAD_MODEL_BITMAP();
 
     SEND_FAILSAFE_1S();
+
+    RELOAD_LUA_SCRIPTS();
   }
 }
 

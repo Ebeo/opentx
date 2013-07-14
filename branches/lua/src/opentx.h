@@ -68,6 +68,12 @@
 #define IF_CPUARM(x)
 #endif
 
+#if defined(LUA)
+#define IF_LUA(x) x,
+#else
+#define IF_LUA(x)
+#endif
+
 #if defined(BATTGRAPH) || defined(PCBTARANIS)
 #define IF_BATTGRAPH(x) x,
 #else
@@ -219,11 +225,13 @@
     #define NOINLINE
   #endif
   #define CONVERT_PTR(x) ((uint32_t)(uint64_t)(x))
+  char *convertSimuPath(const char *path);
 #else
   #define FORCEINLINE inline __attribute__ ((always_inline))
   #define NOINLINE __attribute__ ((noinline))
   #define SIMU_SLEEP(x)
   #define CONVERT_PTR(x) ((uint32_t)(x))
+  #define convertSimuPath(x) (x)
 #endif
 
 // RESX range is used for internal calculation; The menu says -100.0 to 100.0; internally it is -1024 to 1024 to allow some optimizations
@@ -1380,6 +1388,33 @@ enum AUDIO_SOUNDS {
 #include "rtc.h"
 #endif
 
+#if defined(LUA)
+  extern bool luaReload;
+  #define RELOAD_LUA_SCRIPTS() luaReload = true
+  struct ScriptInput {
+    const char *name;
+    uint8_t type;
+    int16_t min;
+    int16_t max;
+    int16_t def;
+  };
+  struct ScriptOutput {
+    const char *name;
+    int16_t value;
+  };
+  struct ScriptInternalData {
+    uint8_t state;
+    uint8_t inputsCount;
+    ScriptInput inputs[MAX_SCRIPT_INPUTS];
+    uint8_t outputsCount;
+    ScriptOutput outputs[MAX_SCRIPT_OUTPUTS];
+    char function[16];
+  };
+  extern ScriptInternalData scriptInternalData[MAX_SCRIPTS];
+#else
+  #define RELOAD_LUA_SCRIPTS()
+#endif
+
 #if defined(CPUARM)
 extern uint8_t requiredSpeakerVolume;
 #endif
@@ -1433,11 +1468,13 @@ void putsTelemetryValue(xcoord_t x, uint8_t y, lcdint_t val, uint8_t unit, uint8
 
 #if defined(CPUARM)
 uint8_t zlen(const char *str, uint8_t size);
+bool zexist(const char *str, uint8_t size);
 char * strcat_zchar(char * dest, char * name, uint8_t size, const char *defaultName, uint8_t defaultNameSize, uint8_t defaultIdx);
 #define strcat_modelname(dest, idx) strcat_zchar(dest, modelHeaders[idx].name, LEN_MODEL_NAME, STR_MODEL, PSIZE(TR_MODEL), idx+1)
 #define strcat_phasename(dest, idx) strcat_zchar(dest, g_model.phaseData[idx].name, LEN_FP_NAME, NULL, 0, 0)
 #define strcat_mixername(dest, idx) strcat_zchar(dest, g_model.mixData[idx].name, LEN_EXPOMIX_NAME, NULL, 0, 0)
 #define ZLEN(s) zlen(s, sizeof(s))
+#define ZEXIST(s) zexist(s, sizeof(s))
 #endif
 
 // Stick tolerance varies between transmitters, Higher is better

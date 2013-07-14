@@ -35,6 +35,7 @@
  */
 
 #include "../opentx.h"
+#include <stdio.h>
 #include <stdarg.h>
 #include "fifo.h"
 

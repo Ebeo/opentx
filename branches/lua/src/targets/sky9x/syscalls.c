@@ -61,9 +61,9 @@ extern void _exit( int status ) ;
 extern void _kill( int pid, int sig ) ;
 extern int _getpid ( void ) ;
 
+unsigned char *heap = NULL ;
 extern caddr_t _sbrk ( int incr )
 {
-    static unsigned char *heap = NULL ;
     unsigned char *prev_heap ;
 
     if ( heap == NULL )
@@ -77,7 +77,22 @@ extern caddr_t _sbrk ( int incr )
     return (caddr_t) prev_heap ;
 }
 
-extern int link( char *old, char *nw )
+extern int _gettimeofday(void *p1, void *p2)
+{
+   return 0 ;
+}
+
+extern int _link( char *old, char *nw )
+{
+    return -1 ;
+}
+
+extern int _unlink (const char *path)
+{
+    return -1 ;
+}
+
+extern int _open(const char *name, int flags, int mode)
 {
     return -1 ;
 }

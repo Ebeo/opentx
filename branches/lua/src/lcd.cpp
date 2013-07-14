@@ -832,6 +832,14 @@ void putsMixerSource(xcoord_t x, uint8_t y, uint8_t idx, LcdFlags att)
     putsStrIdx(x, y, STR_PPM, idx-MIXSRC_PPM1+1, att);
   else if (idx <= MIXSRC_LAST_CH)
     putsStrIdx(x, y, STR_CH, idx-MIXSRC_CH1+1, att);
+#if defined(CPUARM)
+  else if (idx <= MIXSRC_LAST_LUA) {
+    div_t qr = div(idx-MIXSRC_FIRST_LUA, MAX_SCRIPT_OUTPUTS);
+    lcd_putcAtt(x+2, y+1, '1'+qr.quot, TINSIZE);
+    lcd_filled_rect(x, y, 7, 7);
+    lcd_putsnAtt(x+8, y, scriptInternalData[qr.quot].outputs[qr.rem].name, 4, att);
+  }
+#endif
 #if defined(GVARS) || !defined(PCBSTD)
   else if (idx <= MIXSRC_LAST_GVAR)
     putsStrIdx(x, y, STR_GV, idx-MIXSRC_GVAR1+1, att);
