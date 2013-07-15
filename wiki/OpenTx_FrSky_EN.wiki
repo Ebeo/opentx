@@ -688,8 +688,8 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/flash.png
  * If you wish to replace the radio's splash screen, you can either load one from a file or select it from the availble library, and click the "Substitute image in firmware" box.
  * Click "Burn to TX".
  * Once the progress bar is done and the success prompt is shown you can dismiss it and disconnect your radio :)
- * If you get an error about the dfu-util executable not being found:
-   * On Windows: Open the flashing tool settings with the Burn -> Configure menu item. Browse for the dfu-util executable, which should be located in the companion9x installation folder (by default C:\Program Files\companion9x\dfu-util.exe on 32-bit systems, and C:\Program Files (x86)\companion9x\dfu-util.exe on 64-bit systems.
-   * On Mac OS: Open the the flashing tool settings with the companion9x -> Preferences menu item. Browse for the dfu-util executable, path should be /opt/local/bin/dfu-util. 
+ * If you get an error about the dfu-util executable not being found, open the flashing tool settings with the Burn -> Configure menu item. Browse for the dfu-util executable, which should be:
+   * On Windows: In the companion9x installation folder (by default C:\Program Files\companion9x\dfu-util.exe on 32-bit systems, and C:\Program Files (x86)\companion9x\dfu-util.exe on 64-bit systems).
+   * On Mac OS: /opt/local/bin/dfu-util. 
        
   
