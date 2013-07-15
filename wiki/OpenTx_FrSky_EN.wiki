@@ -676,7 +676,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/zadig.png
 
 ==== Installing the flashing utility (for Mac OS only) ====
 
-Download and install the [http://code.google.com/p/companion9x/downloads/detail?name=dfu-util-0.7.pkg&can=2&q=#makechanges dfu-util] package for Mac OS X.
+Download and install the [https://code.google.com/p/companion9x/downloads/detail?name=dfu-util-0.7.mpkg dfu-util] package for Mac OS X.
 
 ==== Downloading and flashing the firmware ====
 
