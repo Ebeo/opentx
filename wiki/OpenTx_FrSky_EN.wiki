@@ -669,9 +669,9 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/zadig.png
 
  * Download the Zadig utility for your operating system: [https://companion9x.googlecode.com/files/zadig_xp.exe Windows XP] or [https://companion9x.googlecode.com/files/zadig.exe Windows Vista and later].
  * Run it as Administrator (Right-click and select the relevant entry).
- * In the big dropdown, you should find an entry named "STM32 BOOTLOADER".
+ * In the big dropdown, you should find an entry named "STM32 BOOTLOADER" or "STM device in DFU mode".
  * If you do not have that entry, choose Options -> List All Devices, and it should now appear in the list.
- * Select that "STM32 BOOTLOADER" entry, and click on the big "Install Driver" respectively "Replace Driver" button. 
+ * Select that entry, and click on the big "Install Driver" respectively "Replace Driver" button. 
  * Close Zadig.
 
 ==== Installing the flashing utility (for Mac OS only) ====
