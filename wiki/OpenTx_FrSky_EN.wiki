@@ -655,23 +655,28 @@ There are 2 ways to simulate either a model or the whole radio.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/29_c9x_sim.png
 
-=== Flashing your Taranis radio (on Windows) ===
+=== Flashing your Taranis radio ===
 
 As mentioned before, the program of your radio can be replaced, either to change the display language or to take advantage of new functions or corrections. 
 
 The first thing to do is to power your radio off and connect it to your computer's USB port.
 
-==== Installing the driver ====
+==== Installing the driver (for Windows only) ====
 
 This is only required the first time you flash your radio on a given computer. If already done you can skip this section. 
+
+https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/zadig.png
+
  * Download the Zadig utility for your operating system: [https://companion9x.googlecode.com/files/zadig_xp.exe Windows XP] or [https://companion9x.googlecode.com/files/zadig.exe Windows Vista and later].
  * Run it as Administrator (Right-click and select the relevant entry).
  * In the big dropdown, you should find an entry named "STM32 BOOTLOADER".
- * If you do not have that entry, then you have probably used !FrSky's upgrade method before, and already installed a driver for the radio. Choose Options -> List All Devices, and it should now appear in the list.
- * Select that "STM32 BOOTLOADER" entry, and click on the big "Install Driver" button. 
+ * If you do not have that entry, choose Options -> List All Devices, and it should now appear in the list.
+ * Select that "STM32 BOOTLOADER" entry, and click on the big "Install Driver" respectively "Replace Driver" button. 
  * Close Zadig.
- 
-https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/zadig.png
+
+==== Installing the flashing utility (for Mac OS only) ====
+
+Download and install the [http://code.google.com/p/companion9x/downloads/detail?name=dfu-util-0.7.pkg&can=2&q=#makechanges dfu-util] package for Mac OS X.
 
 ==== Downloading and flashing the firmware ====
 
@@ -683,4 +688,8 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/flash.png
  * If you wish to replace the radio's splash screen, you can either load one from a file or select it from the availble library, and click the "Substitute image in firmware" box.
  * Click "Burn to TX".
  * Once the progress bar is done and the success prompt is shown you can dismiss it and disconnect your radio :)
+ * If you get an error about the dfu-util executable not being found:
+   * On Windows: Open the flashing tool settings with the Burn -> Configure menu item. Browse for the dfu-util executable, which should be located in the companion9x installation folder (by default C:\Program Files\companion9x\dfu-util.exe on 32-bit systems, and C:\Program Files (x86)\companion9x\dfu-util.exe on 64-bit systems.
+   * On Mac OS: Open the the flashing tool settings with the companion9x -> Preferences menu item. Browse for the dfu-util executable, path should be /opt/local/bin/dfu-util. 
+       
   
