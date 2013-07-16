@@ -116,6 +116,9 @@ Il est un peu prématuré de parler de ces options en détail à ce stade, mais 
 || nottrace || Désactive l'affichage graphique de l'historique des gaz dans l'écran des statistiques .||
 || pgbar || Affiche une petite barre de progression montrant la sauvegarde des paramètres en mémoire. ||
 || imperial || Affichage des données de télémesure en unités impériales. ||
+|| nogps || Désactive le support du GPS. ||
+|| novario || Désactive la fonction variomètre audio. ||
+|| nogauges || Supprime l'affichage des valeurs de télémesure par barres. ||
 
 Les points importants pour le choix initial d'un firmware sont les suivants:
  * *HELI*: Bienvenu si l'on prévoit d'utiliser la radio pour commander des modèles d'hélicoptères.

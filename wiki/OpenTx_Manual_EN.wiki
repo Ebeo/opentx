@@ -102,6 +102,9 @@ It's a bit premature to discuss these options in detail at this stage, but given
 || nottrace || Disable graphical trace in statistics screen ||
 || pgbar || Display a progress bar when writing settings in memory ||
 || imperial || Use imperial units ||
+|| nogps || Remove GPS support ||
+|| novario || Remove audio variometer functionality ||
+|| nogauges || Remove the bars option for telemetry value display  ||
 
  The important points for the initial choice of firmware are: 
  * *HELI*: Useful if you plan to use the radio to control helicopters.

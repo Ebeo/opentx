@@ -1,9 +1,66 @@
 #summary Historique des changements d'OpenTx en français
 #labels Featured
 
+<wiki:comment>
+=== [**Tous] ===
+ * Correction d'un bug dans le mixeur quand une ligne de type Remplacer avait un paramètre Retard bas >0
+ * Correction d'un bug dans le calcul des inters perso dépendant d'autres inters persos 
+
+=== [**Cartes avec SD] ===
+ * Nouvelles valeurs ajoutées aux logs, correction pour certains numbres négatifs
+
+=== [**Cartes ARM ] ===
+ * Toutes les tailles de police supportent maintenant les caractères spéciaux spécifiques à chaque langue
+
+=== [**!FrSky Taranis] ===
+ * Correction d'un bug dans le décodage de la télémétrie 
+ * Le point central des gâchettes est maintenant pris en compte dans la calibration 
+</wiki:comment>
+
 = Historique des versions d'openTx =
 
 <wiki:toc max_depth="2" />
+
+== 2604 / 13 Jul 2013 (Taranis uniquement) ==
+
+=== [**!FrSky Taranis] ===
+ * Ajout d'un réglage du contraste
+
+== 2590 / 8 Jul 2013 (Taranis uniquement) ==
+
+=== [**!FrSky Taranis] ===
+ * Première version officielle!  
+
+== 2491 / 24 Juin 2013 ==
+
+=== [**Tous] ===
+ * Jouer Son possède maintenant une option de répétition
+ * FAI mode ajouté (désactive la télémesure sauf A1/A2/RSSI pour les concours)
+ * Les délais de mixeurs s'appliquent maintenant aussi aux inters 3 positions
+ * RLes alarmes RSSI par défaut correspondent maintenant aux valeurs recommandées de 45 / 42
+
+=== [**stock] ===
+ * Economies de flash
+ * Sons de descente du vario désactivés
+ * Fichiers audio renumérotés (voir [http://openrcforums.com/forum/viewtopic.php?f=45&t=3706#p54008 ici]) 
+   
+=== [**sky9x] ===
+ * Mixeur audio: Plusieurs sons peuvent maintenant être lus en même temps et superposés, les bips n'interrompent et n'effacent plus les annonces vocales en cours et en attante. Noter que les fichiers sons doivent maintenant avoir une fréquence d'échantillonnage de 8, 16 ou 32kHz, et devront probablement être remplacés.
+
+== 2413 / 22 Mai 2013 ==
+
+=== [**Tous] ===
+ * L'écran de calibration apparaît automatiquement après un formatage d'EEPROM
+ * Défilement circulaire dans les menus popup
+
+=== [**stock] ===
+ * Plus d'options (novario / nogps / nogauges)
+ * Economies de flash
+ * Mise à jour de la librairie Mavlink par Rienk
+
+=== [**sky9x] ===
+ * La langue de l'audio peut maintenant être sélectionnée dans les réglages radio. Noter qu'il est nécessaire de déplacer les fichiers son dans des sous-répertoires du dossier SOUNDS (SOUNDS/en pour l'anglais, idem avec fr, it, de, pt, se, cz)
+ *  Plus de réglages pour le 2e port PPM   
 
 == 2215 / 05 Avr 2013 ==
 

@@ -1,9 +1,66 @@
 #summary openTx English changelog
 #labels Featured
 
+<wiki:comment>
+=== [**all] ===
+ * Fix for Replace type mixes with Slow Down >0
+ * Fix for custom switches that refer another custom switch 
+
+=== [**SD-card enabled boards] ===
+ * Logs now include more values, fix for some negative numbers
+
+=== [**ARM boards] ===
+ * All fonts now support language-specific special characters  
+
+=== [**!FrSky Taranis] ===
+ * Fix for a decoding bug in telemtry data  
+ * Sliders' center points now included in calibration 
+</wiki:comment>
+  
 = openTx version history =
 
 <wiki:toc max_depth="2" />
+
+== 2604 / Jul 13 2013 (Taranis only) ==
+
+=== [**!FrSky Taranis] ===
+ * Contrast adjustment added
+
+== 2590 / Jul 8 2013 (Taranis only) ==
+
+=== [**!FrSky Taranis] ===
+ * First official release version!
+
+== 2491 / Jun 24 2013 ==
+
+=== [**all] ===
+ * PlaySound has now a repeat argument
+ * FAI mode added (disable telemetry other than A1/A2/RSSI for contests)
+ * Delays now also apply to 3POS switch!
+ * RSSI alarms default thresholds now 45 / 42
+
+=== [**stock] ===
+ * Flash savings
+ * Vario sink tones removed
+ * Audio files renumbered (see [http://openrcforums.com/forum/viewtopic.php?f=45&t=3706#p54008 here]) 
+   
+=== [**sky9x] ===
+ * Audio mixer: several sounds can now be played simulataneously, and beeps won't interrupt and clear voice alerts anymore. Note that sound files now need to have sampling rates of either 8, 16 or 32kHz and may need to be replaced. 
+
+== 2413 / May 22 2013 ==
+
+=== [**all] ===
+ * Calibration screen automatically appears following an EEPROM format
+ * Wraparound in popup menus
+ 
+=== [**stock] ===
+ * More options supported (novario / nogps / nogauges)
+ * Flash savings
+ * Mavlink huge rework by Rienk! 
+
+=== [**sky9x] ===
+ * Audio language can now be selected in the general settings! Note that the sound files need to be moved to subfolders of the SOUNDS folder (SOUNDS/en for English, same with it, fr, de, pt, se, cz)
+ * More settings for the 2nd PPM port 
 
 == 2215 / Apr 05 2013 ==
 

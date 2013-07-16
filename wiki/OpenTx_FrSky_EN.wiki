@@ -203,7 +203,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/09e_anadiag.png
 
 ==== Calibration ====
 
-This is the place where you can calibrate sticks and pots. Follow the on-screen instructions, and note that when asked to center the sticks this includes the throttle stick. Pots however do not need to be centered, only the extremes are calibrated.
+This is the place where you can calibrate sticks and pots. Follow the on-screen instructions, and note that when asked to center the sticks this includes the throttle stick and the 2 sliders. S1 and S2 pots however do not need to be centered, only the extremes are calibrated.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/10_calib.png
 
