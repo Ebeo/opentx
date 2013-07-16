@@ -34,7 +34,7 @@
 == 2491 / Jun 24 2013 ==
 
 === [**all] ===
- * PlaySound has now a repeat argument
+ * !PlaySound has now a repeat argument
  * FAI mode added (disable telemetry other than A1/A2/RSSI for contests)
  * Delays now also apply to 3POS switch!
  * RSSI alarms default thresholds now 45 / 42
