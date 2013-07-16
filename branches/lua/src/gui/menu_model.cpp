@@ -2878,7 +2878,7 @@ void menuModelMixOne(uint8_t event)
 #endif
       case MIX_FIELD_SOURCE:
         lcd_putsColumnLeft(COLUMN_X, y, NO_INDENT(STR_SOURCE));
-        putsMixerSource(COLUMN_X+MIXES_2ND_COLUMN, y, md2->srcRaw, attr);
+        putsMixerSource(COLUMN_X+MIXES_2ND_COLUMN, y, md2->srcRaw, STREXPANDED|attr);
         if (attr) CHECK_INCDEC_MODELSOURCE(event, md2->srcRaw, 1, MIXSRC_LAST);
         break;
       case MIX_FIELD_WEIGHT:
@@ -3762,6 +3762,23 @@ void menuModelGVars(uint8_t event)
 }
 #endif
 
+#if defined(CPUARM)
+  #define INCDEC_DECLARE_VARS()   uint8_t incdecFlag = EE_MODEL; IsValueAvailable isValueAvailable = NULL
+  #define INCDEC_SET_FLAG(f)      incdecFlag = (EE_MODEL|(f))
+  #define INCDEC_ENABLE_CHECK(fn) isValueAvailable = fn
+  #define CHECK_INCDEC_PARAM(event, var, min, max) checkIncDec(event, var, min, max, incdecFlag, isValueAvailable)
+#elif defined(CPUM64)
+  #define INCDEC_DECLARE_VARS()
+  #define INCDEC_SET_FLAG(f)
+  #define INCDEC_ENABLE_CHECK(fn)
+  #define CHECK_INCDEC_PARAM(event, var, min, max) checkIncDec(event, var, min, max, EE_MODEL)
+#else
+  #define INCDEC_DECLARE_VARS()   uint8_t incdecFlag = EE_MODEL
+  #define INCDEC_SET_FLAG(f)      incdecFlag = (EE_MODEL|(f))
+  #define INCDEC_ENABLE_CHECK(fn)
+  #define CHECK_INCDEC_PARAM(event, var, min, max) checkIncDec(event, var, min, max, incdecFlag)
+#endif
+
 enum CustomSwitchFields {
   CSW_FIELD_FUNCTION,
   CSW_FIELD_V1,
@@ -3778,7 +3795,7 @@ enum CustomSwitchFields {
 #if LCD_W >= 212
   #define CSW_1ST_COLUMN  (4*FW-3)
   #define CSW_2ND_COLUMN  (8*FW+1)
-  #define CSW_3RD_COLUMN  (13*FW+2)
+  #define CSW_3RD_COLUMN  (14*FW)
   #define CSW_4TH_COLUMN  (21*FW+1)
   #define CSW_5TH_COLUMN  (26*FW+1)
   #define CSW_6TH_COLUMN  (31*FW+1)
@@ -3982,22 +3999,7 @@ void menuModelCustomSwitches(uint8_t event)
 
 void menuModelCustomSwitches(uint8_t event)
 {
-#if defined(CPUARM)
-  uint8_t incdecFlag;
-  IsValueAvailable isValueAvailable = NULL;
-  #define INCDEC_SET_FLAG(f) incdecFlag = (EE_MODEL|(f))
-  #define INCDEC_ENABLE_SOURCE_CHECK(b) isValueAvailable = (b ? isSourceAvailable : NULL)
-  #define CHECK_INCDEC_CSPARAM(event, var, min, max) var = checkIncDec(event, var, min, max, incdecFlag, isValueAvailable)
-#elif defined(CPUM64)
-  #define INCDEC_SET_FLAG(f)
-  #define INCDEC_ENABLE_SOURCE_CHECK(...)
-  #define CHECK_INCDEC_CSPARAM(event, var, min, max) CHECK_INCDEC_MODELVAR(event, var, min, max)
-#else
-  uint8_t incdecFlag;
-  #define INCDEC_SET_FLAG(f) incdecFlag = (EE_MODEL|(f))
-  #define INCDEC_ENABLE_SOURCE_CHECK(...)
-  #define CHECK_INCDEC_CSPARAM(event, var, min, max) var = checkIncDec(event, var, min, max, incdecFlag)
-#endif
+  INCDEC_DECLARE_VARS();
 
   MENU(STR_MENUCUSTOMSWITCHES, menuTabModel, e_CustomSwitches, NUM_CSW+1, {0, NAVIGATION_LINE_BY_LINE|CSW_FIELD_LAST/*repeated...*/});
 
@@ -4041,13 +4043,13 @@ void menuModelCustomSwitches(uint8_t event)
       v1_min = SWSRC_OFF+1; v1_max = SWSRC_ON-1;
       v2_min = SWSRC_OFF+1; v2_max = SWSRC_ON-1;
       INCDEC_SET_FLAG(INCDEC_SWITCH);
-      INCDEC_ENABLE_SOURCE_CHECK(false);
+      INCDEC_ENABLE_CHECK(NULL);
     }
     else if (cstate == CS_VCOMP) {
       putsMixerSource(CSW_2ND_COLUMN, y, cs->v1, attr1);
       putsMixerSource(CSW_3RD_COLUMN, y, cs->v2, attr2);
       INCDEC_SET_FLAG(INCDEC_SOURCE);
-      INCDEC_ENABLE_SOURCE_CHECK(true);
+      INCDEC_ENABLE_CHECK(isSourceAvailable);
     }
     else if (cstate == CS_VTIMER) {
       lcd_outdezAtt(CSW_2ND_COLUMN, y, cswTimerValue(cs->v1), LEFT|PREC1|attr1);
@@ -4055,17 +4057,17 @@ void menuModelCustomSwitches(uint8_t event)
       v1_min = v2_min = -128;
       v1_max = v2_max = 122;
       INCDEC_SET_FLAG(0);
-      INCDEC_ENABLE_SOURCE_CHECK(false);
+      INCDEC_ENABLE_CHECK(NULL);
     }
     else {
       putsMixerSource(CSW_2ND_COLUMN, y, cs->v1, attr1);
       if (horz == 1) {
         INCDEC_SET_FLAG(INCDEC_SOURCE);
-        INCDEC_ENABLE_SOURCE_CHECK(true);
+        INCDEC_ENABLE_CHECK(isSourceAvailable);
       }
       else {
         INCDEC_SET_FLAG(0);
-        INCDEC_ENABLE_SOURCE_CHECK(false);
+        INCDEC_ENABLE_CHECK(NULL);
       }
 #if defined(FRSKY)
       if (cs->v1 >= MIXSRC_FIRST_TELEM) {
@@ -4128,10 +4130,10 @@ void menuModelCustomSwitches(uint8_t event)
           break;
         }
         case CSW_FIELD_V1:
-          CHECK_INCDEC_CSPARAM(event, cs->v1, v1_min, v1_max);
+          cs->v1 = CHECK_INCDEC_PARAM(event, cs->v1, v1_min, v1_max);
           break;
         case CSW_FIELD_V2:
-          CHECK_INCDEC_CSPARAM(event, cs->v2, v2_min, v2_max);
+          cs->v2 = CHECK_INCDEC_PARAM(event, cs->v2, v2_min, v2_max);
           break;
         case CSW_FIELD_ANDSW:
 #if defined(CPUARM)
@@ -4274,6 +4276,7 @@ void menuModelCustomFunctions(uint8_t event)
 
         case 2:
           if (sd->swtch) {
+            INCDEC_DECLARE_VARS();
             int16_t val_displayed = CFN_PARAM(sd);
             int8_t val_min = 0;
             uint8_t val_max = 255;
@@ -4319,12 +4322,14 @@ void menuModelCustomFunctions(uint8_t event)
             else if (CFN_FUNC(sd) == FUNC_PLAY_VALUE) {
               val_max = MIXSRC_FIRST_TELEM + TELEM_DISPLAY_MAX - 2;
               putsMixerSource(MODEL_CUSTOM_FUNC_3RD_COLUMN, y, val_displayed+1, attr);
+              INCDEC_ENABLE_CHECK(isSourceP1Available);
             }
 #endif
 #if defined(CPUARM)
             else if (CFN_FUNC(sd) == FUNC_VOLUME) {
               val_max = MIXSRC_LAST_CH-1;
               putsMixerSource(MODEL_CUSTOM_FUNC_3RD_COLUMN, y, val_displayed+1, attr);
+              INCDEC_ENABLE_CHECK(isSourceP1Available);
             }
 #elif defined(VOICE)
             else if (CFN_FUNC(sd) == FUNC_PLAY_TRACK) {
@@ -4353,6 +4358,7 @@ void menuModelCustomFunctions(uint8_t event)
             else if (CFN_FUNC(sd) == FUNC_PLAY_VALUE) {
               val_max = MIXSRC_FIRST_TELEM + TELEM_DISPLAY_MAX - 2;
               putsMixerSource(MODEL_CUSTOM_FUNC_3RD_COLUMN, y, val_displayed+1, attr);
+              INCDEC_ENABLE_CHECK(isSourceP1Available);
             }
 #endif
 #if defined(SDCARD)
@@ -4390,6 +4396,7 @@ void menuModelCustomFunctions(uint8_t event)
                 case FUNC_ADJUST_GVAR_SOURCE:
                   val_max = MIXSRC_LAST_CH-1;
                   putsMixerSource(MODEL_CUSTOM_FUNC_3RD_COLUMN, y, val_displayed+1, attr);
+                  INCDEC_ENABLE_CHECK(isSourceP1Available);
                   break;
                 case FUNC_ADJUST_GVAR_GVAR:
                   val_max = MAX_GVARS-1;
@@ -4416,7 +4423,7 @@ void menuModelCustomFunctions(uint8_t event)
             }
 
             if (active) {
-              CFN_PARAM(sd) = checkIncDec(event, val_displayed, val_min, val_max, EE_MODEL);
+              CFN_PARAM(sd) = CHECK_INCDEC_PARAM(event, val_displayed, val_min, val_max);
             }
           }
           else if (attr) {
@@ -4595,7 +4602,16 @@ void menuModelCustomScripts(uint8_t event)
     // LUA script
     if (ZEXIST(sd.file)) {
       lcd_putsnAtt(5*FW, y, sd.file, sizeof(sd.file), 0);
-      if (!scriptInternalData[i].state) lcd_puts(27*FW+2, y, "(killed)");
+      switch (scriptInternalData[i].state) {
+        case SCRIPT_KILLED:
+          lcd_puts(27*FW+2, y, "(killed)");
+          break;
+        case SCRIPT_SYNTAX_ERROR:
+          lcd_puts(28*FW+2, y, "(error)");
+          break;
+        default:
+          break;
+      }
     }
     else {
       lcd_putsiAtt(5*FW, y, STR_VCSWFUNC, 0, 0);

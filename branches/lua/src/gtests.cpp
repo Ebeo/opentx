@@ -292,18 +292,43 @@ TEST(getSwitch, undefCSW)
 TEST(getSwitch, circularCSW)
 {
   MODEL_RESET();
-  g_model.customSw[0] = { MAX_SWITCH-NUM_CSW, MAX_SWITCH-NUM_CSW, CS_OR };
-  g_model.customSw[1] = { MAX_SWITCH-NUM_CSW, MAX_SWITCH-NUM_CSW, CS_AND };
-  EXPECT_EQ(getSwitch(MAX_SWITCH-NUM_CSW), false);
-  EXPECT_EQ(getSwitch(-(MAX_SWITCH-NUM_CSW)), true);
-  EXPECT_EQ(getSwitch(1+MAX_SWITCH-NUM_CSW), false);
-  EXPECT_EQ(getSwitch(-(1+MAX_SWITCH-NUM_CSW)), true);
+  g_model.customSw[0] = { SWSRC_SW1-1, SWSRC_SW1-1, CS_OR };
+  g_model.customSw[1] = { SWSRC_SW1-1, SWSRC_SW1-1, CS_AND };
+  EXPECT_EQ(getSwitch(SWSRC_SW1-1), false);
+  EXPECT_EQ(getSwitch(-(SWSRC_SW1-1)), true);
+  EXPECT_EQ(getSwitch(SWSRC_SW2-1), false);
+  EXPECT_EQ(getSwitch(-(SWSRC_SW2-1)), true);
 }
 
 TEST(getSwitch, nullSW)
 {
   MODEL_RESET();
   EXPECT_EQ(getSwitch(0), true);
+}
+
+TEST(getSwitch, recursiveSW)
+{
+  extern volatile uint16_t s_last_switch_used;
+
+  MODEL_RESET();
+  g_model.customSw[0] = { SWSRC_RUD, -SWSRC_SW2, CS_OR };
+  g_model.customSw[1] = { SWSRC_ELE, -SWSRC_SW1, CS_OR };
+
+  EXPECT_EQ(getSwitch(SWSRC_SW1), false);
+  EXPECT_EQ(getSwitch(SWSRC_SW2), true);
+
+  s_last_switch_used = 0;
+  EXPECT_EQ(getSwitch(SWSRC_SW1), false);
+  EXPECT_EQ(getSwitch(SWSRC_SW2), true);
+
+  simuSetSwitch(1, 1);
+  s_last_switch_used = 0;
+  EXPECT_EQ(getSwitch(SWSRC_SW1), true);
+  EXPECT_EQ(getSwitch(SWSRC_SW2), true);
+
+  s_last_switch_used = 0;
+  EXPECT_EQ(getSwitch(SWSRC_SW1), true);
+  EXPECT_EQ(getSwitch(SWSRC_SW2), false);
 }
 
 TEST(FlightModes, nullFadeOut_posFadeIn)

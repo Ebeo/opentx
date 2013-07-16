@@ -46,7 +46,7 @@ extern "C" {
 }
 #endif
 
-bool luaReload = false;
+bool luaReload = true;
 ScriptInternalData scriptInternalData[MAX_SCRIPTS];
 lua_State *L = NULL;
 
@@ -182,7 +182,7 @@ void luaLoadModelScripts()
   for (int i=0; i<MAX_SCRIPTS; i++) {
     ScriptData & sd = g_model.scriptsData[i];
     ScriptInternalData & sid = scriptInternalData[i];
-    sid.state = 0;
+    sid.state = SCRIPT_NOFILE;
     if (ZEXIST(sd.file)) {
       char filename[sizeof(SCRIPTS_PATH)+sizeof(sd.file)+sizeof(SCRIPTS_EXT)] = SCRIPTS_PATH "/";
       strncpy(filename+sizeof(SCRIPTS_PATH), sd.file, sizeof(sd.file));
@@ -192,13 +192,14 @@ void luaLoadModelScripts()
           lua_pcall(L, 0, LUA_MULTRET, 0) == LUA_OK &&
           luaGetInputs(i) == LUA_OK &&
           luaGetOutputs(i) == LUA_OK) {
-        sid.state = 1;
+        sid.state = SCRIPT_OK;
         strncpy(sid.function, sd.file, sizeof(sd.file));
         sid.function[sizeof(sd.file)] = '\0';
         strcat(sid.function, "Run");
       }
       else {
         TRACE("Error in script %s: %s", filename, lua_tostring(L, -1));
+        sid.state = SCRIPT_SYNTAX_ERROR;
       }
     }
   }
@@ -215,7 +216,7 @@ void luaTask(void * pdata)
     for (int i=0; i<MAX_SCRIPTS; i++) {
       ScriptData & sd = g_model.scriptsData[i];
       ScriptInternalData & sid = scriptInternalData[i];
-      if (sid.state) {
+      if (sid.state == SCRIPT_OK) {
         countdown = 10;
         lua_sethook(L, hook, LUA_MASKCOUNT, 100);
         lua_getglobal(L, sid.function);  /* function to be called */
@@ -231,9 +232,8 @@ void luaTask(void * pdata)
           for (int j=0; j<sid.outputsCount; j++) {
             /* retrieve result */
             if (!lua_isnumber(L, -1)) {
-              sid.state = 0;
+              sid.state = (countdown==0 ? SCRIPT_KILLED : SCRIPT_SYNTAX_ERROR);
               TRACE("Script %10s disabled", sd.file);
-              // TODO s_global_warning = "LUA isnum Error";
               break;
             }
             sid.outputs[j].value = lua_tointeger(L, -1);
@@ -241,7 +241,7 @@ void luaTask(void * pdata)
           }
         }
         else {
-          sid.state = 0;
+          sid.state = (countdown==0 ? SCRIPT_KILLED : SCRIPT_SYNTAX_ERROR);
           TRACE("Script %10s disabled", sd.file);
         }
       }

@@ -251,7 +251,7 @@ enum ModuleIndex {
 };
 #define MODELDATA_BITMAP  char bitmap[LEN_BITMAP_NAME];
 #define MODELDATA_EXTRA   uint8_t externalModule; uint8_t trainerMode; ModuleData moduleData[NUM_MODULES+1]; char curveNames[MAX_CURVES][6]; ScriptData scriptsData[MAX_SCRIPTS];
-#define LIMITDATA_EXTRA   char name[6];
+#define LIMITDATA_EXTRA   char name[LEN_CHANNEL_NAME];
 #define swstate_t         uint16_t
 #elif defined(PCBSKY9X)
 #define MODELDATA_BITMAP
@@ -332,6 +332,7 @@ PACK(typedef struct t_EEGeneral {
 #define LEN_BITMAP_NAME    10
 #define LEN_EXPOMIX_NAME   8
 #define LEN_FP_NAME        10
+#define LEN_CHANNEL_NAME   6
 #elif defined(PCBSKY9X)
 #define LEN_MODEL_NAME     10
 #define LEN_EXPOMIX_NAME   6
@@ -1177,7 +1178,7 @@ enum MixSources {
   MIXSRC_CH16,
   MIXSRC_LAST_CH = MIXSRC_CH1+NUM_CHNOUT-1,
 
-#if defined(CPUARM)
+#if defined(PCBTARANIS)
   MIXSRC_FIRST_LUA,
   MIXSRC_LAST_LUA = MIXSRC_FIRST_LUA+(MAX_SCRIPTS*MAX_SCRIPT_OUTPUTS)-1,
 #endif

@@ -1402,6 +1402,12 @@ enum AUDIO_SOUNDS {
     const char *name;
     int16_t value;
   };
+  enum ScriptState {
+    SCRIPT_OK,
+    SCRIPT_NOFILE,
+    SCRIPT_SYNTAX_ERROR,
+    SCRIPT_KILLED
+  };
   struct ScriptInternalData {
     uint8_t state;
     uint8_t inputsCount;

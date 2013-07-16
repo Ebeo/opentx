@@ -1113,7 +1113,7 @@ bool isSourceAvailable(int16_t source)
 #if defined(LUA)
   if (source>=MIXSRC_FIRST_LUA && source<=MIXSRC_LAST_LUA) {
     div_t qr = div(source-MIXSRC_FIRST_LUA, MAX_SCRIPT_OUTPUTS);
-    return (scriptInternalData[qr.quot].state && qr.rem<scriptInternalData[qr.quot].outputsCount);
+    return (scriptInternalData[qr.quot].state==SCRIPT_OK && qr.rem<scriptInternalData[qr.quot].outputsCount);
   }
 #else
   if (source>=MIXSRC_FIRST_LUA && source<=MIXSRC_LAST_LUA)
@@ -1126,5 +1126,10 @@ bool isSourceAvailable(int16_t source)
 #endif
 
   return true;
+}
+
+bool isSourceP1Available(int16_t source)
+{
+  return isSourceAvailable(source+1);
 }
 #endif
