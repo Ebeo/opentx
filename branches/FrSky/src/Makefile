@@ -1151,12 +1151,13 @@ fonts/std/font_05x07.lbm: fonts/std/font_03x05.png fonts/std/font_04x06.png font
 	$(IMG2LBM) fonts/std/font_se_08x10.png fonts/std/font_se_08x10.lbm 8x10
 	$(IMG2LBM) fonts/std/font_se_10x14.png fonts/std/font_se_10x14.lbm 10x14
 
-bitmaps/sticks.lbm: bitmaps/sticks_4x1.xbm bitmaps/splash_9x.xbm bitmaps/splash_taranis.png bitmaps/logo_taranis.bmp bitmaps/icons.png bitmaps/asterisk.xbm bitmaps/about_9x.png bitmaps/about_taranis.png bitmaps/asterisk_4bits.png
+bitmaps/sticks.lbm: bitmaps/sticks_4x1.xbm bitmaps/splash_9x.xbm bitmaps/splash_taranis.png bitmaps/splash_frsky.bmp bitmaps/logo_taranis.bmp bitmaps/icons.png bitmaps/asterisk.xbm bitmaps/about_9x.png bitmaps/about_taranis.png bitmaps/asterisk_4bits.png
 	@echo
 	@echo "Convert bitmaps from xbm to lbm:"
 	$(IMG2LBM) bitmaps/sticks_4x1.xbm bitmaps/sticks.lbm img 4
 	$(IMG2LBM) bitmaps/splash_9x.xbm bitmaps/splash_9x.lbm img
 	$(IMG2LBM) bitmaps/splash_taranis.png bitmaps/splash_taranis.lbm bmp
+	$(IMG2LBM) bitmaps/splash_frsky.bmp bitmaps/splash_frsky.lbm bmp
 	$(IMG2LBM) bitmaps/logo_taranis.bmp bitmaps/logo_taranis.lbm bmp
 	$(IMG2LBM) bitmaps/icons.png bitmaps/icons.lbm bmp
 	$(IMG2LBM) bitmaps/asterisk.xbm bitmaps/asterisk.lbm img
