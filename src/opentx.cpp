@@ -78,6 +78,13 @@ const pm_uchar splashdata[] PROGMEM = { 'S','P','S',0,
 const pm_uchar * splash_lbm = splashdata+4;
 #endif
 
+#if defined(PCBTARANIS)
+const pm_uchar splashdata2[] PROGMEM = { 'S','F','S',0,
+#include "bitmaps/splash_frsky.lbm"
+        'S','F','E',0 };
+const pm_uchar * splash2_lbm = splashdata2+4;
+#endif
+
 #if LCD_W >= 212
   const pm_uchar asterisk_lbm[] PROGMEM = {
     #include "bitmaps/asterisk_4bits.lbm"
@@ -1602,12 +1609,9 @@ void doSplash()
 #if defined(PCBTARANIS)
       if (!secondSplash && get_tmr10ms() >= tgtime-200) {
         secondSplash = true;
-        static uint8_t sdSplash[2+4*(LCD_W*LCD_H/8)];
-        if (!bmpLoad(sdSplash, BITMAPS_PATH "/splash.bmp", LCD_W, LCD_H)) {
-          lcd_clear();
-          lcd_bmp(0, 0, sdSplash);
-          lcdRefresh();
-        }
+        lcd_clear();
+        lcd_bmp(0, 0, splash2_lbm);
+        lcdRefresh();
       }
 #elif !defined(PCBSTD)
       if (curTime < get_tmr10ms()) {
