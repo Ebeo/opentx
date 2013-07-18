@@ -1539,6 +1539,11 @@ extern const pm_uint8_t bchunit_ar[];
 #define EARTH_RADIUSKM ((uint32_t)6371)
 #define EARTH_RADIUS ((uint32_t)111194)
 
+#if defined(PCBTARANIS)
+double gpsToDouble(bool neg, int16_t bp, int16_t ap);
+extern double pilotLatitude;
+extern double pilotLongitude;
+#endif
 void getGpsPilotPosition();
 void getGpsDistance();
 void varioWakeup();

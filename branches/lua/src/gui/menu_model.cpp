@@ -4500,7 +4500,7 @@ enum menuModelCustomScriptItems {
   ITEM_MODEL_CUSTOMSCRIPT_PARAMS_LABEL,
 };
 
-#define SCRIPT_ONE_2ND_COLUMN_POS  (14*FW)
+#define SCRIPT_ONE_2ND_COLUMN_POS  (12*FW)
 #define SCRIPT_ONE_3RD_COLUMN_POS  (23*FW)
 
 void menuModelCustomScriptOne(uint8_t event)

@@ -72,20 +72,14 @@ static int luaGetSourceValue(lua_State *L)
   return 1;
 }
 
-double gpsToDouble(bool neg, int16_t bp, int16_t ap)
-{
-  double result = ap;
-  result /= 10000;
-  result += (bp % 100);
-  result /= 60;
-  result += (bp / 100);
-  return neg?-result:result;
-}
-
 static int luaGetValue(lua_State *L)
 {
   const char *what = luaL_checkstring(L, 1);
-  if (!strcmp(what, "latitude")) {
+  if (!strcmp(what, "altitude")) {
+    lua_pushnumber(L, double(frskyData.hub.baroAltitude)/100);
+    return 1;
+  }
+  else if (!strcmp(what, "latitude")) {
     if (frskyData.hub.gpsFix)
       lua_pushnumber(L, gpsToDouble(frskyData.hub.gpsLatitudeNS=='S', frskyData.hub.gpsLatitude_bp, frskyData.hub.gpsLatitude_ap));
     else
@@ -99,7 +93,23 @@ static int luaGetValue(lua_State *L)
       lua_pushnil(L);
     return 1;
   }
-  return 0;
+  else if (!strcmp(what, "pilot latitude")) {
+    if (frskyData.hub.gpsFix)
+      lua_pushnumber(L, pilotLatitude);
+    else
+      lua_pushnil(L);
+    return 1;
+  }
+  else if (!strcmp(what, "pilot longitude")) {
+    if (frskyData.hub.gpsFix)
+      lua_pushnumber(L, pilotLongitude);
+    else
+      lua_pushnil(L);
+    return 1;
+  }
+  else {
+    return 0;
+  }
 }
 
 int luaGetInputs(uint8_t idx)

@@ -333,12 +333,12 @@ void displayTimers()
     if (timerState.val < 0) lcd_hline(TIMERS_X-6, TIMER2_Y+2, 4);
   }
 
-  if (g_model.timers[1].mode && timersStates[0].val <= 0) {
+  if (g_model.timers[0].mode && timersStates[0].val <= 0) {
     if (BLINK_ON_PHASE)
       lcd_filled_rect(TIMERS_X-17, TIMER1_Y, 70, 12);
   }
 
-  if (g_model.timers[0].mode && timersStates[0].val <= 0) {
+  if (g_model.timers[1].mode && timersStates[1].val <= 0) {
     if (BLINK_ON_PHASE)
       lcd_filled_rect(TIMERS_X-17, TIMER2_Y, 70, 12);
   }
