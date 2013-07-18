@@ -3,8 +3,7 @@
 
 <wiki:comment>
 TODO: 
- * Flashing
- * c9x  
+ * Contrast
 </wiki:comment>
 
 = openTx for !FrSky Taranis =
@@ -81,7 +80,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/photo06.jpg
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/photo07.jpg
 
 The back of the radio shows the JR-compatible module slot, along with a JR-style jack trainer port, USB connector and earphone jack. The battery bay houses a microSD card slot, a serial port and of course the battery connection. 
-The supplied battery is a 6-cell NiMH, but the plug will also accept a JST-style balance plug for a 2s Li-Po battery. Battery compartment dimensions are 108x31x23mm. Voltage range is 5.5-13V for the internal components, but be aware that external modules might require up to 12V, so observe your module's requirements when using one and choose the appropriate battery. 
+The supplied battery is a 6-cell NiMH, but the plug will also accept a JST-style balance plug for a 2s Li-Po battery. Battery compartment dimensions are 108x31x28mm. Voltage range is 5.5-13V for the internal components, but be aware that external modules might require up to 12V, so observe your module's requirements when using one and choose the appropriate battery. 
 
 == Software overview ==
 
@@ -651,7 +650,7 @@ Set your flight mode and preferred channel order in the dropdowns below, and dis
 You can now create a new document. A window will appear, with the first line being the radio's general settings, and the next being the model slots. You can have a look in the general settings and create a model by double-clicking in an empty slot. 
 There are 2 ways to simulate either a model or the whole radio.
  * In the model editor, the bottom Simulate button will open the model simulator with the current settings. Note that if a change is made in the model while the simulator is open, it needs to be closed and reopened.
- * At the bottom of the "document" window is a "Simulate Tx" button that will open a similar simulator, however this time with an extra tab showing the radio's LCD screen and UI buttons. The virtual radio will have the same data as the document when the simulator is started. Note that changes on the radion interface are not carried over back to the document.
+ * At the bottom of the "document" window is a "Simulate Tx" button that will open a similar simulator, however this time with an extra tab showing the radio's LCD screen and UI buttons. The virtual radio will have the same data as the document when the simulator is started. Note that changes on the radio interface are not carried over back to the document.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/29_c9x_sim.png
 
