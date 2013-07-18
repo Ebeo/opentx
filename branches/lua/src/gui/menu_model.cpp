@@ -1024,7 +1024,7 @@ void menuModelSetup(uint8_t event)
         }
         else if (k==ITEM_MODEL_TIMER1_COUNTDOWN_BEEP || k==ITEM_MODEL_TIMER2_COUNTDOWN_BEEP) {
 #if defined(CPUARM)
-          timer->countdownBeep = selectMenuItem(MODEL_SETUP_2ND_COLUMN, y, STR_BEEPCOUNTDOWN, STR_VBEEPCOUNTDOWN, timer->countdownBeep, 0, 3, attr, event);
+          timer->countdownBeep = selectMenuItem(MODEL_SETUP_2ND_COLUMN, y, STR_BEEPCOUNTDOWN, STR_VBEEPCOUNTDOWN, timer->countdownBeep, 0, 2, attr, event);
 #else
           timer->countdownBeep = onoffMenuItem(timer->countdownBeep, MODEL_SETUP_2ND_COLUMN, y, STR_BEEPCOUNTDOWN, attr, event);         
 #endif
@@ -4563,12 +4563,14 @@ void menuModelCustomScriptOne(uint8_t event)
     }
   }
 
-  lcd_vline(SCRIPT_ONE_3RD_COLUMN_POS-4, FH+1, LCD_H-FH-1);
-  lcd_puts(SCRIPT_ONE_3RD_COLUMN_POS, FH+1, "Outputs");
+  if (scriptInternalData[s_currIdx].outputsCount > 0) {
+    lcd_vline(SCRIPT_ONE_3RD_COLUMN_POS-4, FH+1, LCD_H-FH-1);
+    lcd_puts(SCRIPT_ONE_3RD_COLUMN_POS, FH+1, "Outputs");
 
-  for (int i=0; i<scriptInternalData[s_currIdx].outputsCount; i++) {
-    putsMixerSource(SCRIPT_ONE_3RD_COLUMN_POS+INDENT_WIDTH, FH+1+FH+i*FH, MIXSRC_FIRST_LUA+(s_currIdx*MAX_SCRIPT_OUTPUTS)+i, 0);
-    lcd_outdezNAtt(SCRIPT_ONE_3RD_COLUMN_POS+11*FW+3, FH+1+FH+i*FH, calcRESXto1000(scriptInternalData[s_currIdx].outputs[i].value), PREC1);
+    for (int i=0; i<scriptInternalData[s_currIdx].outputsCount; i++) {
+      putsMixerSource(SCRIPT_ONE_3RD_COLUMN_POS+INDENT_WIDTH, FH+1+FH+i*FH, MIXSRC_FIRST_LUA+(s_currIdx*MAX_SCRIPT_OUTPUTS)+i, 0);
+      lcd_outdezNAtt(SCRIPT_ONE_3RD_COLUMN_POS+11*FW+3, FH+1+FH+i*FH, calcRESXto1000(scriptInternalData[s_currIdx].outputs[i].value), PREC1);
+    }
   }
 }
 

@@ -150,10 +150,6 @@ extern const pm_char STR_OPEN9X[];
 #endif
 #if defined(CPUARM)
   #define OFS_VUNITSSYSTEM     (OFS_VLCD + sizeof(TR_VLCD))
-#else
-  #define OFS_VUNITSSYSTEM     (OFS_VLCD)
-#endif
-#if defined(CPUARM)
   #define OFS_VBEEPCOUNTDOWN   (OFS_VUNITSSYSTEM + sizeof(TR_VUNITSSYSTEM))
   #define OFS_COUNTRYCODES     (OFS_VBEEPCOUNTDOWN + sizeof(TR_VBEEPCOUNTDOWN))
 #else

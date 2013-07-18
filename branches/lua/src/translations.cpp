@@ -100,6 +100,7 @@ const pm_char STR_OPEN9X[] PROGMEM =
 #if defined(CPUARM)
     ISTR(VLCD)
     ISTR(VUNITSSYSTEM)
+    ISTR(VBEEPCOUNTDOWN)
 #endif
 #if defined(PXX)
     ISTR(COUNTRYCODES)
