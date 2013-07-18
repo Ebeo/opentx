@@ -82,7 +82,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/photo07.jpg
 The back of the radio shows the JR-compatible module slot, along with a JR-style jack trainer port, USB connector and earphone jack. The battery bay houses a microSD card slot, a serial port and of course the battery connection. 
 The supplied battery is a 6-cell NiMH, but the plug will also accept a JST-style balance plug for a 2s Li-Po battery. Battery compartment dimensions are 108x31x28mm. Voltage range is 5.5-13V for the internal components, but be aware that external modules might require up to 12V, so observe your module's requirements when using one and choose the appropriate battery. 
 
-The gimbals have adjustable length and tension, and each of the vertical axes is fitted with a spring disable feature as well as a ratched and brake. This means that there is no need to swap parts to change modes, and that if you want to you can have either both ir none of the vertical axes spring-loaded.
+The gimbals have adjustable length and tension, and each of the vertical axes is fitted with a spring disable feature as well as a ratchet and brake. This means that there is no need to swap parts to change modes, and that if you want to you can have either both or none of the vertical axes spring-loaded.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/screws.png
 
