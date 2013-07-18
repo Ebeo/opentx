@@ -665,14 +665,21 @@ The first thing to do is to power your radio off and connect it to your computer
 
 This is only required the first time you flash your radio on a given computer. If already done you can skip this section. 
 
-https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/zadig.png
-
  * Download the Zadig utility for your operating system: [https://companion9x.googlecode.com/files/zadig_xp.exe Windows XP] or [https://companion9x.googlecode.com/files/zadig.exe Windows Vista and later].
  * Run it as Administrator (Right-click and select the relevant entry).
- * In the big dropdown, you should find an entry named "STM32 BOOTLOADER" or "STM device in DFU mode".
- * If you do not have that entry, choose Options -> List All Devices, and it should now appear in the list.
- * Select that entry, and click on the big "Install Driver" respectively "Replace Driver" button. 
- * Close Zadig.
+ * In the big dropdown, you should find an entry named "STM32 BOOTLOADER". Select it, and click the "Install Driver" button.
+
+https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/zadig.png
+
+ * If you do not have that entry, choose Options -> List All Devices, and it should now appear in the list. Select that entry, and click the "Replace Driver" button. 
+ 
+https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/zadig_replace.png
+  
+Zadig will install the driver, and should report success. When done you can dismiss the message and close it. 
+
+https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/zadig_success.png
+
+Should none of these options work, you can download the driver [https://code.google.com/p/companion9x/downloads/detail?name=Taranis_WinUSB_driver.zip here] and install it manually (instructions are on the download page).
 
 ==== Installing the flashing utility (for Mac OS only) ====
 
