@@ -74,6 +74,9 @@
 #define LEN_VTRIMINC           TR("\006","\013")
 #define TR_VTRIMINC            TR("Expo  ""ExFine""Fine  ""Medium""Coarse","Exponential""Extra Fine ""Fine       ""Medium     ""Coarse     ")
 
+#define LEN_VBEEPCOUNTDOWN     "\006"
+#define TR_VBEEPCOUNTDOWN      "SilentBeeps\0Voice\0"
+
 #define LEN_RETA123            "\001"
 
 #if defined(PCBGRUVIN9X)

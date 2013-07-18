@@ -917,10 +917,10 @@ extern uint8_t trimsCheckTimer;
 extern int16_t csLastValue[NUM_CSW];
 #define CS_LAST_VALUE_INIT -32768
 
-#define TMR_OFF     0
-#define TMR_RUNNING 1
-#define TMR_BEEPING 2
-#define TMR_STOPPED 3
+#define TMR_OFF      0
+#define TMR_RUNNING  1
+#define TMR_NEGATIVE 2
+#define TMR_STOPPED  3
 void resetTimer(uint8_t idx);
 void resetAll();
 
@@ -1316,6 +1316,7 @@ enum AUDIO_SOUNDS {
     AU_MIX_WARNING_1,
     AU_MIX_WARNING_2,
     AU_MIX_WARNING_3,
+    AU_TIMER_00,
     AU_TIMER_LT10,
     AU_TIMER_20,
     AU_TIMER_30,

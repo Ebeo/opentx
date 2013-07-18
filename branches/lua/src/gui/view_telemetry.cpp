@@ -113,7 +113,7 @@ void displayGpsCoord(uint8_t y, char direction, int16_t bp, int16_t ap)
     if (!direction) direction = '-';
     lcd_outdezAtt(TELEM_2ND_COLUMN, y, bp / 100, LEFT); // ddd before '.'
     lcd_putc(lcdLastPos, y, '@');
-    uint8_t mn = bp % 100;
+    uint8_t mn = bp % 100; // TODO div_t
     if (g_eeGeneral.gpsFormat == 0) {
       lcd_putc(lcdLastPos+FWNUM, y, direction);
       lcd_outdezNAtt(lcdLastPos+FW+FW+1, y, mn, LEFT|LEADING0, 2); // mm before '.'

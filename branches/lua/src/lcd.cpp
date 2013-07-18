@@ -704,12 +704,12 @@ void lcdDrawTelemetryTopBar()
   uint8_t att = (g_vbat100mV < g_eeGeneral.vBatWarn ? BLINK : 0);
   putsVBat(16*FW+2,0,att);
   if (g_model.timers[0].mode) {
-    att = (timersStates[0].state==TMR_BEEPING ? BLINK : 0);
+    att = (timersStates[0].val<=0 ? BLINK : 0);
     putsTime(22*FW+5*FWNUM+1, 0, timersStates[0].val, att, att);
     lcd_putsiAtt(18*FW+2, 1, STR_VTELEMCHNS, TELEM_TM1, SMLSIZE);
   }
   if (g_model.timers[1].mode) {
-    att = (timersStates[1].state==TMR_BEEPING ? BLINK : 0);
+    att = (timersStates[1].val<=0 ? BLINK : 0);
     putsTime(31*FW+5*FWNUM+1, 0, timersStates[1].val, att, att);
     lcd_putsiAtt(27*FW+2, 1, STR_VTELEMCHNS, TELEM_TM2, SMLSIZE);
   }
@@ -722,7 +722,7 @@ void lcdDrawTelemetryTopBar()
   uint8_t att = (g_vbat100mV < g_eeGeneral.vBatWarn ? BLINK : 0);
   putsVBat(14*FW,0,att);
   if (g_model.timers[0].mode) {
-    att = (timersStates[0].state==TMR_BEEPING ? BLINK : 0);
+    att = (timersStates[0].val<=0 ? BLINK : 0);
     putsTime(17*FW+5*FWNUM+1, 0, timersStates[0].val, att, att);
   }
   lcd_invert_line(0);

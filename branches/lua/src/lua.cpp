@@ -65,6 +65,43 @@ void hook(lua_State* L, lua_Debug *ar)
   }
 }
 
+static int luaGetSourceValue(lua_State *L)
+{
+  int src = luaL_checkinteger(L, 1);
+  lua_pushnumber(L, src <= 0 ? 0 : getValue(src-1));
+  return 1;
+}
+
+double gpsToDouble(bool neg, int16_t bp, int16_t ap)
+{
+  double result = ap;
+  result /= 10000;
+  result += (bp % 100);
+  result /= 60;
+  result += (bp / 100);
+  return neg?-result:result;
+}
+
+static int luaGetValue(lua_State *L)
+{
+  const char *what = luaL_checkstring(L, 1);
+  if (!strcmp(what, "latitude")) {
+    if (frskyData.hub.gpsFix)
+      lua_pushnumber(L, gpsToDouble(frskyData.hub.gpsLatitudeNS=='S', frskyData.hub.gpsLatitude_bp, frskyData.hub.gpsLatitude_ap));
+    else
+      lua_pushnil(L);
+    return 1;
+  }
+  else if (!strcmp(what, "longitude")) {
+    if (frskyData.hub.gpsFix)
+      lua_pushnumber(L, gpsToDouble(frskyData.hub.gpsLongitudeEW=='W', frskyData.hub.gpsLongitude_bp, frskyData.hub.gpsLongitude_ap));
+    else
+      lua_pushnil(L);
+    return 1;
+  }
+  return 0;
+}
+
 int luaGetInputs(uint8_t idx)
 {
   ScriptData & sd = g_model.scriptsData[idx];
@@ -178,6 +215,12 @@ void luaLoadModelScripts()
   luaL_openlibs(L);
   lua_sethook(L, hook, LUA_MASKCOUNT, 100);
 
+  // Push openTX functions
+  lua_pushcfunction(L, luaGetSourceValue);
+  lua_setglobal(L, "getSourceValue");
+  lua_pushcfunction(L, luaGetValue);
+  lua_setglobal(L, "getValue");
+
   // Load scripts
   for (int i=0; i<MAX_SCRIPTS; i++) {
     ScriptData & sd = g_model.scriptsData[i];
@@ -222,10 +265,7 @@ void luaTask(void * pdata)
         lua_getglobal(L, sid.function);  /* function to be called */
         for (int j=0; j<sid.inputsCount; j++) {
           int8_t input = sd.inputs[j];
-          if (sid.inputs[j].type == 0 || input==0)
-            lua_pushnumber(L, input);
-          else
-            lua_pushnumber(L, getValue(input-1));
+          lua_pushnumber(L, input);
         }
         /* do the call (2 arguments, 1 result) */
         if (lua_pcall(L, sid.inputsCount, sid.outputsCount, 0) == 0) {

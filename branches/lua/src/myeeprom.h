@@ -52,9 +52,9 @@
 #define BEEP_VAL     ( (g_eeGeneral.warnOpts & WARN_BVAL_BIT) >>3 )
 
 #if defined(PCBTARANIS)
-  #define EEPROM_VER       215
+  #define EEPROM_VER       216
 #elif defined(PCBSKY9X)
-  #define EEPROM_VER       215
+  #define EEPROM_VER       216
 #elif defined(PCBGRUVIN9X)
   #define EEPROM_VER       214
 #elif defined(CPUM2561)
@@ -236,7 +236,7 @@ PACK(typedef struct t_ModuleData {
 #define SET_DEFAULT_PPM_FRAME_LENGTH(idx) g_model.moduleData[idx].ppmFrameLength = 4 * max((int8_t)0, g_model.moduleData[idx].channelsCount)
 
 #define MAX_SCRIPT_INPUTS  10
-#define MAX_SCRIPT_OUTPUTS 10
+#define MAX_SCRIPT_OUTPUTS 6
 PACK(typedef struct t_ScriptData {
   char    file[10];
   char    name[10];
@@ -1205,14 +1205,17 @@ enum MixSources {
 #define TMRMODE_THR_REL  3
 #define TMRMODE_THR_TRG  4
 
+#define COUNTDOWN_SILENT 0
+#define COUNTDOWN_BEEPS  1
+#define COUNTDOWN_VOICE  2
+
 #if defined(PCBGRUVIN9X) || defined(CPUARM)
 PACK(typedef struct t_TimerData {
   int8_t    mode;            // timer trigger source -> off, abs, stk, stk%, sw/!sw, !m_sw/!m_sw
   uint16_t  start:12;
-  uint16_t  countdownBeep:1;
   uint16_t  minuteBeep:1;
   uint16_t  persistent:1;
-  uint16_t  spare:1;
+  uint16_t  countdownBeep:2;
   uint16_t  value;
 }) TimerData;
 #else

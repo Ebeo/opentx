@@ -851,8 +851,6 @@ int16_t cyc_anas[3] = {0};
 
 // TODO same naming convention than the putsMixerSource
 
-bool __getSwitch(int8_t swtch);
-
 getvalue_t getValue(uint8_t i)
 {
   /*srcRaw is shifted +1!*/
@@ -3343,30 +3341,27 @@ void doMixerCalculations()
         switch(timerState->state)
         {
           case TMR_RUNNING:
-            if (tv && newTimerVal>=(int16_t)tv) timerState->state = TMR_BEEPING;
+            if (tv && newTimerVal>=(int16_t)tv) timerState->state = TMR_NEGATIVE;
             break;
-          case TMR_BEEPING:
+          case TMR_NEGATIVE:
             if (newTimerVal >= (int16_t)tv + MAX_ALERT_TIME) timerState->state = TMR_STOPPED;
             break;
         }
 
-        if (tv) newTimerVal = tv - newTimerVal; //if counting backwards - display backwards
+        if (tv) newTimerVal = tv - newTimerVal; // if counting backwards - display backwards
 
-        if (newTimerVal != timerState->val) { // beep only if seconds advance
+        if (newTimerVal != timerState->val) {
           timerState->val = newTimerVal;
           if (timerState->state == TMR_RUNNING) {
-            if (g_model.timers[i].countdownBeep && g_model.timers[i].start) { // beep when 30, 15, 10, 5,4,3,2,1 seconds remaining
-              if (newTimerVal==30) AUDIO_TIMER_30(); // beep three times
-              if (newTimerVal==20) AUDIO_TIMER_20(); // beep two times
-              if (newTimerVal<=10) AUDIO_TIMER_LT10(newTimerVal);
+            if (g_model.timers[i].countdownBeep && g_model.timers[i].start) {
+              if (newTimerVal==30) AUDIO_TIMER_30();
+              if (newTimerVal==20) AUDIO_TIMER_20();
+              if (newTimerVal==00) AUDIO_TIMER_00(g_model.timers[i].countdownBeep);
+              if (newTimerVal<=10) AUDIO_TIMER_LT10(g_model.timers[i].countdownBeep, newTimerVal);
             }
-
-            if (g_model.timers[i].minuteBeep && (newTimerVal % 60)==0) { // short beep every minute
+            if (g_model.timers[i].minuteBeep && (newTimerVal % 60)==0) {
               AUDIO_TIMER_MINUTE(newTimerVal);
             }
-          }
-          else if (timerState->state == TMR_BEEPING) {
-            AUDIO_WARNING1();
           }
         }
       }

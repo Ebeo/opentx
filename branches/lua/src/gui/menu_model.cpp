@@ -1023,7 +1023,11 @@ void menuModelSetup(uint8_t event)
           timer->minuteBeep = onoffMenuItem(timer->minuteBeep, MODEL_SETUP_2ND_COLUMN, y, STR_MINUTEBEEP, attr, event);
         }
         else if (k==ITEM_MODEL_TIMER1_COUNTDOWN_BEEP || k==ITEM_MODEL_TIMER2_COUNTDOWN_BEEP) {
-          timer->countdownBeep = onoffMenuItem(timer->countdownBeep, MODEL_SETUP_2ND_COLUMN, y, STR_BEEPCOUNTDOWN, attr, event);
+#if defined(CPUARM)
+          timer->countdownBeep = selectMenuItem(MODEL_SETUP_2ND_COLUMN, y, STR_BEEPCOUNTDOWN, STR_VBEEPCOUNTDOWN, timer->countdownBeep, 0, 3, attr, event);
+#else
+          timer->countdownBeep = onoffMenuItem(timer->countdownBeep, MODEL_SETUP_2ND_COLUMN, y, STR_BEEPCOUNTDOWN, attr, event);         
+#endif
         }
         else {
           putsStrIdx(0*FW, y, STR_TIMER, k>=ITEM_MODEL_TIMER2 ? 2 : 1);
@@ -4496,7 +4500,8 @@ enum menuModelCustomScriptItems {
   ITEM_MODEL_CUSTOMSCRIPT_PARAMS_LABEL,
 };
 
-#define SCRIPT_ONE_2ND_COLUMN_POS  (16*FW)
+#define SCRIPT_ONE_2ND_COLUMN_POS  (14*FW)
+#define SCRIPT_ONE_3RD_COLUMN_POS  (23*FW)
 
 void menuModelCustomScriptOne(uint8_t event)
 {
@@ -4506,7 +4511,7 @@ void menuModelCustomScriptOne(uint8_t event)
 
   putsStrIdx(lcdLastPos+FW, 0, "LUA", s_currIdx+1, 0);
 
-  SUBMENU_NOTITLE(4+scriptInternalData[s_currIdx].inputsCount+scriptInternalData[s_currIdx].outputsCount, { 0, 0, LABEL(inputs), 0/*repeated*/ });
+  SUBMENU_NOTITLE(3+scriptInternalData[s_currIdx].inputsCount, { 0, 0, LABEL(inputs), 0/*repeated*/ });
 
   int8_t sub = m_posVert;
 
@@ -4556,16 +4561,14 @@ void menuModelCustomScriptOne(uint8_t event)
         }
       }
     }
-    else if (i == ITEM_MODEL_CUSTOMSCRIPT_PARAMS_LABEL+scriptInternalData[s_currIdx].inputsCount+1) {
-      lcd_putsLeft(y, "Outputs");
-    }
-    else if (i <= ITEM_MODEL_CUSTOMSCRIPT_PARAMS_LABEL+scriptInternalData[s_currIdx].inputsCount+1+scriptInternalData[s_currIdx].outputsCount) {
-      putsStrIdx(INDENT_WIDTH, y, "LUA", s_currIdx+1, 0);
-      lcd_putc(INDENT_WIDTH+4*FW-1, y, 'a'+i-(ITEM_MODEL_CUSTOMSCRIPT_PARAMS_LABEL+scriptInternalData[s_currIdx].inputsCount+1)-1);
-      int outputIdx = i-(ITEM_MODEL_CUSTOMSCRIPT_PARAMS_LABEL+scriptInternalData[s_currIdx].inputsCount+1)-1;
-      lcd_puts(SCRIPT_ONE_2ND_COLUMN_POS, y, scriptInternalData[s_currIdx].outputs[outputIdx].name);
-      lcd_outdezNAtt(30*FW, y, calcRESXto1000(scriptInternalData[s_currIdx].outputs[outputIdx].value), PREC1);
-    }
+  }
+
+  lcd_vline(SCRIPT_ONE_3RD_COLUMN_POS-4, FH+1, LCD_H-FH-1);
+  lcd_puts(SCRIPT_ONE_3RD_COLUMN_POS, FH+1, "Outputs");
+
+  for (int i=0; i<scriptInternalData[s_currIdx].outputsCount; i++) {
+    putsMixerSource(SCRIPT_ONE_3RD_COLUMN_POS+INDENT_WIDTH, FH+1+FH+i*FH, MIXSRC_FIRST_LUA+(s_currIdx*MAX_SCRIPT_OUTPUTS)+i, 0);
+    lcd_outdezNAtt(SCRIPT_ONE_3RD_COLUMN_POS+11*FW+3, FH+1+FH+i*FH, calcRESXto1000(scriptInternalData[s_currIdx].outputs[i].value), PREC1);
   }
 }
 

@@ -333,14 +333,12 @@ void displayTimers()
     if (timerState.val < 0) lcd_hline(TIMERS_X-6, TIMER2_Y+2, 4);
   }
 
-  // Main timer beeping
-  if (timersStates[0].state==TMR_BEEPING) {
+  if (g_model.timers[1].mode && timersStates[0].val <= 0) {
     if (BLINK_ON_PHASE)
       lcd_filled_rect(TIMERS_X-17, TIMER1_Y, 70, 12);
   }
 
-  // Second timer beeping
-  if (timersStates[1].state==TMR_BEEPING) {
+  if (g_model.timers[0].mode && timersStates[0].val <= 0) {
     if (BLINK_ON_PHASE)
       lcd_filled_rect(TIMERS_X-17, TIMER2_Y, 70, 12);
   }
@@ -351,7 +349,7 @@ void displayTimers()
   // Main timer
   if (g_model.timers[0].mode) {
     TimerState & timerState = timersStates[0];
-    uint8_t att = DBLSIZE | (timerState.state==TMR_BEEPING ? BLINK|INVERS : 0);
+    uint8_t att = DBLSIZE | (timerState.val <= 0 ? BLINK|INVERS : 0);
     putsTime(12*FW+2+10*FWNUM-4, FH*2, timerState.val, att, att);
     putsTmrMode(timerState.val >= 0 ? 9*FW-FW/2+3 : 9*FW-FW/2-4, FH*3, g_model.timers[0].mode, STRCONDENSED);
   }
@@ -587,10 +585,7 @@ void menuMainView(uint8_t event)
       return;
 
     case EVT_KEY_FIRST(KEY_EXIT):
-      if (timersStates[0].state==TMR_BEEPING) {
-        timersStates[0].state = TMR_STOPPED;
-      }
-      else if (s_global_warning) {
+      if (s_global_warning) {
         s_global_warning = NULL;
       }
 #if defined(GVARS)
