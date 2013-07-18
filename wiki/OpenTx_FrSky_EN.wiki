@@ -3,7 +3,7 @@
 
 <wiki:comment>
 TODO: 
- * Contrast
+ * Contrast on capture
 </wiki:comment>
 
 = openTx for !FrSky Taranis =
@@ -82,6 +82,18 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/photo07.jpg
 The back of the radio shows the JR-compatible module slot, along with a JR-style jack trainer port, USB connector and earphone jack. The battery bay houses a microSD card slot, a serial port and of course the battery connection. 
 The supplied battery is a 6-cell NiMH, but the plug will also accept a JST-style balance plug for a 2s Li-Po battery. Battery compartment dimensions are 108x31x28mm. Voltage range is 5.5-13V for the internal components, but be aware that external modules might require up to 12V, so observe your module's requirements when using one and choose the appropriate battery. 
 
+The gimbals have adjustable length and tension, and each of the vertical axes is fitted with a spring disable feature as well as a ratched and brake. This means that there is no need to swap parts to change modes, and that if you want to you can have either both ir none of the vertical axes spring-loaded.
+
+https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/screws.png
+
+On the inside, the gimbals have 3 diffrerent types of screws:
+
+ * Y axis ratchet and/or "smooth braking" action strengths (blue)
+ * Y axis spring disable, screw it in to disable spring (green)
+ * X and Y spring tension (red), screw in for more tension, outer is Y of course.
+
+It is good to note that if you like having weak stick tension, it is easy to get inconsistent centering when the spring tension screws are too loose. Just tighten them enough for centering to be good enough, and recalibrate.
+
 == Software overview ==
 
 Now might be the time to put the battery on charge, so that after reading this section you can directly have a go at putting what you learned in practice!
@@ -143,6 +155,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/08_radio_setup.png
  * Date/Time: To be set, they serve as info but also to give a correct timestamp to files and logs saved by the radio. 
  * Battery range: range of the graphical radio battery meter on the main views. To be set accordingly with the battery type you use (2s lipo here).
  * Sound settings: Mode, Master volume, individual volumes of all mixed sources (Beeps, sound files, variometer, background music), beep duration and pitch. 
+ * Contrast: Screen contrast setting. 
  * Alarms -> Sound off: if "Sound Mode" is "Quiet", the radio will not even sound warnings like a low battery. This alarm will remind you of that when turning the radio on. Inactivity alarm will remind you if you have forgotten to turn the radio off.
  * Backlight -> Mode: If set to Stks, Keys or Both, the backlight will turn on when a stick is moved and/or a key is pressed, for the duration set below.
  * Backlight -> Alarm: Backlight will flash when an alarm sounds.
@@ -680,6 +693,10 @@ Zadig will install the driver, and should report success. When done you can dism
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/zadig_success.png
 
 Should none of these options work, you can download the driver [https://code.google.com/p/companion9x/downloads/detail?name=Taranis_WinUSB_driver.zip here] and install it manually (instructions are on the download page).
+
+When the driver is properly installed, you should see this in the device manager:
+
+https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/devman.png
 
 ==== Installing the flashing utility (for Mac OS only) ====
 
