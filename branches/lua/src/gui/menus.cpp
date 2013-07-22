@@ -1090,6 +1090,22 @@ void drawStatusLine()
 #if defined(CPUARM)
 bool isSourceAvailable(int16_t source)
 {
+#if defined(PCBTARANIS)
+  if (source>=MIXSRC_FIRST_INPUT && source<=MIXSRC_LAST_INPUT) {
+    return false;
+  }
+#endif
+
+#if defined(LUA)
+  if (source>=MIXSRC_FIRST_LUA && source<=MIXSRC_LAST_LUA) {
+    div_t qr = div(source-MIXSRC_FIRST_LUA, MAX_SCRIPT_OUTPUTS);
+    return (scriptInternalData[qr.quot].state==SCRIPT_OK && qr.rem<scriptInternalData[qr.quot].outputsCount);
+  }
+#else
+  if (source>=MIXSRC_FIRST_LUA && source<=MIXSRC_LAST_LUA)
+    return false;
+#endif
+
 #if !defined(HELI)
   if (source>=MIXSRC_CYC1 && source<=MIXSRC_CYC3)
     return false;
@@ -1110,26 +1126,11 @@ bool isSourceAvailable(int16_t source)
     return (cs->func != CS_OFF);
   }
 
-#if defined(LUA)
-  if (source>=MIXSRC_FIRST_LUA && source<=MIXSRC_LAST_LUA) {
-    div_t qr = div(source-MIXSRC_FIRST_LUA, MAX_SCRIPT_OUTPUTS);
-    return (scriptInternalData[qr.quot].state==SCRIPT_OK && qr.rem<scriptInternalData[qr.quot].outputsCount);
-  }
-#else
-  if (source>=MIXSRC_FIRST_LUA && source<=MIXSRC_LAST_LUA)
-    return false;
-#endif
-
 #if !defined(GVARS)
   if (source>=MIXSRC_GVAR1 && source<=MIXSRC_LAST_GVAR)
     return false;
 #endif
 
   return true;
-}
-
-bool isSourceP1Available(int16_t source)
-{
-  return isSourceAvailable(source+1);
 }
 #endif

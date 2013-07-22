@@ -471,6 +471,13 @@ enum EnumKeys {
   #define LOAD_MODEL_BITMAP()
 #endif
 
+#if defined(PCBTARANIS)
+  void loadCurves();
+  #define LOAD_MODEL_CURVES() loadCurves()
+#else
+  #define LOAD_MODEL_CURVES()
+#endif
+
 // TODO elsewhere ...
 #if defined(DSM2)
   #define DSM2_BIND_FLAG       0x80
@@ -1177,12 +1184,14 @@ extern LimitData *limitAddress(uint8_t idx);
 extern int8_t *curveAddress(uint8_t idx);
 extern CustomSwData *cswAddress(uint8_t idx);
 
+#if !defined(PCBTARANIS)
 struct CurveInfo {
   int8_t *crv;
   uint8_t points;
   bool custom;
 };
 extern CurveInfo curveInfo(uint8_t idx);
+#endif
 
 extern void deleteExpoMix(uint8_t expo, uint8_t idx);
 
@@ -1391,7 +1400,7 @@ enum AUDIO_SOUNDS {
 
 #if defined(LUA)
   extern bool luaReload;
-  #define RELOAD_LUA_SCRIPTS() luaReload = true
+  #define LOAD_MODEL_LUA_SCRIPTS() luaReload = true
   struct ScriptInput {
     const char *name;
     uint8_t type;
@@ -1419,7 +1428,7 @@ enum AUDIO_SOUNDS {
   };
   extern ScriptInternalData scriptInternalData[MAX_SCRIPTS];
 #else
-  #define RELOAD_LUA_SCRIPTS()
+  #define LOAD_MODEL_LUA_SCRIPTS()
 #endif
 
 #if defined(CPUARM)

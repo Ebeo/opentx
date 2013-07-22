@@ -963,6 +963,8 @@ void eeLoadModel(uint8_t id)
     }
 #endif
 
+    LOAD_MODEL_CURVES();
+
     resumeMixerCalculations();
     // TODO pulses should be started after mixer calculations ...
 
@@ -975,10 +977,8 @@ void eeLoadModel(uint8_t id)
 #endif
 
     LOAD_MODEL_BITMAP();
-
+    LOAD_MODEL_LUA_SCRIPTS();
     SEND_FAILSAFE_1S();
-
-    RELOAD_LUA_SCRIPTS();
   }
 }
 

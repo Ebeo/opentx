@@ -156,7 +156,7 @@ void displayTrims(uint8_t phase)
     static xcoord_t x[4] = {TRIM_LH_X, TRIM_LV_X, TRIM_RV_X, TRIM_RH_X};
     static uint8_t vert[4] = {0,1,1,0};
     uint8_t xm, ym;
-    xm = x[CONVERT_MODE(i+1)-1];
+    xm = x[CONVERT_MODE(i+1)-MIXSRC_Rud];
 
     uint8_t att = ROUND;
     int16_t val = getTrimValue(phase, i);
@@ -643,18 +643,18 @@ void menuMainView(uint8_t event)
     // TODO simplify this + reuse code in checkSwitches() + Menu MODELSETUP
     switch(i) {
       case 5:
-        sw = getValue(MIXSRC_SF-1) > 0 ? 3*i+2 : 3*i+1;
+        sw = getValue(MIXSRC_SF) > 0 ? 3*i+2 : 3*i+1;
         break;
       case 6:
-        val = getValue(MIXSRC_SG-1);
+        val = getValue(MIXSRC_SG);
         sw = ((val < 0) ? 3*i : ((val == 0) ? 3*i+1 : 3*i+2));
         break;     
       case 7:
-        sw = getValue(MIXSRC_SH-1) > 0 ? 3*i+1 : 3*i;
+        sw = getValue(MIXSRC_SH) > 0 ? 3*i+1 : 3*i;
         break;
       default:
       {
-        val = getValue(MIXSRC_SA+i-1);
+        val = getValue(MIXSRC_SA+i);
         sw = ((val < 0) ? 3*i+1 : ((val == 0) ? 3*i+2 : 3*i+3));
         break;
       }

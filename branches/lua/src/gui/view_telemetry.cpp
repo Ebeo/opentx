@@ -220,7 +220,7 @@ void menuTelemetryFrsky(uint8_t event)
           uint8_t y = barHeight+6+i*(barHeight+6);
           lcd_putsiAtt(0, y+barHeight-5, STR_VTELEMCHNS, source, 0);
           lcd_rect(25, y, BAR_WIDTH+1, barHeight+2);
-          getvalue_t value = getValue(MIXSRC_FIRST_TELEM+source-2);
+          getvalue_t value = getValue(MIXSRC_FIRST_TELEM+source-1);
 #if LCD_W >= 212
           putsTelemetryChannel(27+BAR_WIDTH, y+barHeight-6, source-1, value, LEFT);
 #endif
@@ -305,7 +305,7 @@ void menuTelemetryFrsky(uint8_t event)
           }
           if (field) {
             fields_count++;
-            getvalue_t value = getValue(MIXSRC_FIRST_TELEM+field-2);
+            getvalue_t value = getValue(MIXSRC_FIRST_TELEM+field-1);
             uint8_t att = (i==3 ? NO_UNIT : DBLSIZE|NO_UNIT);
 #if LCD_W >= 212
             xcoord_t pos[] = {0, 71, 143, 214};

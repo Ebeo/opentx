@@ -56,13 +56,13 @@
 #elif defined(PCBSKY9X)
   #define EEPROM_VER       216
 #elif defined(PCBGRUVIN9X)
-  #define EEPROM_VER       214
-#elif defined(CPUM2561)
-  #define EEPROM_VER       214
-#elif defined(CPUM128)
   #define EEPROM_VER       215
+#elif defined(CPUM2561)
+  #define EEPROM_VER       215
+#elif defined(CPUM128)
+  #define EEPROM_VER       216
 #else
-  #define EEPROM_VER       213
+  #define EEPROM_VER       214
 #endif
 
 #ifndef PACK
@@ -78,6 +78,7 @@
   #define NUM_CSW    32 // number of custom switches
   #define NUM_CFN    32 // number of functions assigned to switches
   #define MAX_SCRIPTS 6
+  #define MAX_INPUTS 32
 #elif defined(PCBGRUVIN9X)
   #define MAX_MODELS 30
   #define NUM_CHNOUT 16 // number of real output channels CH1-CH16
@@ -114,14 +115,27 @@
 
 #define MAX_TIMERS 2
 
-#if defined(CPUARM)
+#if defined(PCBTARANIS)
+  enum CurveType {
+    CURVE_TYPE_STANDARD,
+    CURVE_TYPE_CUSTOM,
+    CURVE_TYPE_LAST = CURVE_TYPE_CUSTOM
+  };
+PACK(typedef struct t_CurveInfo {
+  uint8_t type;
+  int8_t  points;
+}) CurveInfo;
   #define MAX_CURVES 16
   #define NUM_POINTS 512
-  #define CURVTYPE   int16_t
+  #define CURVDATA   CurveInfo
+#elif defined(CPUARM)
+  #define MAX_CURVES 16
+  #define NUM_POINTS 512
+  #define CURVDATA   int16_t
 #else
   #define MAX_CURVES 8
   #define NUM_POINTS (112-MAX_CURVES)
-  #define CURVTYPE   int8_t
+  #define CURVDATA   int8_t
 #endif
 
 #if defined(PCBTARANIS) || defined(PCBSKY9X)
@@ -160,7 +174,7 @@ PACK(typedef struct t_TrainerMix {
   uint8_t srcChn:6; // 0-7 = ch1-8
   uint8_t mode:2;   // off,add-mode,subst-mode
   int8_t  studWeight;
-}) TrainerMix; //
+}) TrainerMix;
 
 PACK(typedef struct t_TrainerData {
   int16_t        calib[4];
@@ -697,7 +711,7 @@ PACK(typedef struct t_CustomFnData { // Function Switches data
 #define CFN_PARAM(p)       ((p)->param.composite.val)
 #define CFN_RESET_PARAM(p) memset(&(p)->param, 0, sizeof((p)->param))
 #else
-PACK(typedef struct t_CustomFnData { // Function Switches data
+PACK(typedef struct t_CustomFnData {
   int8_t  swtch; // input
   union {
     struct {
@@ -1086,6 +1100,15 @@ enum SwitchSources {
 
 enum MixSources {
   MIXSRC_NONE,
+
+#if defined(PCBTARANIS)
+  MIXSRC_FIRST_INPUT,
+  MIXSRC_LAST_INPUT = MIXSRC_FIRST_INPUT+MAX_INPUTS-1,
+
+  MIXSRC_FIRST_LUA,
+  MIXSRC_LAST_LUA = MIXSRC_FIRST_LUA+(MAX_SCRIPTS*MAX_SCRIPT_OUTPUTS)-1,
+#endif
+
   MIXSRC_Rud,
   MIXSRC_Ele,
   MIXSRC_Thr,
@@ -1178,11 +1201,6 @@ enum MixSources {
   MIXSRC_CH16,
   MIXSRC_LAST_CH = MIXSRC_CH1+NUM_CHNOUT-1,
 
-#if defined(PCBTARANIS)
-  MIXSRC_FIRST_LUA,
-  MIXSRC_LAST_LUA = MIXSRC_FIRST_LUA+(MAX_SCRIPTS*MAX_SCRIPT_OUTPUTS)-1,
-#endif
-
   MIXSRC_GVAR1,
   MIXSRC_LAST_GVAR = MIXSRC_GVAR1+MAX_GVARS-1,
 
@@ -1190,11 +1208,7 @@ enum MixSources {
   MIXSRC_LAST_TELEM = MIXSRC_FIRST_TELEM+NUM_TELEMETRY-1
 };
 
-#if defined(LUA)
- #define MIXSRC_LAST MIXSRC_LAST_LUA
-#else
- #define MIXSRC_LAST MIXSRC_LAST_CH
-#endif
+#define MIXSRC_LAST MIXSRC_LAST_CH
 
 #define MIN_POINTS 3
 #define MAX_POINTS 17
@@ -1323,7 +1337,7 @@ PACK(typedef struct t_ModelData {
   LimitData limitData[NUM_CHNOUT];
   ExpoData  expoData[MAX_EXPOS];
   
-  CURVTYPE  curves[MAX_CURVES];
+  CURVDATA  curves[MAX_CURVES];
   int8_t    points[NUM_POINTS];
   
   CustomSwData customSw[NUM_CSW];

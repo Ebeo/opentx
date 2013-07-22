@@ -162,17 +162,11 @@ uint8_t channel_order(uint8_t x)
   return ( ((pgm_read_byte(bchout_ar + g_eeGeneral.templateSetup) >> (6-(x-1) * 2)) & 3 ) + 1 );
 }
 
-/*
-mode1 rud ele thr ail
-mode2 rud thr ele ail
-mode3 ail ele thr rud
-mode4 ail thr ele rud
-*/
 const pm_uint8_t modn12x3[] PROGMEM = {
-    1, 2, 3, 4,
-    1, 3, 2, 4,
-    4, 2, 3, 1,
-    4, 3, 2, 1 };
+    MIXSRC_Rud, MIXSRC_Ele, MIXSRC_Thr, MIXSRC_Ail,
+    MIXSRC_Rud, MIXSRC_Thr, MIXSRC_Ele, MIXSRC_Ail,
+    MIXSRC_Ail, MIXSRC_Ele, MIXSRC_Thr, MIXSRC_Rud,
+    MIXSRC_Ail, MIXSRC_Thr, MIXSRC_Ele, MIXSRC_Rud };
 
 char idx2char(int8_t idx)
 {
@@ -354,6 +348,28 @@ LimitData *limitAddress(uint8_t idx)
   return &g_model.limitData[idx];
 }
 
+#if defined(PCBTARANIS)
+int8_t *curveEnd[MAX_CURVES];
+void loadCurves()
+{
+  int8_t * tmp = g_model.points;
+  for (int i=0; i<MAX_CURVES; i++) {
+    switch (g_model.curves[i].type) {
+      case CURVE_TYPE_STANDARD:
+        tmp += 5+g_model.curves[i].points;
+        break;
+      case CURVE_TYPE_CUSTOM:
+        tmp += 8+2*g_model.curves[i].points;
+        break;
+    }
+    curveEnd[i] = tmp;
+  }
+}
+int8_t *curveAddress(uint8_t idx)
+{
+  return idx==0 ? g_model.points : curveEnd[idx-1];
+}
+#else
 int8_t *curveAddress(uint8_t idx)
 {
   return &g_model.points[idx==0 ? 0 : 5*idx+g_model.curves[idx-1]];
@@ -375,6 +391,7 @@ CurveInfo curveInfo(uint8_t idx)
   }
   return result;
 }
+#endif
 
 CustomSwData *cswAddress(uint8_t idx)
 {
@@ -485,33 +502,43 @@ void modelDefault(uint8_t id)
 
 int16_t intpol(int16_t x, uint8_t idx) // -100, -75, -50, -25, 0 ,25 ,50, 75, 100
 {
+#if defined(PCBTARANIS)
+  CurveInfo &crv = g_model.curves[idx];
+  int8_t *points = curveAddress(idx);
+  uint8_t count = crv.points+5;
+  bool custom = (crv.type == CURVE_TYPE_CUSTOM);
+#else
   CurveInfo crv = curveInfo(idx);
+  int8_t *points = crv.crv;
+  uint8_t count = crv.points;
+  bool custom = crv.custom;
+#endif
   int16_t erg = 0;
 
   x+=RESXu;
   if (x < 0) {
-    erg = (int16_t)crv.crv[0] * (RESX/4);
+    erg = (int16_t)points[0] * (RESX/4);
   }
   else if (x >= (RESX*2)) {
-    erg = (int16_t)crv.crv[crv.points-1] * (RESX/4);
+    erg = (int16_t)points[count-1] * (RESX/4);
   }
   else {
     uint16_t a=0, b=0;
     uint8_t i;
-    if (crv.custom) {
-      for (i=0; i<crv.points-1; i++) {
+    if (custom) {
+      for (i=0; i<count-1; i++) {
         a = b;
-        b = (i==crv.points-2 ? 2*RESX : RESX + calc100toRESX(crv.crv[crv.points+i]));
+        b = (i==count-2 ? 2*RESX : RESX + calc100toRESX(points[count+i]));
         if ((uint16_t)x<=b) break;
       }
     }
     else {
-      uint16_t d = (RESX * 2) / (crv.points-1);
+      uint16_t d = (RESX * 2) / (count-1);
       i = (uint16_t)x / d;
       a = i * d;
       b = a + d;
     }
-    erg = (int16_t)crv.crv[i]*(RESX/4) + ((int32_t)(x-a) * (crv.crv[i+1]-crv.crv[i]) * (RESX/4)) / ((b-a));
+    erg = (int16_t)points[i]*(RESX/4) + ((int32_t)(x-a) * (points[i+1]-points[i]) * (RESX/4)) / ((b-a));
   }
 
   return erg / 25; // 100*D5/RESX;
@@ -853,9 +880,8 @@ int16_t cyc_anas[3] = {0};
 
 getvalue_t getValue(uint8_t i)
 {
-  /*srcRaw is shifted +1!*/
-
-  if (i<NUM_STICKS+NUM_POTS) return calibratedStick[i];
+  if (i==0) return 0;
+  else if (i<NUM_STICKS+NUM_POTS) return calibratedStick[i-1];
 #if defined(PCBGRUVIN9X) || defined(PCBSKY9X)
   else if (i<NUM_STICKS+NUM_POTS+NUM_ROTARY_ENCODERS) return getRotaryEncoder(i-(NUM_STICKS+NUM_POTS));
 #endif
@@ -1006,10 +1032,10 @@ bool getSwitch(int8_t swtch)
         result = csLastValue[cs_idx] <= 0;
       }
       else {
-        getvalue_t x = getValue(cs->v1-1);
+        getvalue_t x = getValue(cs->v1);
         getvalue_t y;
         if (s == CS_VCOMP) {
-          y = getValue(cs->v2-1);
+          y = getValue(cs->v2);
 
           switch (cs->func) {
             case CS_EQUAL:
@@ -1146,7 +1172,7 @@ int8_t getMovedSwitch()
   for (uint8_t i=0; i<NUM_SWITCHES; i++) {
     swstate_t mask = (0x03 << (i*2));
     uint8_t prev = (switches_states & mask) >> (i*2);
-    uint8_t next = (1024+getValue(MIXSRC_SA+i-1)) / 1024;
+    uint8_t next = (1024+getValue(MIXSRC_SA+i)) / 1024;
     if (prev != next) {
       switches_states = (switches_states & (~mask)) | (next << (i*2));
       if (i<5)
@@ -2377,7 +2403,7 @@ PLAY_FUNCTION(playValue, uint8_t idx)
 
     case MIXSRC_FIRST_TELEM-1+TELEM_ALT-1:
 #if defined(PCBTARANIS)
-      PLAY_NUMBER(val/100, 1+UNIT_METERS, 0);
+      PLAY_NUMBER(val/10, 1+UNIT_METERS, PREC1);
       break;
 #endif
     case MIXSRC_FIRST_TELEM-1+TELEM_MIN_ALT-1:
@@ -2793,7 +2819,7 @@ void perOut(uint8_t mode, uint8_t tick10ms)
     getvalue_t vr = anas[AIL_STICK]+trims[AIL_STICK];
     getvalue_t vc = 0;
     if (g_model.swashR.collectiveSource)
-      vc = getValue(g_model.swashR.collectiveSource-1);
+      vc = getValue(g_model.swashR.collectiveSource);
 
     if (g_model.swashR.invertELE) vp = -vp;
     if (g_model.swashR.invertAIL) vr = -vr;
@@ -2882,7 +2908,7 @@ void perOut(uint8_t mode, uint8_t tick10ms)
           v = md->noExpo ? rawAnas[k] : anas[k];
         }
         else {
-          v = getValue(k);
+          v = getValue(k+1);
           if (k>=MIXSRC_CH1-1 && k<=MIXSRC_LAST_CH-1 && md->destCh != k-MIXSRC_CH1+1) {
             if (dirtyChannels & ((bitfield_channels_t)1 << (k-MIXSRC_CH1+1)) & (passDirtyChannels|~(((bitfield_channels_t) 1 << md->destCh)-1)))
               passDirtyChannels |= (bitfield_channels_t) 1 << md->destCh;

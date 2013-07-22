@@ -828,9 +828,38 @@ void putsStrIdx(xcoord_t x, uint8_t y, const pm_char *str, uint8_t idx, LcdFlags
 void putsMixerSource(xcoord_t x, uint8_t y, uint8_t idx, LcdFlags att)
 {
 #if defined(PCBTARANIS)
-  if (idx < MIXSRC_SW1)
-    lcd_putsiAtt(x, y, STR_VSRCRAW, idx, att);
-  else if (idx < MIXSRC_PPM1)
+  if (idx == 0) {
+    lcd_putsiAtt(x, y, STR_VSRCRAW, 0, att);
+  }
+  else if (idx <= MIXSRC_LAST_INPUT) {
+    lcd_putcAtt(x+2, y+1, 'I', TINSIZE);
+    lcd_filled_rect(x, y, 7, 7);
+    lcd_putsnAtt(x+8, y, "???", att & STREXPANDED ? 9 : 4, att);
+  }
+#endif
+
+#if defined(PCBTARANIS)
+  else if (idx <= MIXSRC_LAST_LUA) {
+    div_t qr = div(idx-MIXSRC_FIRST_LUA, MAX_SCRIPT_OUTPUTS);
+#if defined(LUA)
+    if (qr.quot < MAX_SCRIPTS && qr.rem < scriptInternalData[qr.quot].outputsCount) {
+      lcd_putcAtt(x+2, y+1, '1'+qr.quot, TINSIZE);
+      lcd_filled_rect(x, y, 7, 7);
+      lcd_putsnAtt(x+8, y, scriptInternalData[qr.quot].outputs[qr.rem].name, att & STREXPANDED ? 9 : 4, att);
+    }
+    else
+#endif
+    {
+      putsStrIdx(x, y, "LUA", qr.quot+1, att);
+      lcd_putcAtt(lcdLastPos, y, 'a'+qr.rem, att);
+    }
+  }
+#endif
+
+#if defined(PCBTARANIS)
+  else if (idx < MIXSRC_SW1)
+    lcd_putsiAtt(x, y, STR_VSRCRAW, idx-MIXSRC_Rud+1, att);
+  else if (idx <= MIXSRC_LAST_CSW)
     putsSwitches(x, y, SWSRC_SW1+idx-MIXSRC_SW1, att);
 #else
   if (idx < MIXSRC_THR)
@@ -849,23 +878,6 @@ void putsMixerSource(xcoord_t x, uint8_t y, uint8_t idx, LcdFlags att)
     }
 #endif
   }
-#if defined(PCBTARANIS)
-  else if (idx <= MIXSRC_LAST_LUA) {
-    div_t qr = div(idx-MIXSRC_FIRST_LUA, MAX_SCRIPT_OUTPUTS);
-#if defined(LUA)
-    if (qr.quot < MAX_SCRIPTS && qr.rem < scriptInternalData[qr.quot].outputsCount) {
-      lcd_putcAtt(x+2, y+1, '1'+qr.quot, TINSIZE);
-      lcd_filled_rect(x, y, 7, 7);
-      lcd_putsnAtt(x+8, y, scriptInternalData[qr.quot].outputs[qr.rem].name, att & STREXPANDED ? 9 : 4, att);
-    }
-    else
-#endif
-    {
-      putsStrIdx(x, y, "LUA", qr.quot+1, att);
-      lcd_putcAtt(lcdLastPos, y, 'a'+qr.rem, att);
-    }
-  }
-#endif
 #if defined(GVARS) || !defined(PCBSTD)
   else if (idx <= MIXSRC_LAST_GVAR)
     putsStrIdx(x, y, STR_GV, idx-MIXSRC_GVAR1+1, att);

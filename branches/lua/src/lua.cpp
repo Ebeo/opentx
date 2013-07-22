@@ -68,7 +68,7 @@ void hook(lua_State* L, lua_Debug *ar)
 static int luaGetSourceValue(lua_State *L)
 {
   int src = luaL_checkinteger(L, 1);
-  lua_pushnumber(L, src <= 0 ? 0 : getValue(src-1));
+  lua_pushnumber(L, src <= 0 ? 0 : getValue(src));
   return 1;
 }
 
