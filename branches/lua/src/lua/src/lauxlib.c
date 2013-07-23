@@ -593,8 +593,10 @@ static const char *getF (lua_State *L, void *ud, size_t *size) {
        'getF' called 'fread', it might still wait for user input.
        The next check avoids this problem. */
 #if defined(USE_FATFS)
-    FRESULT result = f_read(&lf->f, lf->buff, sizeof(lf->buff), size);
-    if (result != FR_OK || size == 0) return NULL;
+    U16 f_read_size;
+    FRESULT result = f_read(&lf->f, lf->buff, sizeof(lf->buff), &f_read_size);
+    if (result != FR_OK || f_read_size == 0) return NULL;
+    *size = f_read_size;
 #else
     if (feof(lf->f)) return NULL;
     *size = fread(lf->buff, 1, sizeof(lf->buff), lf->f);  /* read block */

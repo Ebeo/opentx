@@ -2244,11 +2244,6 @@ bool moveCurve(uint8_t index, int8_t shift)
   }
 
   eeDirty(EE_MODEL);
-
-  for (int i=0; i<MAX_CURVES; i++) {
-    TRACE("i=%d: end=%d", i, curveEnd[i]-&g_model.points[0]);
-  }
-
   return true;
 }
 #else
