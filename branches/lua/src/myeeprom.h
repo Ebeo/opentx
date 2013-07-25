@@ -265,7 +265,7 @@ enum ModuleIndex {
 };
 #define MODELDATA_BITMAP  char bitmap[LEN_BITMAP_NAME];
 #define MODELDATA_EXTRA   uint8_t externalModule; uint8_t trainerMode; ModuleData moduleData[NUM_MODULES+1]; char curveNames[MAX_CURVES][6]; ScriptData scriptsData[MAX_SCRIPTS];
-#define LIMITDATA_EXTRA   char name[LEN_CHANNEL_NAME];
+#define LIMITDATA_EXTRA   char name[LEN_CHANNEL_NAME]; int8_t curve;
 #define swstate_t         uint16_t
 #elif defined(PCBSKY9X)
 #define MODELDATA_BITMAP
