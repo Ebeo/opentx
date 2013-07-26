@@ -515,8 +515,9 @@ int16_t intpol(int16_t x, uint8_t idx) // -100, -75, -50, -25, 0 ,25 ,50, 75, 10
 #endif
   int16_t erg = 0;
 
-  x+=RESXu;
-  if (x < 0) {
+  x += RESXu;
+
+  if (x <= 0) {
     erg = (int16_t)points[0] * (RESX/4);
   }
   else if (x >= (RESX*2)) {
@@ -818,7 +819,8 @@ int16_t applyLimits(uint8_t channel, int32_t value)
 
 #if defined(PCBTARANIS)
   if (lim->curve) {
-    // TODO
+    // TODO we loose precision here, intpol could work with int32_t on ARM boards...
+    value = 256 * intpol(value/256, lim->curve-1);
   }
 #endif
 
