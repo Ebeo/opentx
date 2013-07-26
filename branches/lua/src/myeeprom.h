@@ -402,9 +402,15 @@ PACK(typedef struct t_ExpoData {
 }) ExpoData;
 #endif
 
+#if defined(CPUARM)
+  #define limit_min_max_t int16_t
+#else
+  #define limit_min_max_t int8_t
+#endif
+
 PACK(typedef struct t_LimitData {
-  int8_t  min;
-  int8_t  max;
+  limit_min_max_t min;
+  limit_min_max_t max;
   int8_t  ppmCenter;
   int16_t offset:14;
   uint16_t symetrical:1;

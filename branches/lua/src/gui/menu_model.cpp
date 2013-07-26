@@ -3447,6 +3447,9 @@ enum LimitsItems {
   ITEM_LIMITS_MIN,
   ITEM_LIMITS_MAX,
   ITEM_LIMITS_DIRECTION,
+#if defined(PCBTARANIS) && defined(CURVES)
+  ITEM_LIMITS_CURVE,
+#endif
 #if defined(PPM_CENTER_ADJUSTABLE)
   ITEM_LIMITS_PPM_CENTER,
 #endif
@@ -3459,16 +3462,13 @@ enum LimitsItems {
 
 #if defined(PCBTARANIS)
   #define LIMITS_NAME_POS           4*FW
-  #define LIMITS_OFFSET_POS         14*FW
-  #define LIMITS_DIRECTION_POS      19*FW+4
-  #define LIMITS_MIN_POS            19*FW
-  #define LIMITS_MAX_POS            23*FW+4
-  #define LIMITS_REVERT_POS         26*FW
-  #ifdef PPM_CENTER_ADJUSTABLE
-    #define LIMITS_PPM_CENTER_POS     34*FW
-  #else
-    #define LIMITS_PPM_CENTER_POS     32*FW
-  #endif
+  #define LIMITS_OFFSET_POS         14*FW+4
+  #define LIMITS_MIN_POS            19*FW-2
+  #define LIMITS_DIRECTION_POS      19*FW+1
+  #define LIMITS_MAX_POS            23*FW+1
+  #define LIMITS_REVERT_POS         24*FW-1
+  #define LIMITS_CURVE_POS          28*FW-1
+  #define LIMITS_PPM_CENTER_POS     35*FW
 #else
   #if defined(PPM_UNIT_US)
     #define LIMITS_MIN_POS          12*FW+1
@@ -3611,6 +3611,7 @@ void menuModelLimits(uint8_t event)
             eeDirty(EE_MODEL);
           }
           break;
+
         case ITEM_LIMITS_MIN:
 #if defined(PPM_UNIT_US)
           lcd_outdezAtt(LIMITS_MIN_POS, y, (((int16_t)ld->min-100)*128) / 25, attr);
@@ -3619,6 +3620,7 @@ void menuModelLimits(uint8_t event)
 #endif
           if (active) ld->min = 100 + checkIncDecModel(event, ld->min-100, -limit, 25);
           break;
+
         case ITEM_LIMITS_MAX:
 #if defined(PPM_UNIT_US)
           lcd_outdezAtt(LIMITS_MAX_POS, y, (((int16_t)ld->max+100)*128) / 25, attr);
@@ -3627,6 +3629,7 @@ void menuModelLimits(uint8_t event)
 #endif
           if (active) ld->max = -100 + checkIncDecModel(event, ld->max+100, -25, limit);
           break;
+
         case ITEM_LIMITS_DIRECTION:
         {
           uint8_t revert = ld->revert;
@@ -3646,6 +3649,20 @@ void menuModelLimits(uint8_t event)
           }
           break;
         }
+
+#if defined(PCBTARANIS) && defined(CURVES)
+        case ITEM_LIMITS_CURVE:
+          putsCurve(LIMITS_CURVE_POS, y, ld->curve>0 ? ld->curve+CURVE_BASE-1 : ld->curve, attr);
+          if (attr && event==EVT_KEY_LONG(KEY_ENTER) && ld->curve>0) {
+            s_curveChan = (ld->curve<0 ? -ld->curve-1 : ld->curve-1);
+            pushMenu(menuModelCurveOne);
+          }
+          if (active) {
+            CHECK_INCDEC_MODELVAR(event, ld->curve, -MAX_CURVES, +MAX_CURVES);
+          }
+          break;
+#endif
+
 #if defined(PPM_CENTER_ADJUSTABLE)
         case ITEM_LIMITS_PPM_CENTER:
           lcd_outdezAtt(LIMITS_PPM_CENTER_POS, y, PPM_CENTER+ld->ppmCenter, attr);
@@ -3654,6 +3671,7 @@ void menuModelLimits(uint8_t event)
           }
           break;
 #endif
+
 #if defined(PPM_LIMITS_SYMETRICAL)
         case ITEM_LIMITS_SYMETRICAL:
           lcd_putcAtt(LCD_W-FW-MENUS_SCROLLBAR_WIDTH, y, ld->symetrical ? '=' : '^', attr);

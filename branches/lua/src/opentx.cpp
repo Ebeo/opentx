@@ -815,6 +815,13 @@ int8_t calcRESXto100(int16_t x)
 int16_t applyLimits(uint8_t channel, int32_t value)
 {
   LimitData * lim = limitAddress(channel);
+
+#if defined(PCBTARANIS)
+  if (lim->curve) {
+    // TODO
+  }
+#endif
+
   int16_t ofs   = calc1000toRESX(lim->offset);   // multiply to 1.24 to get range (-1024..1024)
   int16_t lim_p = calc100toRESX(lim->max + 100);
   int16_t lim_n = calc100toRESX(lim->min - 100); //multiply by 10.24 to get same range (-1024..1024)
