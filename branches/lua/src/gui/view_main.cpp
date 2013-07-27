@@ -135,15 +135,15 @@ void drawStick(uint8_t centrex, int16_t xval, int16_t yval)
 
 void doMainScreenGraphics()
 {
-  int16_t calibStickVert = calibratedStick[CONVERT_MODE(1+1)-1];
-  if (g_model.throttleReversed && CONVERT_MODE(1+1)-1 == THR_STICK)
+  int16_t calibStickVert = calibratedStick[CONVERT_MODE(1)];
+  if (g_model.throttleReversed && CONVERT_MODE(1) == THR_STICK)
     calibStickVert = -calibStickVert;
-  drawStick(LBOX_CENTERX, calibratedStick[CONVERT_MODE(0+1)-1], calibStickVert);
+  drawStick(LBOX_CENTERX, calibratedStick[CONVERT_MODE(0)], calibStickVert);
 
-  calibStickVert = calibratedStick[CONVERT_MODE(2+1)-1];
-  if (g_model.throttleReversed && CONVERT_MODE(2+1)-1 == THR_STICK)
+  calibStickVert = calibratedStick[CONVERT_MODE(2)];
+  if (g_model.throttleReversed && CONVERT_MODE(2) == THR_STICK)
     calibStickVert = -calibStickVert;
-  drawStick(RBOX_CENTERX, calibratedStick[CONVERT_MODE(3+1)-1], calibStickVert);
+  drawStick(RBOX_CENTERX, calibratedStick[CONVERT_MODE(3)], calibStickVert);
 
 #if !defined(PCBTARANIS)
   drawPotsBars();
@@ -156,7 +156,7 @@ void displayTrims(uint8_t phase)
     static xcoord_t x[4] = {TRIM_LH_X, TRIM_LV_X, TRIM_RV_X, TRIM_RH_X};
     static uint8_t vert[4] = {0,1,1,0};
     uint8_t xm, ym;
-    xm = x[CONVERT_MODE(i+1)-MIXSRC_Rud];
+    xm = x[CONVERT_MODE(i)];
 
     uint8_t att = ROUND;
     int16_t val = getTrimValue(phase, i);

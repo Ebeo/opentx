@@ -644,7 +644,7 @@
 
 // Taranis column headers
 #define TR_PHASES_HEADERS      { " Name ", " Schalter ", " Trimmung ", " Fade In ", " Fade Out " }
-#define TR_LIMITS_HEADERS      { " Name ", " Offset ", " Min ", " Max ", " Richtung ", " PPM Mitte ", " Symmetrisch " }
+#define TR_LIMITS_HEADERS      { " Name ", " Offset ", " Min ", " Max ", " Richtung ", " Curve ", " PPM Mitte ", " Symmetrisch " }
 #define TR_CSW_HEADERS         { " Funktion ", " Var1 ", " Var2 ", " UND Schalter ", " Dauer ", " Delay " }
 
 //Taranis About screen

@@ -1105,8 +1105,8 @@ void menuModelSetup(uint8_t event)
         uint8_t idx = g_model.thrTraceSrc + MIXSRC_Thr;
         if (idx > MIXSRC_Thr)
           idx += 1;
-        if (idx >= MIXSRC_Pot1+NUM_POTS)
-          idx += MIXSRC_CH1 - MIXSRC_Pot1 - NUM_POTS;
+        if (idx >= MIXSRC_FIRST_POT+NUM_POTS)
+          idx += MIXSRC_CH1 - MIXSRC_FIRST_POT - NUM_POTS;
         putsMixerSource(MODEL_SETUP_2ND_COLUMN, y, idx, attr);
         break;
       }
@@ -2289,11 +2289,11 @@ void displayPresetChoice(uint8_t event)
   if (s_warning_result) {
     CurveInfo & crv = g_model.curves[s_curveChan];
     int8_t * points = curveAddress(s_curveChan);
-    for (uint8_t i=0; i<crv.points; i++)
-      points[i] = (i-(crv.points/2)) * s_warning_input_value * 50 / (crv.points-1);
+    for (uint8_t i=0; i<5+crv.points; i++)
+      points[i] = (i-((5+crv.points)/2)) * s_warning_input_value * 50 / (4+crv.points);
     if (crv.type == CURVE_TYPE_CUSTOM) {
-      for (int i=0; i<crv.points-2; i++)
-        points[crv.points+i] = -100 + ((i+1)*200) / (crv.points-1);
+      for (int i=0; i<3+crv.points; i++)
+        points[crv.points+i] = -100 + ((i+1)*200) / (4+crv.points);
     }
   }
 }
@@ -2306,17 +2306,17 @@ void onCurveOneMenu(const char *result)
   else if (result == STR_CURVE_MIRROR) {
     CurveInfo & crv = g_model.curves[s_curveChan];
     int8_t * points = curveAddress(s_curveChan);
-    for (int i=0; i<crv.points; i++)
+    for (int i=0; i<5+crv.points; i++)
       points[i] = -points[i];
   }
   else if (result == STR_CURVE_CLEAR) {
     CurveInfo & crv = g_model.curves[s_curveChan];
     int8_t * points = curveAddress(s_curveChan);
-    for (int i=0; i<crv.points; i++)
+    for (int i=0; i<5+crv.points; i++)
       points[i] = 0;
     if (crv.type == CURVE_TYPE_CUSTOM) {
-      for (int i=0; i<crv.points-2; i++)
-        points[crv.points+i] = -100 + ((i+1)*200) / (crv.points-1);
+      for (int i=0; i<3+crv.points; i++)
+        points[crv.points+i] = -100 + ((i+1)*200) / (4+crv.points);
     }
   }
 }
@@ -3464,11 +3464,11 @@ enum LimitsItems {
   #define LIMITS_NAME_POS           4*FW
   #define LIMITS_OFFSET_POS         14*FW+4
   #define LIMITS_MIN_POS            19*FW-2
-  #define LIMITS_DIRECTION_POS      19*FW+1
-  #define LIMITS_MAX_POS            23*FW+1
-  #define LIMITS_REVERT_POS         24*FW-1
-  #define LIMITS_CURVE_POS          28*FW-1
-  #define LIMITS_PPM_CENTER_POS     35*FW
+  #define LIMITS_DIRECTION_POS      19*FW-2
+  #define LIMITS_MAX_POS            22*FW+1
+  #define LIMITS_REVERT_POS         23*FW-1
+  #define LIMITS_CURVE_POS          27*FW-1
+  #define LIMITS_PPM_CENTER_POS     34*FW
 #else
   #if defined(PPM_UNIT_US)
     #define LIMITS_MIN_POS          12*FW+1

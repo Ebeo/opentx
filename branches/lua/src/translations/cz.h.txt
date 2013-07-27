@@ -644,7 +644,7 @@
 
 // Taranis column headers
 #define TR_PHASES_HEADERS      { " Jméno ", " Spínač ", " Trimy ", " Přechod Zap ", " Přechod Vyp " }
-#define TR_LIMITS_HEADERS      { " Jméno ", " Subtrim ", " Min ", " Max ", " Směr ", " Střed PPM ", " Symetrické " }
+#define TR_LIMITS_HEADERS      { " Jméno ", " Subtrim ", " Min ", " Max ", " Směr ", " Curve ", " Střed PPM ", " Symetrické " }
 #define TR_CSW_HEADERS         { " Funkce ", " Hodnota 1 ", " Hodnota 2 ", " AND Spínač ", " Trvání ", " Zpoždění " }
 
 //Taranis About screen

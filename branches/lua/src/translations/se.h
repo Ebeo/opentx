@@ -644,7 +644,7 @@
 
 // Taranis column headers
 #define TR_PHASES_HEADERS      { " Namn ", " Brytare ", " Trimmar ", " Tona Upp ", " Tona Ned " }
-#define TR_LIMITS_HEADERS      { " Namn ", " Offset ", " Min ", " Max ", " Riktning ", " PPM-centrum ", " Symmetriskt " }
+#define TR_LIMITS_HEADERS      { " Namn ", " Offset ", " Min ", " Max ", " Riktning ", " Curve ", " PPM-centrum ", " Symmetriskt " }
 #define TR_CSW_HEADERS         { " Funktion ", " V1 ", " V2 ", " AND Brytare ", " Tidsl\201ngd ", " F\202rdr\202j " }
 
 // About screen

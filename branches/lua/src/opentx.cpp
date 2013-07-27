@@ -162,11 +162,17 @@ uint8_t channel_order(uint8_t x)
   return ( ((pgm_read_byte(bchout_ar + g_eeGeneral.templateSetup) >> (6-(x-1) * 2)) & 3 ) + 1 );
 }
 
+/*
+mode1 rud ele thr ail
+mode2 rud thr ele ail
+mode3 ail ele thr rud
+mode4 ail thr ele rud
+*/
 const pm_uint8_t modn12x3[] PROGMEM = {
-    MIXSRC_Rud, MIXSRC_Ele, MIXSRC_Thr, MIXSRC_Ail,
-    MIXSRC_Rud, MIXSRC_Thr, MIXSRC_Ele, MIXSRC_Ail,
-    MIXSRC_Ail, MIXSRC_Ele, MIXSRC_Thr, MIXSRC_Rud,
-    MIXSRC_Ail, MIXSRC_Thr, MIXSRC_Ele, MIXSRC_Rud };
+    0, 1, 2, 3,
+    0, 2, 1, 3,
+    3, 1, 2, 0,
+    3, 2, 1, 0 };
 
 char idx2char(int8_t idx)
 {
@@ -820,7 +826,10 @@ int16_t applyLimits(uint8_t channel, int32_t value)
 #if defined(PCBTARANIS)
   if (lim->curve) {
     // TODO we loose precision here, intpol could work with int32_t on ARM boards...
-    value = 256 * intpol(value/256, lim->curve-1);
+    if (lim->curve > 0)
+      value = 256 * intpol(value/256, lim->curve-1);
+    else
+      value = 256 * intpol(-value/256, -lim->curve-1);
   }
 #endif
 
@@ -890,18 +899,41 @@ int16_t cyc_anas[3] = {0};
 getvalue_t getValue(uint8_t i)
 {
   if (i==0) return 0;
-  else if (i<NUM_STICKS+NUM_POTS) return calibratedStick[i-1];
-#if defined(PCBGRUVIN9X) || defined(PCBSKY9X)
-  else if (i<NUM_STICKS+NUM_POTS+NUM_ROTARY_ENCODERS) return getRotaryEncoder(i-(NUM_STICKS+NUM_POTS));
+
+#if defined(PCBTARANIS)
+  else if (i <= MIXSRC_LAST_INPUT) {
+    return 0;
+  }
 #endif
-  else if (i<MIXSRC_MAX) return 1024;
-  else if (i<MIXSRC_CYC3)
-#if defined(HELI)
-    return cyc_anas[i+1-MIXSRC_CYC1];
+
+#if defined(PCBTARANIS)
+  else if (i<MIXSRC_LAST_LUA) {
+#if defined(LUA)
+    div_t qr = div(i-MIXSRC_FIRST_LUA+1, MAX_SCRIPT_OUTPUTS);
+    return scriptInternalData[qr.quot].outputs[qr.rem].value;
 #else
     return 0;
 #endif
-  else if (i<MIXSRC_TrimAil) return calc1000toRESX((int16_t)8 * getTrimValue(s_perout_flight_phase, i+1-MIXSRC_TrimRud));
+  }
+#endif
+
+  else if (i<=MIXSRC_LAST_POT) return calibratedStick[i-MIXSRC_Rud];
+
+#if defined(PCBGRUVIN9X) || defined(PCBSKY9X)
+  else if (i<=MIXSRC_LAST_ROTARY_ENCODER) return getRotaryEncoder(i-MIXSRC_REa);
+#endif
+
+  else if (i<MIXSRC_MAX) return 1024;
+
+  else if (i<MIXSRC_CYC3)
+#if defined(HELI)
+    return cyc_anas[i-MIXSRC_CYC1];
+#else
+    return 0;
+#endif
+
+  else if (i<MIXSRC_TrimAil) return calc1000toRESX((int16_t)8 * getTrimValue(s_perout_flight_phase, i-MIXSRC_TrimRud));
+
 #if defined(PCBTARANIS)
   else if (i<MIXSRC_SA) return (switchState(SW_SA0) ? -1024 : (switchState(SW_SA1) ? 0 : 1024));
   else if (i<MIXSRC_SB) return (switchState(SW_SB0) ? -1024 : (switchState(SW_SB1) ? 0 : 1024));
@@ -919,27 +951,20 @@ getvalue_t getValue(uint8_t i)
 #endif
   else if (i<MIXSRC_LAST_CSW) return getSwitch(SWSRC_THR+i+1-MIXSRC_THR) ? 1024 : -1024;
 #endif
-  else if (i<MIXSRC_LAST_PPM) { int16_t x = g_ppmIns[i+1-MIXSRC_PPM1]; if (i<MIXSRC_PPM1+NUM_CAL_PPM) { x-= g_eeGeneral.trainer.calib[i+1-MIXSRC_PPM1]; } return x*2; }
-  else if (i<MIXSRC_LAST_CH) return ex_chans[i+1-MIXSRC_CH1];
-#if defined(CPUARM)
-  else if (i<MIXSRC_LAST_LUA) {
-#if defined(LUA)
-    div_t qr = div(i-MIXSRC_FIRST_LUA+1, MAX_SCRIPT_OUTPUTS);
-    return scriptInternalData[qr.quot].outputs[qr.rem].value;
-#else
-    return 0;
-#endif
-  }
-#endif
+
+  else if (i<MIXSRC_LAST_PPM) { int16_t x = g_ppmIns[i-MIXSRC_PPM1]; if (i<MIXSRC_PPM1+NUM_CAL_PPM) { x-= g_eeGeneral.trainer.calib[i-MIXSRC_PPM1]; } return x*2; }
+  else if (i<MIXSRC_LAST_CH) return ex_chans[i-MIXSRC_CH1];
+
 #if defined(GVARS)
-  else if (i<MIXSRC_LAST_GVAR) return GVAR_VALUE(i+1-MIXSRC_GVAR1, getGVarFlightPhase(s_perout_flight_phase, i+1-MIXSRC_GVAR1));
+  else if (i<MIXSRC_LAST_GVAR) return GVAR_VALUE(i-MIXSRC_GVAR1, getGVarFlightPhase(s_perout_flight_phase, i-MIXSRC_GVAR1));
 #endif
+
   else if (i<MIXSRC_FIRST_TELEM-1+TELEM_TX_VOLTAGE) return g_vbat100mV;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_TM2) return timersStates[i+1-MIXSRC_FIRST_TELEM+1-TELEM_TM1].val;
+  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_TM2) return timersStates[i-MIXSRC_FIRST_TELEM+1-TELEM_TM1].val;
 #if defined(FRSKY)
   else if (i<MIXSRC_FIRST_TELEM-1+TELEM_RSSI_TX) return frskyData.rssi[1].value;
   else if (i<MIXSRC_FIRST_TELEM-1+TELEM_RSSI_RX) return frskyData.rssi[0].value;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_A2) return frskyData.analog[i+1-MIXSRC_FIRST_TELEM+1-TELEM_A1].value;
+  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_A2) return frskyData.analog[i-MIXSRC_FIRST_TELEM+1-TELEM_A1].value;
 #if defined(FRSKY_SPORT)
   else if (i<MIXSRC_FIRST_TELEM-1+TELEM_ALT) return frskyData.hub.baroAltitude;
 #elif defined(FRSKY_HUB) || defined(WS_HOW_HIGH)
@@ -966,7 +991,7 @@ getvalue_t getValue(uint8_t i)
   else if (i<MIXSRC_FIRST_TELEM-1+TELEM_VSPD) return frskyData.hub.varioSpeed;
   else if (i<MIXSRC_FIRST_TELEM-1+TELEM_MIN_A1) return frskyData.analog[0].min;
   else if (i<MIXSRC_FIRST_TELEM-1+TELEM_MIN_A2) return frskyData.analog[1].min;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_MAX_POWER) return *(((int16_t*)(&frskyData.hub.minAltitude))+i+1-(MIXSRC_FIRST_TELEM-1+TELEM_MIN_ALT));
+  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_MAX_POWER) return *(((int16_t*)(&frskyData.hub.minAltitude))+i-(MIXSRC_FIRST_TELEM-1+TELEM_MIN_ALT));
 #endif
 #endif
   else return 0;
@@ -1868,7 +1893,7 @@ uint8_t checkTrim(uint8_t event)
   if (k>=0 && k<8 && !IS_KEY_BREAK(event)) {
 #endif
     // LH_DWN LH_UP LV_DWN LV_UP RV_DWN RV_UP RH_DWN RH_UP
-    uint8_t idx = CONVERT_MODE(1+(uint8_t)k/2) - 1;
+    uint8_t idx = CONVERT_MODE((uint8_t)k/2);
     uint8_t phase;
     int16_t before;
     bool thro;
@@ -2232,7 +2257,7 @@ BeepANACenter evalSticks(uint8_t mode)
   for (uint8_t i=0; i<NUM_STICKS+NUM_POTS+NUM_ROTARY_ENCODERS; i++) {
 
     // normalization [0..2048] -> [-1024..1024]
-    uint8_t ch = (i < NUM_STICKS ? CONVERT_MODE(i+1) - 1 : i);
+    uint8_t ch = (i < NUM_STICKS ? CONVERT_MODE(i) : i);
 
 #if defined(ROTARY_ENCODERS)
     int16_t v = ((i < NUM_STICKS+NUM_POTS) ? anaIn(i) : getRotaryEncoder(i-(NUM_STICKS+NUM_POTS)));
@@ -2894,8 +2919,6 @@ void perOut(uint8_t mode, uint8_t tick10ms)
 
       if (md->srcRaw == 0) break;
 
-      uint8_t k = md->srcRaw - 1;
-
       if (!(dirtyChannels & ((bitfield_channels_t)1 << md->destCh))) continue;
 
       //========== PHASE && SWITCH =====
@@ -2903,26 +2926,27 @@ void perOut(uint8_t mode, uint8_t tick10ms)
       delayval_t mixEnabled = !(md->phases & (1 << s_perout_flight_phase)) && getSwitch(md->swtch);
 
       //========== VALUE ===============
+      uint8_t stickIndex = md->srcRaw - MIXSRC_Rud;
       getvalue_t v = 0;
       if (mode > e_perout_mode_inactive_phase) {
-        if (!mixEnabled || k >= NUM_STICKS || (k == THR_STICK && g_model.thrTrim)) {
+        if (!mixEnabled || stickIndex >= NUM_STICKS || (stickIndex == THR_STICK && g_model.thrTrim)) {
           continue;
         }
         else {
-          if (!(mode & e_perout_mode_nosticks)) v = anas[k];
+          if (!(mode & e_perout_mode_nosticks)) v = anas[stickIndex];
         }
       }
       else {
-        if (k < NUM_STICKS) {
-          v = md->noExpo ? rawAnas[k] : anas[k];
+        if (stickIndex < NUM_STICKS) {
+          v = md->noExpo ? rawAnas[stickIndex] : anas[stickIndex];
         }
         else {
-          v = getValue(k+1);
-          if (k>=MIXSRC_CH1-1 && k<=MIXSRC_LAST_CH-1 && md->destCh != k-MIXSRC_CH1+1) {
-            if (dirtyChannels & ((bitfield_channels_t)1 << (k-MIXSRC_CH1+1)) & (passDirtyChannels|~(((bitfield_channels_t) 1 << md->destCh)-1)))
+          v = getValue(md->srcRaw);
+          if (md->srcRaw>=MIXSRC_CH1 && md->srcRaw<=MIXSRC_LAST_CH && md->destCh != md->srcRaw-MIXSRC_CH1) {
+            if (dirtyChannels & ((bitfield_channels_t)1 << (md->srcRaw-MIXSRC_CH1)) & (passDirtyChannels|~(((bitfield_channels_t) 1 << md->destCh)-1)))
               passDirtyChannels |= (bitfield_channels_t) 1 << md->destCh;
-            if (k-MIXSRC_CH1+1 < md->destCh || pass > 0)
-              v = chans[k-MIXSRC_CH1+1] >> 8;
+            if (md->srcRaw-MIXSRC_CH1 < md->destCh || pass > 0)
+              v = chans[md->srcRaw-MIXSRC_CH1] >> 8;
           }
         }
         if (!mixCondition) {
@@ -2978,8 +3002,8 @@ void perOut(uint8_t mode, uint8_t tick10ms)
           int8_t mix_trim = md->carryTrim;
           if (mix_trim < TRIM_ON)
             mix_trim = -mix_trim - 1;
-          else if (mix_trim == TRIM_ON && k < NUM_STICKS)
-            mix_trim = k;
+          else if (mix_trim == TRIM_ON && stickIndex < NUM_STICKS)
+            mix_trim = stickIndex;
           else
             mix_trim = -1;
           if (mix_trim >= 0) v += trims[mix_trim];

@@ -553,13 +553,12 @@ extern const pm_uint8_t modn12x3[];
 extern uint8_t stickMode;
 
 //convert from mode 1 to mode stickMode
-//NOTICE!  =>  1..4 -> 1..4
-#define CONVERT_MODE(x)  (((x)<=4) ? pgm_read_byte(modn12x3 + 4*stickMode + (x)-1) : (x) )
-
+//NOTICE!  =>  0..3 -> 0..3
 #define RUD_STICK 0
 #define ELE_STICK 1
 #define THR_STICK 2
 #define AIL_STICK 3
+#define CONVERT_MODE(x)  (((x)<=AIL_STICK) ? pgm_read_byte(modn12x3 + 4*stickMode + (x)) : (x) )
 
 extern uint8_t channel_order(uint8_t x);
 
