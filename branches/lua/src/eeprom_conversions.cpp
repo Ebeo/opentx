@@ -100,7 +100,7 @@ PACK(typedef struct {
   LimitData limitData[NUM_CHNOUT];
   ExpoData  expoData[MAX_EXPOS];
 
-  CURVTYPE  curves[MAX_CURVES];
+  CURVDATA  curves[MAX_CURVES];
   int8_t    points[NUM_POINTS];
 
   CustomSwData customSw[NUM_CSW];

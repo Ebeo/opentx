@@ -1101,7 +1101,7 @@ bool isSourceAvailable(int16_t source)
     div_t qr = div(source-MIXSRC_FIRST_LUA, MAX_SCRIPT_OUTPUTS);
     return (scriptInternalData[qr.quot].state==SCRIPT_OK && qr.rem<scriptInternalData[qr.quot].outputsCount);
   }
-#else
+#elif defined(PCBTARANIS)
   if (source>=MIXSRC_FIRST_LUA && source<=MIXSRC_LAST_LUA)
     return false;
 #endif

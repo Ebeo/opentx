@@ -69,51 +69,59 @@
 #define PACK( __Declaration__ ) __Declaration__ __attribute__((__packed__))
 #endif
 
-#if defined(CPUARM)
-  #define MAX_MODELS 60
-  #define NUM_CHNOUT 32 // number of real output channels CH1-CH32
-  #define MAX_PHASES 9
-  #define MAX_MIXERS 64
-  #define MAX_EXPOS  32
-  #define NUM_CSW    32 // number of custom switches
-  #define NUM_CFN    32 // number of functions assigned to switches
+#if defined(PCBTARANIS)
+  #define MAX_MODELS  60
+  #define NUM_CHNOUT  32 // number of real output channels CH1-CH32
+  #define MAX_PHASES  9
+  #define MAX_MIXERS  64
+  #define MAX_EXPOS   64
+  #define NUM_CSW     32 // number of custom switches
+  #define NUM_CFN     32 // number of functions assigned to switches
   #define MAX_SCRIPTS 6
-  #define MAX_INPUTS 32
+  #define MAX_INPUTS  32
+#elif defined(CPUARM)
+  #define MAX_MODELS  60
+  #define NUM_CHNOUT  32 // number of real output channels CH1-CH32
+  #define MAX_PHASES  9
+  #define MAX_MIXERS  64
+  #define MAX_EXPOS   32
+  #define NUM_CSW     32 // number of custom switches
+  #define NUM_CFN     32 // number of functions assigned to switches
 #elif defined(PCBGRUVIN9X)
-  #define MAX_MODELS 30
-  #define NUM_CHNOUT 16 // number of real output channels CH1-CH16
-  #define MAX_PHASES 6
-  #define MAX_MIXERS 32
-  #define MAX_EXPOS  16
-  #define NUM_CSW    15 // number of custom switches
-  #define NUM_CFN    24 // number of functions assigned to switches
+  #define MAX_MODELS  30
+  #define NUM_CHNOUT  16 // number of real output channels CH1-CH16
+  #define MAX_PHASES  6
+  #define MAX_MIXERS  32
+  #define MAX_EXPOS   16
+  #define NUM_CSW     15 // number of custom switches
+  #define NUM_CFN     24 // number of functions assigned to switches
 #elif defined(CPUM2561)
-  #define MAX_MODELS 30
-  #define NUM_CHNOUT 16 // number of real output channels CH1-CH16
-  #define MAX_PHASES 6
-  #define MAX_MIXERS 32
-  #define MAX_EXPOS  16
-  #define NUM_CSW    15 // number of custom switches
-  #define NUM_CFN    24 // number of functions assigned to switches
+  #define MAX_MODELS  30
+  #define NUM_CHNOUT  16 // number of real output channels CH1-CH16
+  #define MAX_PHASES  6
+  #define MAX_MIXERS  32
+  #define MAX_EXPOS   16
+  #define NUM_CSW     15 // number of custom switches
+  #define NUM_CFN     24 // number of functions assigned to switches
 #elif defined(CPUM128)
-  #define MAX_MODELS 30
-  #define NUM_CHNOUT 16 // number of real output channels CH1-CH16
-  #define MAX_PHASES 5
-  #define MAX_MIXERS 32
-  #define MAX_EXPOS  14
-  #define NUM_CSW    15 // number of custom switches
-  #define NUM_CFN    24 // number of functions assigned to switches
+  #define MAX_MODELS  30
+  #define NUM_CHNOUT  16 // number of real output channels CH1-CH16
+  #define MAX_PHASES  5
+  #define MAX_MIXERS  32
+  #define MAX_EXPOS   14
+  #define NUM_CSW     15 // number of custom switches
+  #define NUM_CFN     24 // number of functions assigned to switches
 #else
-  #define MAX_MODELS 16
-  #define NUM_CHNOUT 16 // number of real output channels CH1-CH16
-  #define MAX_PHASES 5
-  #define MAX_MIXERS 32
-  #define MAX_EXPOS  14
-  #define NUM_CSW    12 // number of custom switches
-  #define NUM_CFN    16 // number of functions assigned to switches
+  #define MAX_MODELS  16
+  #define NUM_CHNOUT  16 // number of real output channels CH1-CH16
+  #define MAX_PHASES  5
+  #define MAX_MIXERS  32
+  #define MAX_EXPOS   14
+  #define NUM_CSW     12 // number of custom switches
+  #define NUM_CFN     16 // number of functions assigned to switches
 #endif
 
-#define MAX_TIMERS 2
+#define MAX_TIMERS    2
 
 #if defined(PCBTARANIS)
   enum CurveType {
