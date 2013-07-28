@@ -2613,7 +2613,7 @@ void insertExpoMix(uint8_t expo, uint8_t idx)
     memmove(mix+1, mix, (MAX_MIXERS-(idx+1))*sizeof(MixData));
     memclear(mix, sizeof(MixData));
     mix->destCh = s_currCh-1;
-    mix->srcRaw = (s_currCh > 4 ? s_currCh : channel_order(s_currCh));
+    mix->srcRaw = (s_currCh > 4 ? s_currCh : MIXSRC_Rud - 1 + channel_order(s_currCh));
     mix->weight = 100;
   }
   resumeMixerCalculations();
@@ -4600,7 +4600,7 @@ void menuModelCustomScriptOne(uint8_t event)
     }
     else if (i <= ITEM_MODEL_CUSTOMSCRIPT_PARAMS_LABEL+scriptInternalData[s_currIdx].inputsCount) {
       int inputIdx = i-ITEM_MODEL_CUSTOMSCRIPT_PARAMS_LABEL-1;
-      lcd_puts(INDENT_WIDTH, y, scriptInternalData[s_currIdx].inputs[inputIdx].name);
+      lcd_putsnAtt(INDENT_WIDTH, y, scriptInternalData[s_currIdx].inputs[inputIdx].name, 10, 0);
       if (scriptInternalData[s_currIdx].inputs[inputIdx].type == 0) {
         lcd_outdezAtt(SCRIPT_ONE_2ND_COLUMN_POS, y, g_model.scriptsData[s_currIdx].inputs[inputIdx]+scriptInternalData[s_currIdx].inputs[inputIdx].def, attr|LEFT);
         if (attr) {

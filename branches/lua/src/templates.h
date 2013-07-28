@@ -68,7 +68,7 @@
 #define STK_P3   7
 
 #define CV(x) (CURVE_BASE+(x)-1)
-#define CC(x) (channel_order(x)) //need to invert this to work with dest
+#define CC(x) (MIXSRC_Rud - 1 + channel_order(x)) //need to invert this to work with dest
 
 #define CURVE5(x) ((x)-1)
 #define CURVE9(x) (MAX_CURVE5+(x)-1)

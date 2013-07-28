@@ -473,7 +473,7 @@ inline void applyDefaultTemplate()
     MixData *md = mixAddress(i);
     md->destCh = i;
     md->weight = 100;
-    md->srcRaw = channel_order(i+1);
+    md->srcRaw = MIXSRC_Rud - 1 + channel_order(i+1);
   }
 
   eeDirty(EE_MODEL);
