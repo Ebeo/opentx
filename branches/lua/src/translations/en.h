@@ -374,7 +374,11 @@
 #define TR_MODELNAME           "Model Name"
 #define TR_PHASENAME           "Mode Name"
 #define TR_MIXNAME             "Mix Name"
-#define TR_EXPONAME            "Expo Name"
+#if defined(PCBTARANIS)
+  #define TR_EXPONAME            "Line Name"
+#else
+  #define TR_EXPONAME            "Expo Name"
+#endif
 #define TR_BITMAP              "Model Image"
 #define TR_TIMER               TR("Timer","Timer ")
 #define TR_ELIMITS             TR("E.Limits","Extended Limits")
@@ -516,11 +520,14 @@
 #define TR_MENUFLIGHTPHASES    "FLIGHT MODES"
 #define TR_MENUHELISETUP       "HELI SETUP"
 
-#if defined(PPM_CENTER_ADJUSTABLE) || defined(PPM_LIMITS_SYMETRICAL) // The right menu titles for the gurus ...
-  #define TR_MENUDREXPO        "STICKS"
+#if defined(PCBTARANIS)
+  #define TR_MENUINPUTS        "INPUTS"
+  #define TR_MENULIMITS        "SERVOS"
+#elif defined(PPM_CENTER_ADJUSTABLE) || defined(PPM_LIMITS_SYMETRICAL) // The right menu titles for the gurus ...
+  #define TR_MENUINPUTS        "STICKS"
   #define TR_MENULIMITS        "SERVOS"
 #else
-  #define TR_MENUDREXPO        "DR/EXPO"
+  #define TR_MENUINPUTS        "DR/EXPO"
   #define TR_MENULIMITS        "LIMITS"
 #endif
 

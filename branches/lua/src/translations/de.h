@@ -514,10 +514,10 @@
 #define TR_MENUHELISETUP       "HUBSCHRAUBER"
 
 #if defined(PPM_CENTER_ADJUSTABLE) || defined(PPM_LIMITS_SYMETRICAL) // The right menu titles for the gurus ...
-  #define TR_MENUDREXPO        "KN\204PPEL"
+  #define TR_MENUINPUTS        "KN\204PPEL"
   #define TR_MENULIMITS        "AUSG\200NGE"
 #else
-  #define TR_MENUDREXPO        TR("DR/EXPO","DUALRATE/EXPO")
+  #define TR_MENUINPUTS        TR("DR/EXPO","DUALRATE/EXPO")
   #define TR_MENULIMITS        TR("GRENZEN","SERVO WEG")
 #endif
 

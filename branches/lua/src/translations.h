@@ -415,7 +415,7 @@ extern const pm_char STR_MENUSETUP[];
 extern const pm_char STR_MENUFLIGHTPHASE[];
 extern const pm_char STR_MENUFLIGHTPHASES[];
 extern const pm_char STR_MENUHELISETUP[];
-extern const pm_char STR_MENUDREXPO[];
+extern const pm_char STR_MENUINPUTS[];
 extern const pm_char STR_MENULIMITS[];
 extern const pm_char STR_MENUCURVES[];
 extern const pm_char STR_MENUCURVE[];

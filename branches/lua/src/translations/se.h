@@ -514,10 +514,10 @@
 #define TR_MENUHELISETUP       "Helikopter"
 
 #if defined(PPM_CENTER_ADJUSTABLE) || defined(PPM_LIMITS_SYMETRICAL) // The right menu titles for the gurus ...
-  #define TR_MENUDREXPO        "Spakar" 
+  #define TR_MENUINPUTS        "Spakar" 
   #define TR_MENULIMITS        "Outputs"
 #else
-  #define TR_MENUDREXPO        "DR/Expo"
+  #define TR_MENUINPUTS        "DR/Expo"
   #define TR_MENULIMITS        "Gr\201nser"
 #endif
 

@@ -515,10 +515,10 @@
 #define TR_MENUHELISETUP       TR("CONF.HELI","CONFIGURATION HELICO")
 
 #if defined(PPM_CENTER_ADJUSTABLE) || defined(PPM_LIMITS_SYMETRICAL) // The right menu titles for the gurus ...
-  #define TR_MENUDREXPO          "MANCHES"
+  #define TR_MENUINPUTS          "MANCHES"
   #define TR_MENULIMITS          "SORTIES"
 #else
-  #define TR_MENUDREXPO          "DR/EXPO"
+  #define TR_MENUINPUTS          "DR/EXPO"
   #define TR_MENULIMITS          "LIMITES"
 #endif
 

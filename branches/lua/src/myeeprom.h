@@ -272,7 +272,7 @@ enum ModuleIndex {
   TRAINER_MODULE
 };
 #define MODELDATA_BITMAP  char bitmap[LEN_BITMAP_NAME];
-#define MODELDATA_EXTRA   uint8_t externalModule; uint8_t trainerMode; ModuleData moduleData[NUM_MODULES+1]; char curveNames[MAX_CURVES][6]; ScriptData scriptsData[MAX_SCRIPTS];
+#define MODELDATA_EXTRA   uint8_t externalModule; uint8_t trainerMode; ModuleData moduleData[NUM_MODULES+1]; char curveNames[MAX_CURVES][6]; ScriptData scriptsData[MAX_SCRIPTS]; char inputNames[MAX_INPUTS][4];
 #define LIMITDATA_EXTRA   char name[LEN_CHANNEL_NAME]; int8_t curve;
 #define swstate_t         uint16_t
 #elif defined(PCBSKY9X)
@@ -368,12 +368,14 @@ PACK(typedef struct t_EEGeneral {
 PACK(typedef struct t_ExpoData {
   uint8_t  mode;         // 0=end, 1=pos, 2=neg, 3=both
   uint8_t  chn;
+  uint8_t  srcRaw;
   int8_t   swtch;
   uint16_t phases;
   int8_t   weight;
   uint8_t  curveMode;
   char     name[LEN_EXPOMIX_NAME];
-  uint8_t  spare[2];
+  int8_t   carryTrim;
+  int8_t   offset;
   int8_t   curveParam;
 }) ExpoData;
 #elif defined(CPUARM)
@@ -1230,7 +1232,10 @@ enum MixSources {
   MIXSRC_LAST_TELEM = MIXSRC_FIRST_TELEM+NUM_TELEMETRY-1
 };
 
-#define MIXSRC_LAST MIXSRC_LAST_CH
+#define MIXSRC_FIRST   (MIXSRC_NONE+1)
+#define MIXSRC_LAST    MIXSRC_LAST_CH
+#define INPUTSRC_FIRST MIXSRC_Rud
+#define INPUTSRC_LAST  MIXSRC_LAST_TELEM
 
 #define MIN_POINTS 3
 #define MAX_POINTS 17

@@ -834,7 +834,10 @@ void putsMixerSource(xcoord_t x, uint8_t y, uint8_t idx, LcdFlags att)
   else if (idx <= MIXSRC_LAST_INPUT) {
     lcd_putcAtt(x+2, y+1, 'I', TINSIZE);
     lcd_filled_rect(x, y, 7, 7);
-    lcd_putsnAtt(x+8, y, "???", att & STREXPANDED ? 9 : 4, att);
+    if (ZEXIST(g_model.inputNames[idx-MIXSRC_FIRST_INPUT]))
+      lcd_putsnAtt(x+8, y, g_model.inputNames[idx-MIXSRC_FIRST_INPUT], 4, ZCHAR|att);
+    else
+      lcd_outdezNAtt(x+8, y, idx, att|LEADING0|LEFT, 2);
   }
 #endif
 

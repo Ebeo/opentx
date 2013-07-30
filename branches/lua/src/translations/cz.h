@@ -517,7 +517,7 @@
 // Alignment
 
 
-#define TR_MENUDREXPO          "DR/EXPO"
+#define TR_MENUINPUTS          "DR/EXPO"
 #define TR_MENULIMITS          "LIMITY"
 
 

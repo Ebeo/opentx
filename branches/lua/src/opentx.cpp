@@ -909,7 +909,7 @@ getvalue_t getValue(uint8_t i)
 #if defined(PCBTARANIS)
   else if (i<MIXSRC_LAST_LUA) {
 #if defined(LUA)
-    div_t qr = div(i-MIXSRC_FIRST_LUA+1, MAX_SCRIPT_OUTPUTS);
+    div_t qr = div(i-MIXSRC_FIRST_LUA, MAX_SCRIPT_OUTPUTS);
     return scriptInternalData[qr.quot].outputs[qr.rem].value;
 #else
     return 0;

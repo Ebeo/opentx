@@ -45,6 +45,18 @@ inline void displayColumnHeader(const char **headers, uint8_t index)
   lcd_putsAtt(17*FW, 0, headers[index], 0);
 }
 
+#if !defined(CPUM64)
+  void displayScrollbar(xcoord_t x, uint8_t y, uint8_t h, uint16_t offset, uint16_t count, uint8_t visible);
+#endif
+
+#if LCD_W >= 212
+  extern uint8_t scrollbar_X;
+  #define SET_SCROLLBAR_X(x) scrollbar_X = (x);
+#else
+  #define SET_SCROLLBAR_X(x)
+#endif
+
+
 #if LCD_W >= 212
   #if defined(TRANSLATIONS_FR)
     #define MENU_COLUMNS         1
@@ -188,8 +200,10 @@ int8_t checkIncDecGen(uint8_t event, int8_t i_val, int8_t i_min, int8_t i_max);
 
 #if defined(CPUARM)
   bool isSourceAvailable(int16_t source);
+  bool isInputSourceAvailable(int16_t source);
   #define CHECK_INCDEC_MODELSOURCE(event, var, min, max) \
     var = checkIncDec(event,var,min,max,EE_MODEL|INCDEC_SOURCE|NO_INCDEC_MARKS, isSourceAvailable)
+  bool isInputSourceAvailable(int16_t source);
 #elif defined(AUTOSOURCE)
   #define CHECK_INCDEC_MODELSOURCE(event, var, min, max) \
     var = checkIncDec(event,var,min,max,EE_MODEL|INCDEC_SOURCE|NO_INCDEC_MARKS)
