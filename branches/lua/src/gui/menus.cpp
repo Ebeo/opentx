@@ -1143,18 +1143,36 @@ bool isSourceAvailable(int16_t source)
 
 bool isInputSourceAvailable(int16_t source)
 {
-  if (!isSourceAvailable(source))
-    return false;
+  if (source>=MIXSRC_Rud && source<=MIXSRC_MAX)
+    return true;
 
-  if (source>=MIXSRC_CYC1 && source<=MIXSRC_CYC3)
-    return false;
+  if (source>=MIXSRC_TrimRud && source<MIXSRC_SW1)
+    return true;
 
-  if (source>=MIXSRC_CH1 && source<=MIXSRC_LAST_CH)
-    return false;
+  if (source>=MIXSRC_FIRST_TELEM && source<=MIXSRC_LAST_TELEM)
+    return true;
 
-  if (source>=MIXSRC_SW1 && source<=MIXSRC_LAST_CSW)
-    return false;
+  return false;
+}
 
+bool isSwitchAvailable(int16_t swtch)
+{
+  if (swtch < 0) {
+    if (swtch <= -SWSRC_ON)
+      return false;
+#if defined(PCBTARANIS)
+    else if (swtch == -SWSRC_SF0 || swtch == -SWSRC_SF2 || swtch == -SWSRC_SH0 || swtch == -SWSRC_SH2)
+      return false;
+#endif
+    else
+      swtch = -swtch;
+  }
+
+  if (swtch>=SWSRC_FIRST_CSW && swtch<=SWSRC_LAST_CSW) {
+    CustomSwData * cs = cswAddress(swtch-SWSRC_FIRST_CSW);
+    return (cs->func != CS_OFF);
+  }
+  
   return true;
 }
 #endif

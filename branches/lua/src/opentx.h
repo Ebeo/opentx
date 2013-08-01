@@ -1153,20 +1153,29 @@ extern int16_t            ex_chans[NUM_CHNOUT]; // Outputs (before LIMITS) of th
 extern int16_t            channelOutputs[NUM_CHNOUT];
 extern uint16_t           BandGap;
 
-#if defined(CPUARM)
-  #define NUM_INPUTS      (NUM_STICKS)
+#if defined(PCBTARANIS)
+  #define NUM_INPUTS      (MAX_INPUTS)
 #else
   #define NUM_INPUTS      (NUM_STICKS)
 #endif
 
-extern int16_t expo(int16_t x, int16_t k);
-extern int16_t intpol(int16_t, uint8_t);
-extern int16_t applyCurve(int16_t, int8_t);
-extern void applyExpos(int16_t *anas, uint8_t mode);
-extern int16_t applyLimits(uint8_t channel, int32_t value);
+int16_t expo(int16_t x, int16_t k);
+int16_t intpol(int16_t, uint8_t);
+int16_t applyCurve(int16_t, int8_t);
 
-extern uint16_t anaIn(uint8_t chan);
-extern int16_t thrAnaIn(uint8_t chan);
+#if defined(PCBTARANIS)
+  #define APPLY_EXPOS_EXTRA_PARAMS_INC , uint8_t ovwrIdx=0, int16_t ovwrValue=0
+  #define APPLY_EXPOS_EXTRA_PARAMS     , uint8_t ovwrIdx, int16_t ovwrValue
+#else
+  #define APPLY_EXPOS_EXTRA_PARAMS_INC
+  #define APPLY_EXPOS_EXTRA_PARAMS
+#endif
+
+void applyExpos(int16_t *anas, uint8_t mode APPLY_EXPOS_EXTRA_PARAMS_INC);
+int16_t applyLimits(uint8_t channel, int32_t value);
+
+uint16_t anaIn(uint8_t chan);
+int16_t thrAnaIn(uint8_t chan);
 extern int16_t calibratedStick[NUM_STICKS+NUM_POTS];
 
 #define FLASH_DURATION 20 /*200ms*/
@@ -1176,12 +1185,12 @@ extern uint16_t lightOffCounter;
 extern uint8_t flashCounter;
 extern uint8_t mixWarning;
 
-extern PhaseData *phaseAddress(uint8_t idx);
-extern ExpoData *expoAddress(uint8_t idx);
-extern MixData *mixAddress(uint8_t idx);
-extern LimitData *limitAddress(uint8_t idx);
-extern int8_t *curveAddress(uint8_t idx);
-extern CustomSwData *cswAddress(uint8_t idx);
+PhaseData *phaseAddress(uint8_t idx);
+ExpoData *expoAddress(uint8_t idx);
+MixData *mixAddress(uint8_t idx);
+LimitData *limitAddress(uint8_t idx);
+int8_t *curveAddress(uint8_t idx);
+CustomSwData *cswAddress(uint8_t idx);
 
 #if !defined(PCBTARANIS)
 struct CurveInfo {
@@ -1192,11 +1201,13 @@ struct CurveInfo {
 extern CurveInfo curveInfo(uint8_t idx);
 #endif
 
-extern void deleteExpoMix(uint8_t expo, uint8_t idx);
+void deleteExpoMix(uint8_t expo, uint8_t idx);
+void insertExpoMix(uint8_t expo, uint8_t idx);
+void applyDefaultTemplate();
 
-extern void incSubtrim(uint8_t idx, int16_t inc);
-extern void instantTrim();
-extern void moveTrimsToOffsets();
+void incSubtrim(uint8_t idx, int16_t inc);
+void instantTrim();
+void moveTrimsToOffsets();
 
 #if defined(CPUARM)
 #define ACTIVE_PHASES_TYPE uint16_t

@@ -36,6 +36,22 @@
 
 #include "opentx.h"
 
+// static variables used in perOut - moved here so they don't interfere with the stack
+// It's also easier to initialize them here.
+#if !defined(PCBTARANIS)
+int16_t  rawAnas [NUM_INPUTS] = {0};
+#endif
+int16_t  anas [NUM_INPUTS] = {0};
+int16_t  trims[NUM_STICKS] = {0};
+int32_t  chans[NUM_CHNOUT] = {0};
+BeepANACenter bpanaCenter = 0;
+struct t_inactivity inactivity = {0};
+
+int24_t act   [MAX_MIXERS] = {0};
+SwOn    swOn  [MAX_MIXERS]; // TODO better name later...
+
+uint8_t mixWarning;
+
 #if defined(CPUARM)
 #define MIXER_STACK_SIZE    500
 #define MENUS_STACK_SIZE    1000
@@ -52,11 +68,6 @@ OS_STK menusStack[MENUS_STACK_SIZE];
 
 OS_TID audioTaskId;
 OS_STK audioStack[AUDIO_STACK_SIZE];
-
-#if defined(LUA)
-OS_TID luaTaskId;
-OS_STK luaStack[LUA_STACK_SIZE];
-#endif
 
 #if defined(BLUETOOTH)
 OS_TID btTaskId;
@@ -460,25 +471,35 @@ void generalDefault()
 
 uint16_t evalChkSum()
 {
-  uint16_t sum=0;
+  uint16_t sum = 0;
+  const int16_t *calibValues = &g_eeGeneral.calibMid[0];
   for (int i=0; i<NUM_STICKS+NUM_POTS+5; i++)
-    sum += g_eeGeneral.calibMid[i];
+    sum += calibValues[i];
   return sum;
 }
 
-#if !defined(TEMPLATES)
-inline void applyDefaultTemplate()
+#if defined(PCBTARANIS)
+int8_t char2idx(char c)
 {
-  for (int i=0; i<NUM_STICKS; i++) {
-    MixData *md = mixAddress(i);
-    md->destCh = i;
-    md->weight = 100;
-    md->srcRaw = MIXSRC_Rud - 1 + channel_order(i+1);
-  }
-
-  eeDirty(EE_MODEL);
+  if (c >= 'a') return 'a' - c - 1;
+  if (c >= 'A') return c - 'A' + 1;
+  return 0;
 }
 #endif
+
+extern int8_t s_currCh;
+void applyDefaultTemplate()
+{
+  for (int i=0; i<NUM_STICKS; i++) {
+    s_currCh = i+1;
+#if defined(PCBTARANIS)
+    insertExpoMix(1, i);
+    for (int c=0; c<4; c++)
+      g_model.inputNames[i][c] = char2idx(STR_VSRCRAW[1+STR_VSRCRAW[0]*(expoAddress(i)->srcRaw-MIXSRC_Rud+1)+c]);
+#endif
+    insertExpoMix(0, i);
+  }
+}
 
 #if defined(PXX) && defined(CPUARM)
 void checkModelIdUnique(uint8_t id)
@@ -677,10 +698,12 @@ int16_t expo(int16_t x, int16_t k)
   return neg? -y : y;
 }
 
-void applyExpos(int16_t *anas, uint8_t mode)
+void applyExpos(int16_t *anas, uint8_t mode APPLY_EXPOS_EXTRA_PARAMS)
 {
+#if !defined(PCBTARANIS)
   int16_t anas2[NUM_INPUTS]; // values before expo, to ensure same expo base when multiple expo lines are used
   memcpy(anas2, anas, sizeof(anas2));
+#endif
 
   int8_t cur_chn = -1;
 
@@ -688,27 +711,31 @@ void applyExpos(int16_t *anas, uint8_t mode)
 #if defined(BOLD_FONT)
     if (mode==e_perout_mode_normal) swOn[i].activeExpo = false;
 #endif
-    ExpoData &ed = g_model.expoData[i];
-    if (ed.mode==0) break; // end of list
-    if (ed.chn == cur_chn)
+    ExpoData * ed = expoAddress(i);
+    if (!EXPO_VALID(ed)) break; // end of list
+    if (ed->chn == cur_chn)
       continue;
-    if (ed.phases & (1<<s_perout_flight_phase))
+    if (ed->phases & (1<<s_perout_flight_phase))
       continue;
-    if (getSwitch(ed.swtch)) {
-      int16_t v = anas2[ed.chn];
-      if((v<0 && (ed.mode&1)) || (v>=0 && (ed.mode&2))) {
+    if (getSwitch(ed->swtch)) {
+#if defined(PCBTARANIS)
+      int16_t v = (ed->srcRaw == ovwrIdx ? ovwrValue : getValue(ed->srcRaw));
+#else
+      int16_t v = anas2[ed->chn];
+#endif
+      if (EXPO_MODE_ENABLE(ed, v)) {
 #if defined(BOLD_FONT)
         if (mode==e_perout_mode_normal) swOn[i].activeExpo = true;
 #endif
-        cur_chn = ed.chn;
-        int8_t curveParam = ed.curveParam;
+        cur_chn = ed->chn;
+        int8_t curveParam = ed->curveParam;
         if (curveParam) {
-          if (ed.curveMode == MODE_CURVE)
+          if (ed->curveMode == MODE_CURVE)
             v = applyCurve(v, curveParam);
           else
             v = expo(v, GET_GVAR(curveParam, -100, 100, s_perout_flight_phase));
         }
-        int16_t weight = GET_GVAR(ed.weight, 0, 100, s_perout_flight_phase);
+        int16_t weight = GET_GVAR(ed->weight, 0, 100, s_perout_flight_phase);
         weight = calc100to256(weight);
         v = ((int32_t)v * weight) >> 8;
         anas[cur_chn] = v;
@@ -902,7 +929,7 @@ getvalue_t getValue(uint8_t i)
 
 #if defined(PCBTARANIS)
   else if (i <= MIXSRC_LAST_INPUT) {
-    return 0;
+    return anas[i-MIXSRC_FIRST_INPUT];
   }
 #endif
 
@@ -923,75 +950,75 @@ getvalue_t getValue(uint8_t i)
   else if (i<=MIXSRC_LAST_ROTARY_ENCODER) return getRotaryEncoder(i-MIXSRC_REa);
 #endif
 
-  else if (i<MIXSRC_MAX) return 1024;
+  else if (i==MIXSRC_MAX) return 1024;
 
-  else if (i<MIXSRC_CYC3)
+  else if (i<=MIXSRC_CYC3)
 #if defined(HELI)
     return cyc_anas[i-MIXSRC_CYC1];
 #else
     return 0;
 #endif
 
-  else if (i<MIXSRC_TrimAil) return calc1000toRESX((int16_t)8 * getTrimValue(s_perout_flight_phase, i-MIXSRC_TrimRud));
+  else if (i<=MIXSRC_TrimAil) return calc1000toRESX((int16_t)8 * getTrimValue(s_perout_flight_phase, i-MIXSRC_TrimRud));
 
 #if defined(PCBTARANIS)
-  else if (i<MIXSRC_SA) return (switchState(SW_SA0) ? -1024 : (switchState(SW_SA1) ? 0 : 1024));
-  else if (i<MIXSRC_SB) return (switchState(SW_SB0) ? -1024 : (switchState(SW_SB1) ? 0 : 1024));
-  else if (i<MIXSRC_SC) return (switchState(SW_SC0) ? -1024 : (switchState(SW_SC1) ? 0 : 1024));
-  else if (i<MIXSRC_SD) return (switchState(SW_SD0) ? -1024 : (switchState(SW_SD1) ? 0 : 1024));
-  else if (i<MIXSRC_SE) return (switchState(SW_SE0) ? -1024 : (switchState(SW_SE1) ? 0 : 1024));
-  else if (i<MIXSRC_SF) return (switchState(SW_SF0) ? -1024 : 1024);
-  else if (i<MIXSRC_SG) return (switchState(SW_SG0) ? -1024 : (switchState(SW_SG1) ? 0 : 1024));
-  else if (i<MIXSRC_SH) return (switchState(SW_SH0) ? -1024 : 1024);
-  else if (i<MIXSRC_LAST_CSW) return getSwitch(SWSRC_SW1+i-MIXSRC_SH) ? 1024 : -1024;
+  else if (i==MIXSRC_SA) return (switchState(SW_SA0) ? -1024 : (switchState(SW_SA1) ? 0 : 1024));
+  else if (i==MIXSRC_SB) return (switchState(SW_SB0) ? -1024 : (switchState(SW_SB1) ? 0 : 1024));
+  else if (i==MIXSRC_SC) return (switchState(SW_SC0) ? -1024 : (switchState(SW_SC1) ? 0 : 1024));
+  else if (i==MIXSRC_SD) return (switchState(SW_SD0) ? -1024 : (switchState(SW_SD1) ? 0 : 1024));
+  else if (i==MIXSRC_SE) return (switchState(SW_SE0) ? -1024 : (switchState(SW_SE1) ? 0 : 1024));
+  else if (i==MIXSRC_SF) return (switchState(SW_SF0) ? -1024 : 1024);
+  else if (i==MIXSRC_SG) return (switchState(SW_SG0) ? -1024 : (switchState(SW_SG1) ? 0 : 1024));
+  else if (i==MIXSRC_SH) return (switchState(SW_SH0) ? -1024 : 1024);
 #else
-  else if (i<MIXSRC_3POS) return (switchState(SW_ID0) ? -1024 : (switchState(SW_ID1) ? 0 : 1024));
+  else if (i==MIXSRC_3POS) return (switchState(SW_ID0) ? -1024 : (switchState(SW_ID1) ? 0 : 1024));
 #if defined(EXTRA_3POS)
-  else if (i<MIXSRC_3POS2) return (switchState(SW_ID3) ? -1024 : (switchState(SW_ID4) ? 0 : 1024));
+  else if (i==MIXSRC_3POS2) return (switchState(SW_ID3) ? -1024 : (switchState(SW_ID4) ? 0 : 1024));
 #endif
-  else if (i<MIXSRC_LAST_CSW) return getSwitch(SWSRC_THR+i+1-MIXSRC_THR) ? 1024 : -1024;
 #endif
 
-  else if (i<MIXSRC_LAST_PPM) { int16_t x = g_ppmIns[i-MIXSRC_PPM1]; if (i<MIXSRC_PPM1+NUM_CAL_PPM) { x-= g_eeGeneral.trainer.calib[i-MIXSRC_PPM1]; } return x*2; }
-  else if (i<MIXSRC_LAST_CH) return ex_chans[i-MIXSRC_CH1];
+  else if (i<=MIXSRC_LAST_CSW) return getSwitch(SWSRC_FIRST_CSW+i-MIXSRC_FIRST_CSW) ? 1024 : -1024;
+
+  else if (i<=MIXSRC_LAST_PPM) { int16_t x = g_ppmIns[i-MIXSRC_FIRST_PPM]; if (i<MIXSRC_FIRST_PPM+NUM_CAL_PPM) { x-= g_eeGeneral.trainer.calib[i-MIXSRC_FIRST_PPM]; } return x*2; }
+  else if (i<=MIXSRC_LAST_CH) return ex_chans[i-MIXSRC_CH1];
 
 #if defined(GVARS)
-  else if (i<MIXSRC_LAST_GVAR) return GVAR_VALUE(i-MIXSRC_GVAR1, getGVarFlightPhase(s_perout_flight_phase, i-MIXSRC_GVAR1));
+  else if (i<=MIXSRC_LAST_GVAR) return GVAR_VALUE(i-MIXSRC_GVAR1, getGVarFlightPhase(s_perout_flight_phase, i-MIXSRC_GVAR1));
 #endif
 
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_TX_VOLTAGE) return g_vbat100mV;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_TM2) return timersStates[i-MIXSRC_FIRST_TELEM+1-TELEM_TM1].val;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_TX_VOLTAGE) return g_vbat100mV;
+  else if (i<=MIXSRC_FIRST_TELEM-1+TELEM_TM2) return timersStates[i-MIXSRC_FIRST_TELEM+1-TELEM_TM1].val;
 #if defined(FRSKY)
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_RSSI_TX) return frskyData.rssi[1].value;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_RSSI_RX) return frskyData.rssi[0].value;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_A2) return frskyData.analog[i-MIXSRC_FIRST_TELEM+1-TELEM_A1].value;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_RSSI_TX) return frskyData.rssi[1].value;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_RSSI_RX) return frskyData.rssi[0].value;
+  else if (i<=MIXSRC_FIRST_TELEM-1+TELEM_A2) return frskyData.analog[i-MIXSRC_FIRST_TELEM+1-TELEM_A1].value;
 #if defined(FRSKY_SPORT)
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_ALT) return frskyData.hub.baroAltitude;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_ALT) return frskyData.hub.baroAltitude;
 #elif defined(FRSKY_HUB) || defined(WS_HOW_HIGH)
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_ALT) return TELEMETRY_ALT_BP;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_ALT) return TELEMETRY_ALT_BP;
 #endif
 #if defined(FRSKY_HUB)
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_RPM) return frskyData.hub.rpm;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_FUEL) return frskyData.hub.fuelLevel;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_T1) return frskyData.hub.temperature1;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_T2) return frskyData.hub.temperature2;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_SPEED) return TELEMETRY_GPS_SPEED_BP;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_DIST) return frskyData.hub.gpsDistance;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_GPSALT) return TELEMETRY_GPS_ALT_BP;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_CELL) return (int16_t)frskyData.hub.minCellVolts * 2;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_CELLS_SUM) return (int16_t)frskyData.hub.cellsSum;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_VFAS) return (int16_t)frskyData.hub.vfas;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_CURRENT) return (int16_t)frskyData.hub.current;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_CONSUMPTION) return frskyData.hub.currentConsumption;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_POWER) return frskyData.hub.power;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_ACCx) return frskyData.hub.accelX;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_ACCy) return frskyData.hub.accelY;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_ACCz) return frskyData.hub.accelZ;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_HDG) return frskyData.hub.gpsCourse_bp;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_VSPD) return frskyData.hub.varioSpeed;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_MIN_A1) return frskyData.analog[0].min;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_MIN_A2) return frskyData.analog[1].min;
-  else if (i<MIXSRC_FIRST_TELEM-1+TELEM_MAX_POWER) return *(((int16_t*)(&frskyData.hub.minAltitude))+i-(MIXSRC_FIRST_TELEM-1+TELEM_MIN_ALT));
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_RPM) return frskyData.hub.rpm;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_FUEL) return frskyData.hub.fuelLevel;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_T1) return frskyData.hub.temperature1;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_T2) return frskyData.hub.temperature2;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_SPEED) return TELEMETRY_GPS_SPEED_BP;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_DIST) return frskyData.hub.gpsDistance;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_GPSALT) return TELEMETRY_GPS_ALT_BP;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_CELL) return (int16_t)frskyData.hub.minCellVolts * 2;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_CELLS_SUM) return (int16_t)frskyData.hub.cellsSum;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_VFAS) return (int16_t)frskyData.hub.vfas;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_CURRENT) return (int16_t)frskyData.hub.current;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_CONSUMPTION) return frskyData.hub.currentConsumption;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_POWER) return frskyData.hub.power;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_ACCx) return frskyData.hub.accelX;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_ACCy) return frskyData.hub.accelY;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_ACCz) return frskyData.hub.accelZ;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_HDG) return frskyData.hub.gpsCourse_bp;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_VSPD) return frskyData.hub.varioSpeed;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MIN_A1) return frskyData.analog[0].min;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MIN_A2) return frskyData.analog[1].min;
+  else if (i==MIXSRC_FIRST_TELEM-1+TELEM_MAX_POWER) return *(((int16_t*)(&frskyData.hub.minAltitude))+i-(MIXSRC_FIRST_TELEM-1+TELEM_MIN_ALT));
 #endif
 #endif
   else return 0;
@@ -2203,20 +2230,6 @@ uint16_t isqrt32(uint32_t n)
 }
 #endif
 
-// static variables used in perOut - moved here so they don't interfere with the stack
-// It's also easier to initialize them here.
-int16_t  rawAnas [NUM_INPUTS] = {0};
-int16_t  anas [NUM_INPUTS] = {0};
-int16_t  trims[NUM_STICKS] = {0};
-int32_t  chans[NUM_CHNOUT] = {0};
-BeepANACenter bpanaCenter = 0;
-struct t_inactivity inactivity = {0};
-
-int24_t act   [MAX_MIXERS] = {0};
-SwOn    swOn  [MAX_MIXERS]; // TODO better name later...
-
-uint8_t mixWarning;
-
 FORCEINLINE void evalTrims()
 {
   uint8_t phase = s_perout_flight_phase;
@@ -2331,7 +2344,10 @@ BeepANACenter evalSticks(uint8_t mode)
         v = (int32_t(v)*calc100toRESX(g_model.swashR.value))/int32_t(d);
 #endif
 
+#if !defined(PCBTARANIS)
       rawAnas[ch] = v;
+#endif
+
       anas[ch] = v; //set values for mixer
     }
   }
@@ -2937,10 +2953,13 @@ void perOut(uint8_t mode, uint8_t tick10ms)
         }
       }
       else {
+#if !defined(PCBTARANIS)
         if (stickIndex < NUM_STICKS) {
           v = md->noExpo ? rawAnas[stickIndex] : anas[stickIndex];
         }
-        else {
+        else
+#endif
+        {
           v = getValue(md->srcRaw);
           if (md->srcRaw>=MIXSRC_CH1 && md->srcRaw<=MIXSRC_LAST_CH && md->destCh != md->srcRaw-MIXSRC_CH1) {
             if (dirtyChannels & ((bitfield_channels_t)1 << (md->srcRaw-MIXSRC_CH1)) & (passDirtyChannels|~(((bitfield_channels_t) 1 << md->destCh)-1)))
@@ -2997,6 +3016,7 @@ void perOut(uint8_t mode, uint8_t tick10ms)
         int16_t offset = GET_GVAR(MD_OFFSET(md), GV_RANGELARGE_NEG, GV_RANGELARGE, s_perout_flight_phase);
         if (offset) v += calc100toRESX_16Bits(offset);
 
+#if !defined(PCBTARANIS) // (because trims are taken into account by INPUTS on Taranis)
       //========== TRIMS ===============
         if (!(mode & e_perout_mode_notrims)) {
           int8_t mix_trim = md->carryTrim;
@@ -3008,6 +3028,7 @@ void perOut(uint8_t mode, uint8_t tick10ms)
             mix_trim = -1;
           if (mix_trim >= 0) v += trims[mix_trim];
         }
+#endif
       }
       
       // saves 12 bytes code if done here and not together with weight; unknown reason
@@ -3876,6 +3897,11 @@ void perMain()
 #endif
   }
 
+#if defined(LUA)
+  void luaTask();
+  luaTask();
+#endif
+
   drawStatusLine();
   lcdRefresh();
 
@@ -4554,10 +4580,6 @@ int main(void)
   mixerTaskId = CoCreateTask(mixerTask, NULL, 5, &mixerStack[MIXER_STACK_SIZE-1], MIXER_STACK_SIZE);
   menusTaskId = CoCreateTask(menusTask, NULL, 10, &menusStack[MENUS_STACK_SIZE-1], MENUS_STACK_SIZE);
   audioTaskId = CoCreateTask(audioTask, NULL, 7, &audioStack[AUDIO_STACK_SIZE-1], AUDIO_STACK_SIZE);
-
-#if defined(LUA)
-  luaTaskId = CoCreateTask(luaTask, NULL, 12, &luaStack[LUA_STACK_SIZE-1], LUA_STACK_SIZE);
-#endif
 
   audioMutex = CoCreateMutex();
   mixerMutex = CoCreateMutex();

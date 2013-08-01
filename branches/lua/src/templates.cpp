@@ -150,10 +150,7 @@ void applyTemplate(uint8_t idx)
     switch (idx) {
       // Simple 4-Ch
       case TMPL_SIMPLE_4CH:
-        setDest(ICC(STK_RUD), MIXSRC_Rud);
-        setDest(ICC(STK_ELE), MIXSRC_Ele);
-        setDest(ICC(STK_THR), MIXSRC_Thr);
-        setDest(ICC(STK_AIL), MIXSRC_Ail);
+        applyDefaultTemplate();
         break;
 
       // Sticky-T-Cut

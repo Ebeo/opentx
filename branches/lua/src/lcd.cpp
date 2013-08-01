@@ -867,11 +867,11 @@ void putsMixerSource(xcoord_t x, uint8_t y, uint8_t idx, LcdFlags att)
 #else
   if (idx < MIXSRC_THR)
     lcd_putsiAtt(x, y, STR_VSRCRAW, idx, att);
-  else if (idx < MIXSRC_PPM1)
+  else if (idx < MIXSRC_FIRST_PPM)
     putsSwitches(x, y, idx-MIXSRC_THR+1+3*(1/*+EXTRA_3POS*/), att);
 #endif
   else if (idx < MIXSRC_CH1)
-    putsStrIdx(x, y, STR_PPM, idx-MIXSRC_PPM1+1, att);
+    putsStrIdx(x, y, STR_PPM, idx-MIXSRC_FIRST_PPM+1, att);
   else if (idx <= MIXSRC_LAST_CH) {
     putsStrIdx(x, y, STR_CH, idx-MIXSRC_CH1+1, att);
 #if defined(PCBTARANIS)
@@ -889,9 +889,9 @@ void putsMixerSource(xcoord_t x, uint8_t y, uint8_t idx, LcdFlags att)
     lcd_putsiAtt(x, y, STR_VTELEMCHNS, idx-MIXSRC_FIRST_TELEM+1, att);
 }
 
-void putsChnLetter(xcoord_t x, uint8_t y, uint8_t idx, LcdFlags attr)
+void putsChnLetter(xcoord_t x, uint8_t y, uint8_t idx, LcdFlags att)
 {
-  lcd_putsiAtt(x, y, STR_RETA123, idx-1, attr);
+  lcd_putsiAtt(x, y, STR_RETA123, idx-1, att);
 }
 
 void putsModelName(xcoord_t x, uint8_t y, char *name, uint8_t id, LcdFlags att)

@@ -366,18 +366,21 @@ PACK(typedef struct t_EEGeneral {
 
 #if defined(PCBTARANIS)
 PACK(typedef struct t_ExpoData {
-  uint8_t  mode;         // 0=end, 1=pos, 2=neg, 3=both
   uint8_t  chn;
   uint8_t  srcRaw;
   int8_t   swtch;
   uint16_t phases;
   int8_t   weight;
-  uint8_t  curveMode;
+  uint8_t  curveMode:2;
+  int8_t   carryTrim:3;
+  uint8_t  spare1:3;
   char     name[LEN_EXPOMIX_NAME];
-  int8_t   carryTrim;
   int8_t   offset;
   int8_t   curveParam;
+  uint8_t  spare2[2];
 }) ExpoData;
+#define EXPO_VALID(ed)          ((ed)->srcRaw)
+#define EXPO_MODE_ENABLE(ed, v) (true)
 #elif defined(CPUARM)
 PACK(typedef struct t_ExpoData {
   uint8_t  mode;         // 0=end, 1=pos, 2=neg, 3=both
@@ -389,6 +392,8 @@ PACK(typedef struct t_ExpoData {
   char     name[LEN_EXPOMIX_NAME];
   int8_t   curveParam;
 }) ExpoData;
+#define EXPO_VALID(ed)          ((ed)->mode)
+#define EXPO_MODE_ENABLE(ed, v) ((v<0 && (ed->mode&1)) || (v>=0 && (ed->mode&2)))
 #elif defined(PCBGRUVIN9X) || defined(CPUM2561)
 PACK(typedef struct t_ExpoData {
   uint8_t mode:2;         // 0=end, 1=pos, 2=neg, 3=both
@@ -400,6 +405,8 @@ PACK(typedef struct t_ExpoData {
   uint8_t weight;
   int8_t  curveParam;
 }) ExpoData;
+#define EXPO_VALID(ed)          ((ed)->mode)
+#define EXPO_MODE_ENABLE(ed, v) ((v<0 && (ed->mode&1)) || (v>=0 && (ed->mode&2)))
 #else
 PACK(typedef struct t_ExpoData {
   uint8_t mode:2;         // 0=end, 1=pos, 2=neg, 3=both
@@ -410,6 +417,8 @@ PACK(typedef struct t_ExpoData {
   uint8_t weight;         // One spare bit here (used for GVARS)
   int8_t  curveParam;
 }) ExpoData;
+#define EXPO_VALID(ed)          ((ed)->mode)
+#define EXPO_MODE_ENABLE(ed, v) ((v<0 && (ed->mode&1)) || (v>=0 && (ed->mode&2)))
 #endif
 
 #if defined(CPUARM)
@@ -454,11 +463,10 @@ PACK(typedef struct t_LimitData {
 PACK(typedef struct t_MixData {
   uint8_t  destCh;
   uint16_t phases;
-  uint8_t  curveMode:1;       // O=curve, 1=differential
-  uint8_t  noExpo:1;
-  int8_t   carryTrim:3;
+  uint8_t  curveMode:2;       // O=curve, 1=differential
+  int8_t   spare1:3;
   uint8_t  mltpx:2;           // multiplex method: 0 means +=, 1 means *=, 2 means :=
-  uint8_t  spare1:1;
+  uint8_t  spare2:1;
   int16_t  weight;
   int8_t   swtch;
   int8_t   curveParam;
@@ -471,7 +479,7 @@ PACK(typedef struct t_MixData {
   uint8_t  srcRaw;
   int16_t  offset;
   char     name[LEN_EXPOMIX_NAME];
-  uint8_t  spare2[2];
+  uint8_t  spare3[2];
 }) MixData;
 #else
 PACK(typedef struct t_MixData {
@@ -1077,7 +1085,8 @@ enum SwitchSources {
   SWSRC_TRN,
 #endif
 
-  SWSRC_SW1,
+  SWSRC_FIRST_CSW,
+  SWSRC_SW1 = SWSRC_FIRST_CSW,
   SWSRC_SW2,
   SWSRC_SW3,
   SWSRC_SW4,
@@ -1197,15 +1206,16 @@ enum MixSources {
   MIXSRC_GEA,
   MIXSRC_TRN,
 #endif
-  MIXSRC_SW1,
+  MIXSRC_FIRST_CSW,
+  MIXSRC_SW1 = MIXSRC_FIRST_CSW,
   MIXSRC_SW9 = MIXSRC_SW1 + 8,
   MIXSRC_SWA,
   MIXSRC_SWB,
   MIXSRC_SWC,
-  MIXSRC_LAST_CSW = MIXSRC_SW1+NUM_CSW-1,
+  MIXSRC_LAST_CSW = MIXSRC_FIRST_CSW+NUM_CSW-1,
 
-  MIXSRC_PPM1,
-  MIXSRC_LAST_PPM = MIXSRC_PPM1 + 7,
+  MIXSRC_FIRST_PPM,
+  MIXSRC_LAST_PPM = MIXSRC_FIRST_PPM + 7,
 
   MIXSRC_CH1,
   MIXSRC_CH2,
@@ -1312,7 +1322,6 @@ enum ModuleTypes {
   MODULE_TYPE_NONE = 0,
   MODULE_TYPE_PPM,
   MODULE_TYPE_XJT,
-  MODULE_TYPE_DJT,
 #if defined(DSM2)
   MODULE_TYPE_DSM2,
 #endif

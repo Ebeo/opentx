@@ -121,9 +121,9 @@
 #endif
 
 #if defined(PCBTARANIS)
-#define GREY(x)         ((x) * 0x1000)
-#define GREY_DEFAULT    GREY(11)
-#define GREY_MASK(x)    ((x) & 0xF000)
+  #define GREY(x)       ((x) * 0x1000)
+  #define GREY_DEFAULT  GREY(11)
+  #define GREY_MASK(x)  ((x) & 0xF000)
 #endif
 
 #if defined(CPUARM)

@@ -89,13 +89,6 @@ void clearMixes();
 void clearCurves();
 void applyTemplate(uint8_t idx);
 
-#ifdef TEMPLATES
-inline void applyDefaultTemplate()
-{
-  applyTemplate(TMPL_SIMPLE_4CH);
-}
-#endif
-
 #endif //TEMPLATES_H
 
 

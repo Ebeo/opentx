@@ -65,51 +65,83 @@ void hook(lua_State* L, lua_Debug *ar)
   }
 }
 
-static int luaGetSourceValue(lua_State *L)
-{
-  int src = luaL_checkinteger(L, 1);
-  lua_pushnumber(L, src <= 0 ? 0 : getValue(src));
-  return 1;
-}
-
 static int luaGetValue(lua_State *L)
 {
-  const char *what = luaL_checkstring(L, 1);
-  if (!strcmp(what, "altitude")) {
-    lua_pushnumber(L, double(frskyData.hub.baroAltitude)/100);
-    return 1;
-  }
-  else if (!strcmp(what, "latitude")) {
-    if (frskyData.hub.gpsFix)
-      lua_pushnumber(L, gpsToDouble(frskyData.hub.gpsLatitudeNS=='S', frskyData.hub.gpsLatitude_bp, frskyData.hub.gpsLatitude_ap));
-    else
-      lua_pushnil(L);
-    return 1;
-  }
-  else if (!strcmp(what, "longitude")) {
-    if (frskyData.hub.gpsFix)
-      lua_pushnumber(L, gpsToDouble(frskyData.hub.gpsLongitudeEW=='W', frskyData.hub.gpsLongitude_bp, frskyData.hub.gpsLongitude_ap));
-    else
-      lua_pushnil(L);
-    return 1;
-  }
-  else if (!strcmp(what, "pilot latitude")) {
-    if (frskyData.hub.gpsFix)
-      lua_pushnumber(L, pilotLatitude);
-    else
-      lua_pushnil(L);
-    return 1;
-  }
-  else if (!strcmp(what, "pilot longitude")) {
-    if (frskyData.hub.gpsFix)
-      lua_pushnumber(L, pilotLongitude);
-    else
-      lua_pushnil(L);
+  if (lua_isnumber(L, 1)) {
+    int src = luaL_checkinteger(L, 1);
+    lua_pushnumber(L, getValue(src));
     return 1;
   }
   else {
-    return 0;
+    const char *what = luaL_checkstring(L, 1);
+    if (!strcmp(what, "altitude")) {
+      lua_pushnumber(L, double(frskyData.hub.baroAltitude)/100);
+      return 1;
+    }
+    else if (!strcmp(what, "latitude")) {
+      if (frskyData.hub.gpsFix)
+        lua_pushnumber(L, gpsToDouble(frskyData.hub.gpsLatitudeNS=='S', frskyData.hub.gpsLatitude_bp, frskyData.hub.gpsLatitude_ap));
+      else
+        lua_pushnil(L);
+      return 1;
+    }
+    else if (!strcmp(what, "longitude")) {
+      if (frskyData.hub.gpsFix)
+        lua_pushnumber(L, gpsToDouble(frskyData.hub.gpsLongitudeEW=='W', frskyData.hub.gpsLongitude_bp, frskyData.hub.gpsLongitude_ap));
+      else
+        lua_pushnil(L);
+      return 1;
+    }
+    else if (!strcmp(what, "pilot latitude")) {
+      if (frskyData.hub.gpsFix)
+        lua_pushnumber(L, pilotLatitude);
+      else
+        lua_pushnil(L);
+      return 1;
+    }
+    else if (!strcmp(what, "pilot longitude")) {
+      if (frskyData.hub.gpsFix)
+        lua_pushnumber(L, pilotLongitude);
+      else
+        lua_pushnil(L);
+      return 1;
+    }
   }
+
+  return 0;
+}
+
+static int luaPlayFile(lua_State *L)
+{
+  const char * filename = luaL_checkstring(L, 1);
+  PLAY_FILE(filename, 0, 0);
+  return 0;
+}
+
+static int luaDrawPoint(lua_State *L)
+{
+  int x = luaL_checkinteger(L, 1);
+  int y = luaL_checkinteger(L, 2);
+  lcd_plot(x, y);
+  return 0;
+}
+
+static int luaDrawHLine(lua_State *L)
+{
+  int x = luaL_checkinteger(L, 1);
+  int y = luaL_checkinteger(L, 2);
+  int w = luaL_checkinteger(L, 3);
+  lcd_hlineStip(x, y, w, 0xff);
+  return 0;
+}
+
+static int luaDrawVLine(lua_State *L)
+{
+  int x = luaL_checkinteger(L, 1);
+  int y = luaL_checkinteger(L, 2);
+  int h = luaL_checkinteger(L, 3);
+  lcd_vlineStip(x, y, h, 0xff);
+  return 0;
 }
 
 int luaGetInputs(uint8_t idx)
@@ -226,10 +258,17 @@ void luaLoadModelScripts()
   lua_sethook(L, hook, LUA_MASKCOUNT, 100);
 
   // Push openTX functions
-  lua_pushcfunction(L, luaGetSourceValue);
-  lua_setglobal(L, "getSourceValue");
   lua_pushcfunction(L, luaGetValue);
   lua_setglobal(L, "getValue");
+  lua_pushcfunction(L, luaPlayFile);
+  lua_setglobal(L, "playFile");
+  lua_pushcfunction(L, luaDrawPoint);
+  lua_setglobal(L, "drawPoint");
+  lua_pushcfunction(L, luaDrawHLine);
+  lua_setglobal(L, "drawHLine");
+  lua_pushcfunction(L, luaDrawVLine);
+  lua_setglobal(L, "drawVLine");
+
 
   // Load scripts
   for (int i=0; i<MAX_SCRIPTS; i++) {
@@ -258,44 +297,43 @@ void luaLoadModelScripts()
   }
 }
 
-void luaTask(void * pdata)
+void luaTask()
 {
-  while (1) {
-    if (luaReload) {
-      luaReload = false;
-      luaLoadModelScripts();
-    }
+  if (luaReload) {
+    luaReload = false;
+    luaLoadModelScripts();
+  }
 
-    for (int i=0; i<MAX_SCRIPTS; i++) {
-      ScriptData & sd = g_model.scriptsData[i];
-      ScriptInternalData & sid = scriptInternalData[i];
-      if (sid.state == SCRIPT_OK) {
-        countdown = 10;
-        lua_sethook(L, hook, LUA_MASKCOUNT, 100);
-        lua_getglobal(L, sid.function);  /* function to be called */
-        for (int j=0; j<sid.inputsCount; j++) {
-          int8_t input = sd.inputs[j];
-          lua_pushnumber(L, input);
-        }
-        /* do the call (2 arguments, 1 result) */
-        if (lua_pcall(L, sid.inputsCount, sid.outputsCount, 0) == 0) {
-          for (int j=0; j<sid.outputsCount; j++) {
-            /* retrieve result */
-            if (!lua_isnumber(L, -1)) {
-              sid.state = (countdown==0 ? SCRIPT_KILLED : SCRIPT_SYNTAX_ERROR);
-              TRACE("Script %10s disabled", sd.file);
-              break;
-            }
-            sid.outputs[j].value = lua_tointeger(L, -1);
-            lua_pop(L, 1);  /* pop returned value */
+  for (int i=0; i<MAX_SCRIPTS; i++) {
+    ScriptData & sd = g_model.scriptsData[i];
+    ScriptInternalData & sid = scriptInternalData[i];
+    if (sid.state == SCRIPT_OK) {
+      countdown = 10;
+      lua_sethook(L, hook, LUA_MASKCOUNT, 100);
+      lua_getglobal(L, sid.function);  /* function to be called */
+      for (int j=0; j<sid.inputsCount; j++) {
+        if (sid.inputs[j].type == 1)
+          lua_pushnumber(L, (uint8_t)sd.inputs[j]);
+        else
+          lua_pushnumber(L, sd.inputs[j]);
+      }
+      /* do the call (2 arguments, 1 result) */
+      if (lua_pcall(L, sid.inputsCount, sid.outputsCount, 0) == 0) {
+        for (int j=0; j<sid.outputsCount; j++) {
+          /* retrieve result */
+          if (!lua_isnumber(L, -1)) {
+            sid.state = (countdown==0 ? SCRIPT_KILLED : SCRIPT_SYNTAX_ERROR);
+            TRACE("Script %10s disabled", sd.file);
+            break;
           }
-        }
-        else {
-          sid.state = (countdown==0 ? SCRIPT_KILLED : SCRIPT_SYNTAX_ERROR);
-          TRACE("Script %10s disabled", sd.file);
+          sid.outputs[j].value = lua_tointeger(L, -1);
+          lua_pop(L, 1);  /* pop returned value */
         }
       }
+      else {
+        TRACE("Error in script %10s: %s", sd.file, lua_tostring(L, -1));
+        sid.state = (countdown==0 ? SCRIPT_KILLED : SCRIPT_SYNTAX_ERROR);
+      }
     }
-    CoTickDelay(5);  // 10ms for now
   }
 }

@@ -333,16 +333,6 @@ void *main_thread(void *)
 #define getcwd _getcwd
 #endif
 
-#if defined(LUA)
-extern void luaTask(void * pdata);
-void *lua_thread(void *)
-{
-  luaTask(NULL);
-  return NULL;
-}
-pthread_t lua_thread_pid;
-#endif
-
 pthread_t main_thread_pid;
 void StartMainThread(bool tests)
 {
@@ -353,20 +343,12 @@ void StartMainThread(bool tests)
 
   main_thread_running = (tests ? 1 : 2);
   pthread_create(&main_thread_pid, NULL, &main_thread, NULL);
-
-#if defined(LUA)
-  pthread_create(&lua_thread_pid, NULL, &lua_thread, NULL);
-#endif
 }
 
 void StopMainThread()
 {
   main_thread_running = 0;
   pthread_join(main_thread_pid, NULL);
-
-#if defined(LUA)
-  pthread_join(lua_thread_pid, NULL);
-#endif
 }
 
 pthread_t eeprom_thread_pid;
