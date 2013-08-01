@@ -728,6 +728,24 @@ void applyExpos(int16_t *anas, uint8_t mode APPLY_EXPOS_EXTRA_PARAMS)
         if (mode==e_perout_mode_normal) swOn[i].activeExpo = true;
 #endif
         cur_chn = ed->chn;
+
+#if defined(PCBTARANIS)
+        int16_t offset = GET_GVAR(ed->offset, GV_RANGELARGE_NEG, GV_RANGELARGE, s_perout_flight_phase);
+        if (offset) v += calc100toRESX_16Bits(offset);
+
+        //========== TRIMS ===============
+        if (!(mode & e_perout_mode_notrims)) {
+          int8_t input_trim = ed->carryTrim;
+          if (input_trim < TRIM_ON)
+            input_trim = -input_trim - 1;
+          else if (input_trim == TRIM_ON && ed->srcRaw >= MIXSRC_Rud && ed->srcRaw <= MIXSRC_Ail)
+            input_trim = ed->srcRaw - MIXSRC_Rud;
+          else
+            input_trim = -1;
+          if (input_trim >= 0) v += trims[input_trim];
+        }
+#endif
+
         int8_t curveParam = ed->curveParam;
         if (curveParam) {
           if (ed->curveMode == MODE_CURVE)
@@ -2339,16 +2357,16 @@ BeepANACenter evalSticks(uint8_t mode)
         }
       }
 
-#ifdef HELI
+#if defined(HELI)
       if (d && (ch==ELE_STICK || ch==AIL_STICK))
         v = (int32_t(v)*calc100toRESX(g_model.swashR.value))/int32_t(d);
 #endif
 
 #if !defined(PCBTARANIS)
       rawAnas[ch] = v;
-#endif
 
       anas[ch] = v; //set values for mixer
+#endif
     }
   }
 
