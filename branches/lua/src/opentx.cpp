@@ -39,7 +39,7 @@
 // static variables used in perOut - moved here so they don't interfere with the stack
 // It's also easier to initialize them here.
 #if !defined(PCBTARANIS)
-int16_t  rawAnas [NUM_INPUTS] = {0};
+int16_t  rawAnas[NUM_INPUTS] = {0};
 #endif
 int16_t  anas [NUM_INPUTS] = {0};
 int16_t  trims[NUM_STICKS] = {0};
@@ -56,7 +56,6 @@ uint8_t mixWarning;
 #define MIXER_STACK_SIZE    500
 #define MENUS_STACK_SIZE    1000
 #define AUDIO_STACK_SIZE    500
-#define LUA_STACK_SIZE      1000
 #define BT_STACK_SIZE       500
 #define DEBUG_STACK_SIZE    500
 
@@ -573,6 +572,59 @@ int16_t intpol(int16_t x, uint8_t idx) // -100, -75, -50, -25, 0 ,25 ,50, 75, 10
 }
 
 #if defined(CURVES)
+#if defined(PCBTARANIS)
+int16_t applyCurve(int16_t x, CurveRef & curve)
+{
+  switch(curve.type) {
+    case CURVE_REF_DIFF:
+    {
+      int curveParam = calc100to256(GET_GVAR(curve.value, -100, 100, s_perout_flight_phase));
+      if (curveParam > 0 && x < 0)
+        x = (x * (256 - curveParam)) >> 8;
+      else if (curveParam < 0 && x > 0)
+        x = (x * (256 + curveParam)) >> 8;
+      return x;
+    }
+
+    case CURVE_REF_EXPO:
+      return expo(x, GET_GVAR(curve.value, -100, 100, s_perout_flight_phase));
+
+    case CURVE_REF_FUNC:
+      switch(curve.value) {
+        case CURVE_X_GT0:
+          if (x < 0) x = 0; //x|x>0
+          return x;
+        case CURVE_X_LT0:
+          if (x > 0) x = 0; //x|x<0
+          return x;
+        case CURVE_ABS_X: // x|abs(x)
+          return abs(x);
+        case CURVE_F_GT0: //f|f>0
+          return x > 0 ? RESX : 0;
+        case CURVE_F_LT0: //f|f<0
+          return x < 0 ? -RESX : 0;
+        case CURVE_ABS_F: //f|abs(f)
+          return x > 0 ? RESX : -RESX;
+      }
+      break;
+
+    case CURVE_REF_CUSTOM:
+    {
+      int curveParam = curve.value;
+      if (curveParam < 0) {
+        x = -x;
+        curveParam = -curveParam;
+      }
+      if (curveParam > 0 && curveParam <= MAX_CURVES) {
+        return intpol(x, curveParam - 1);
+      }
+      break;
+    }
+  }
+
+  return x;
+}
+#else
 int16_t applyCurve(int16_t x, int8_t idx)
 {
   /* already tried to have only one return at the end */
@@ -600,6 +652,7 @@ int16_t applyCurve(int16_t x, int8_t idx)
   }
   return intpol(x, idx - CURVE_BASE);
 }
+#endif
 #else
 #define applyCurve(x, idx) (x)
 #endif
@@ -729,10 +782,29 @@ void applyExpos(int16_t *anas, uint8_t mode APPLY_EXPOS_EXTRA_PARAMS)
 #endif
         cur_chn = ed->chn;
 
+        //========== CURVE=================
 #if defined(PCBTARANIS)
-        int16_t offset = GET_GVAR(ed->offset, GV_RANGELARGE_NEG, GV_RANGELARGE, s_perout_flight_phase);
-        if (offset) v += calc100toRESX_16Bits(offset);
+        v = applyCurve(v, ed->curve);
+#else
+        int8_t curveParam = ed->curveParam;
+        if (curveParam) {
+          if (ed->curveMode == MODE_CURVE)
+            v = applyCurve(v, curveParam);
+          else
+            v = expo(v, GET_GVAR(curveParam, -100, 100, s_perout_flight_phase));
+        }
+#endif
 
+        //========== WEIGHT ===============
+        int16_t weight = GET_GVAR(ed->weight, 0, 100, s_perout_flight_phase);
+        weight = calc100to256(weight);
+        v = ((int32_t)v * weight) >> 8;
+
+#if defined(PCBTARANIS)
+        //========== OFFSET ===============
+        int16_t offset = GET_GVAR(ed->offset, -100, 100, s_perout_flight_phase);
+        if (offset) v += calc100toRESX(offset);
+        
         //========== TRIMS ===============
         if (!(mode & e_perout_mode_notrims)) {
           int8_t input_trim = ed->carryTrim;
@@ -743,19 +815,9 @@ void applyExpos(int16_t *anas, uint8_t mode APPLY_EXPOS_EXTRA_PARAMS)
           else
             input_trim = -1;
           if (input_trim >= 0) v += trims[input_trim];
-        }
+        }        
 #endif
 
-        int8_t curveParam = ed->curveParam;
-        if (curveParam) {
-          if (ed->curveMode == MODE_CURVE)
-            v = applyCurve(v, curveParam);
-          else
-            v = expo(v, GET_GVAR(curveParam, -100, 100, s_perout_flight_phase));
-        }
-        int16_t weight = GET_GVAR(ed->weight, 0, 100, s_perout_flight_phase);
-        weight = calc100to256(weight);
-        v = ((int32_t)v * weight) >> 8;
         anas[cur_chn] = v;
       }
     }
@@ -2269,7 +2331,7 @@ FORCEINLINE void evalTrims()
   }
 }
 
-BeepANACenter evalSticks(uint8_t mode)
+BeepANACenter evalInputs(uint8_t mode)
 {
   BeepANACenter anaCenter = 0;
 
@@ -2370,11 +2432,11 @@ BeepANACenter evalSticks(uint8_t mode)
     }
   }
 
-  /* EXPOs */
-  applyExpos(anas, mode);
-
   /* TRIMs */
   evalTrims();
+
+  /* EXPOs */
+  applyExpos(anas, mode);
 
   return anaCenter;
 }
@@ -2857,7 +2919,7 @@ void evalFunctions()
 uint8_t s_perout_flight_phase;
 void perOut(uint8_t mode, uint8_t tick10ms)
 {
-  BeepANACenter anaCenter = evalSticks(mode);
+  BeepANACenter anaCenter = evalInputs(mode);
 
   if (mode == e_perout_mode_normal) {
     //===========BEEP CENTER================
@@ -3085,22 +3147,30 @@ void perOut(uint8_t mode, uint8_t tick10ms)
                 int32_t newValue = tact-rate/((int16_t)(100/SLOW_STEP)*md->speedDown);
                 if (newValue>currentValue) currentValue = newValue; // Endposition; prevent toggling around the destination
               }            
-            } //endif diff>0
+            }
             act[i] = tact = currentValue;
             // open.20.fsguruh: this implementation would save about 50 bytes code
           } // endif tick10ms ; in case no time passed assign the old value, not the current value from source
           v = (tact >> DEL_MULT_SHIFT);
-        } //endif diff
-      } //endif speed
+        }
+      }
 
       //========== CURVES ===============
+#if defined(PCBTARANIS)
+      // TODO something cleaner ...
+      if (apply_offset_and_curve && md->curve.type) {
+        v = applyCurve(v, md->curve);
+      }
+#else
       if (apply_offset_and_curve && md->curveParam && md->curveMode == MODE_CURVE) {
         v = applyCurve(v, md->curveParam);
       }
+#endif
 
       //========== WEIGHT ===============
       int32_t dv = (int32_t) v * weight;
-      
+
+#if !defined(PCBTARANIS)       // TODO move before WEIGHT for readability
       //========== DIFFERENTIAL =========
       if (md->curveMode == MODE_DIFFERENTIAL) {
 	// @@@2 also recalculate curveParam to a 256 basis which ease the calculation later a lot
@@ -3110,6 +3180,7 @@ void perOut(uint8_t mode, uint8_t tick10ms)
         else if (curveParam < 0 && dv > 0)
           dv = (dv * (256 + curveParam)) >> 8;		  
       }
+#endif
 
       int32_t *ptr = &chans[md->destCh]; // Save calculating address several times
       
@@ -3937,20 +4008,17 @@ void perMain()
   }
   if (counter-- == 0) {
     counter = 10;
-#if defined(PCBTARANIS)
     int32_t instant_vbat = anaIn(TX_VOLTAGE);
+#if defined(PCBTARANIS)
     instant_vbat = (instant_vbat + instant_vbat*(g_eeGeneral.vBatCalib)/128) * BATT_SCALE;
     instant_vbat >>= 11;
     instant_vbat += 2; // because of the diode
 #elif defined(PCBSKY9X)
-    int32_t instant_vbat = anaIn(TX_VOLTAGE);
     instant_vbat = (instant_vbat + instant_vbat*(g_eeGeneral.vBatCalib)/128) * 4191;
     instant_vbat /= 55296;
 #elif defined(PCBGRUVIN9X)
-    uint16_t instant_vbat = anaIn(TX_VOLTAGE);
-    instant_vbat = ((uint32_t)instant_vbat*1112 + (int32_t)instant_vbat*g_eeGeneral.vBatCalib + (BandGap<<2)) / (BandGap<<3);
+    instant_vbat = (instant_vbat*1112 + instant_vbat*g_eeGeneral.vBatCalib + (BandGap<<2)) / (BandGap<<3);
 #else
-    uint16_t instant_vbat = anaIn(TX_VOLTAGE);
     instant_vbat = (instant_vbat*16 + instant_vbat*g_eeGeneral.vBatCalib/8) / BandGap;
 #endif
 
@@ -4193,7 +4261,7 @@ ISR(USART0_UDRE_vect)
 
 void instantTrim()
 {
-  evalSticks(e_perout_mode_notrainer);
+  evalInputs(e_perout_mode_notrainer);
 
   for (uint8_t i=0; i<NUM_STICKS; i++) {
     if (i!=THR_STICK) {

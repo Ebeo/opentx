@@ -130,7 +130,9 @@
     CURVE_TYPE_LAST = CURVE_TYPE_CUSTOM
   };
 PACK(typedef struct t_CurveInfo {
-  uint8_t type;
+  uint8_t type:3;
+  uint8_t smooth:1;
+  uint8_t spare:4;
   int8_t  points;
 }) CurveInfo;
   #define MAX_CURVES 16
@@ -350,34 +352,49 @@ PACK(typedef struct t_EEGeneral {
 }) EEGeneral;
 
 #if defined(PCBTARANIS)
-#define LEN_MODEL_NAME     12
-#define LEN_BITMAP_NAME    10
-#define LEN_EXPOMIX_NAME   8
-#define LEN_FP_NAME        10
-#define LEN_CHANNEL_NAME   6
+  #define LEN_MODEL_NAME     12
+  #define LEN_BITMAP_NAME    10
+  #define LEN_EXPOMIX_NAME   8
+  #define LEN_FP_NAME        10
+  #define LEN_CHANNEL_NAME   6
 #elif defined(PCBSKY9X)
-#define LEN_MODEL_NAME     10
-#define LEN_EXPOMIX_NAME   6
-#define LEN_FP_NAME        6
+  #define LEN_MODEL_NAME     10
+  #define LEN_EXPOMIX_NAME   6
+  #define LEN_FP_NAME        6
 #else
-#define LEN_MODEL_NAME     10
-#define LEN_FP_NAME        6
+  #define LEN_MODEL_NAME     10
+  #define LEN_FP_NAME        6
+#endif
+
+#if defined(PCBTARANIS)
+enum CurveRefType {
+  CURVE_REF_DIFF,
+  CURVE_REF_EXPO,
+  CURVE_REF_FUNC,
+  CURVE_REF_CUSTOM
+};
+PACK(typedef struct t_CurveRef {
+  uint8_t type;
+  int8_t  value;
+}) CurveRef;
+#else
+  #define MODE_DIFFERENTIAL  0
+  #define MODE_EXPO          0
+  #define MODE_CURVE         1
 #endif
 
 #if defined(PCBTARANIS)
 PACK(typedef struct t_ExpoData {
-  uint8_t  chn;
   uint8_t  srcRaw;
+  uint8_t  chn;
   int8_t   swtch;
   uint16_t phases;
   int8_t   weight;
-  uint8_t  curveMode:2;
-  int8_t   carryTrim:3;
-  uint8_t  spare1:3;
+  int8_t   carryTrim;
   char     name[LEN_EXPOMIX_NAME];
   int8_t   offset;
-  int8_t   curveParam;
-  uint8_t  spare2[2];
+  CurveRef curve;
+  uint8_t  spare[2];
 }) ExpoData;
 #define EXPO_VALID(ed)          ((ed)->srcRaw)
 #define EXPO_MODE_ENABLE(ed, v) (true)
@@ -450,10 +467,6 @@ PACK(typedef struct t_LimitData {
 #define MLTPX_MUL   1
 #define MLTPX_REP   2
 
-#define MODE_DIFFERENTIAL  0
-#define MODE_EXPO          0
-#define MODE_CURVE         1
-
 #if defined(CPUARM)
 #define DELAY_STEP  10
 #define SLOW_STEP   10
@@ -463,13 +476,10 @@ PACK(typedef struct t_LimitData {
 PACK(typedef struct t_MixData {
   uint8_t  destCh;
   uint16_t phases;
-  uint8_t  curveMode:2;       // O=curve, 1=differential
-  int8_t   spare1:3;
-  uint8_t  mltpx:2;           // multiplex method: 0 means +=, 1 means *=, 2 means :=
-  uint8_t  spare2:1;
+  uint8_t  mltpx;           // multiplex method: 0 means +=, 1 means *=, 2 means :=
   int16_t  weight;
   int8_t   swtch;
-  int8_t   curveParam;
+  CurveRef curve;
   uint8_t  mixWarn:4;         // mixer warning
   uint8_t  srcVariant:4;
   uint8_t  delayUp;
@@ -479,7 +489,7 @@ PACK(typedef struct t_MixData {
   uint8_t  srcRaw;
   int16_t  offset;
   char     name[LEN_EXPOMIX_NAME];
-  uint8_t  spare3[2];
+  uint8_t  spare[2];
 }) MixData;
 #else
 PACK(typedef struct t_MixData {

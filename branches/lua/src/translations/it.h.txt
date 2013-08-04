@@ -514,10 +514,10 @@
 #define TR_MENUHELISETUP       "SETUP  ELI"
 
 #if defined(PPM_CENTER_ADJUSTABLE) || defined(PPM_LIMITS_SYMETRICAL) // The right menu titles for the gurus ...
-  #define TR_MENUDREXPO          "STICK"
+  #define TR_MENUINPUTS          "STICK"
   #define TR_MENULIMITS          "USCITE"
 #else
-  #define TR_MENUDREXPO          "DR/ESPO"
+  #define TR_MENUINPUTS          "DR/ESPO"
   #define TR_MENULIMITS          "LIMITI"
 #endif
 

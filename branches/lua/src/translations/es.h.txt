@@ -514,10 +514,10 @@
 #define TR_MENUHELISETUP       "CONF. HELI"
 
 #if defined(PPM_CENTER_ADJUSTABLE) || defined(PPM_LIMITS_SYMETRICAL) // The right menu titles for the gurus ...
-  #define TR_MENUDREXPO        "STICKS"
+  #define TR_MENUINPUTS        "STICKS"
   #define TR_MENULIMITS        "SERVOS"
 #else
-  #define TR_MENUDREXPO        "DR/EXPO"
+  #define TR_MENUINPUTS        "DR/EXPO"
   #define TR_MENULIMITS        "LIMITES"
 #endif
 

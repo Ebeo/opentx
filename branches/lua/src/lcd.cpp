@@ -965,6 +965,19 @@ void putsFlightPhase(xcoord_t x, uint8_t y, int8_t idx, LcdFlags att)
 }
 #endif
 
+#if defined(PCBTARANIS)
+void putsCurve(xcoord_t x, uint8_t y, int8_t idx, LcdFlags att)
+{
+  if (idx == 0) return lcd_putsiAtt(x, y, STR_MMMINV, 0, att);
+
+  if (idx < 0) {
+    lcd_putcAtt(x-1*FW, y, '!', att);
+    idx = -idx;
+  }
+
+  putsStrIdx(x, y, STR_CV, idx, att);
+}
+#else
 void putsCurve(xcoord_t x, uint8_t y, int8_t idx, LcdFlags att)
 {
   if (idx < 0) {
@@ -976,6 +989,7 @@ void putsCurve(xcoord_t x, uint8_t y, int8_t idx, LcdFlags att)
   else
     putsStrIdx(x, y, STR_CV, idx-CURVE_BASE+1, att);
 }
+#endif
 
 void putsTmrMode(xcoord_t x, uint8_t y, int8_t mode, LcdFlags att)
 {

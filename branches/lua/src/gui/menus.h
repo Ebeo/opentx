@@ -252,11 +252,11 @@ void title(const pm_char * s);
   TITLE(title)
 
 #define SUBMENU_NOTITLE(lines_count, ...) { \
-  static const pm_uint8_t mstate_tab[] PROGMEM = __VA_ARGS__; \
+  MENU_TAB(__VA_ARGS__); \
   if (!check(event,0,NULL,0,mstate_tab,DIM(mstate_tab)-1,(lines_count)-1)) return; }
 
 #define SUBMENU(title, lines_count, ...) \
-  static const pm_uint8_t mstate_tab[] PROGMEM = __VA_ARGS__; \
+  MENU_TAB(__VA_ARGS__); \
   if (!check(event,0,NULL,0,mstate_tab,DIM(mstate_tab)-1,(lines_count)-1)) return; \
   TITLE(title)
 

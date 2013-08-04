@@ -42,11 +42,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-#if defined(PCBTARANIS)
-#define IF_9X(x)
-#else
-#define IF_9X(x) x,
-#endif
+// TODO change all IF_xxx by CASE_xxx when used with a comma!
 
 #if defined(PCBSKY9X)
 #define IF_PCBSKY9X(x) x,
@@ -55,11 +51,17 @@
 #endif
 
 #if defined(PCBTARANIS)
-#define IF_PCBTARANIS()    true
+#define IS_PCBTARANIS()    true
+#define IF_PCBTARANIS(x)   (x)
 #define CASE_PCBTARANIS(x) x,
+#define IF_9X(x)           (0)
+#define CASE_9X(x)
 #else
-#define IF_PCBTARANIS()    false
+#define IS_PCBTARANIS()    false
+#define IF_PCBTARANIS(x)   (0)
 #define CASE_PCBTARANIS(x)
+#define IF_9X(x)           (x)
+#define CASE_9X(x)         x,
 #endif
 
 #if defined(CPUARM)

@@ -1602,7 +1602,7 @@ static uint8_t s_currIdx;
 #endif
 
 #if LCD_W >= 212
-  #define EXPO_ONE_2ND_COLUMN (LCD_W+3*FW-90)
+  #define EXPO_ONE_2ND_COLUMN (LCD_W-8*FW-90)
   #define EXPO_ONE_FP_WIDTH   (9*FW)
 #else
   #define EXPO_ONE_2ND_COLUMN (7*FW+3*FW+2)
@@ -1627,6 +1627,31 @@ uint8_t editDelay(const uint8_t y, const uint8_t event, const uint8_t attr, cons
   return delay;
 }
 #define EDIT_DELAY(x, y, event, attr, str, delay) editDelay(y, event, attr, str, delay)
+#endif
+
+#if defined(PCBTARANIS)
+void editCurveRef(uint8_t x, uint8_t y, CurveRef & curve, uint8_t event, uint8_t attr)
+{
+  lcd_putsiAtt(x, y, "\04DiffExpoFuncCstm", curve.type, m_posHorz==0 ? attr : 0);
+  if (attr && m_posHorz==0) {
+    CHECK_INCDEC_MODELVAR_ZERO(event, curve.type, CURVE_REF_CUSTOM);
+    if (checkIncDec_Ret) curve.value = 0;
+  }
+  switch (curve.type) {
+    case CURVE_REF_DIFF:
+    case CURVE_REF_EXPO:
+      curve.value = gvarMenuItem(x+5*FW, y, curve.value, -100, 100, m_posHorz==1 ? LEFT|attr : LEFT, event);
+      break;
+    case CURVE_REF_FUNC:
+      lcd_putsiAtt(x+5*FW, y, STR_VCURVEFUNC, curve.value, m_posHorz==1 ? attr : 0);
+      if (attr && m_posHorz==1) CHECK_INCDEC_MODELVAR_ZERO(event, curve.value, CURVE_BASE-1);
+      break;
+    case CURVE_REF_CUSTOM:
+      putsCurve(x+5*FW+2, y, curve.value, m_posHorz==1 ? attr : 0);
+      if (attr && m_posHorz==1) CHECK_INCDEC_MODELVAR(event, curve.value, -MAX_CURVES, MAX_CURVES);
+      break;
+  }
+}
 #endif
 
 #if defined(FLIGHT_MODES)
@@ -1669,10 +1694,15 @@ FlightModesType editFlightModes(uint8_t x, uint8_t y, uint8_t event, FlightModes
       continue;
 #endif
 #if defined(PCBTARANIS)
-    LcdFlags flags = (attr && (posHorz==p)) ? BLINK|INVERS : ((value & (1<<p)) ? 0 : INVERS);
-    if (attr && m_posHorz<0)
-      flags = BLINK|INVERS;
-    lcd_putcAtt(x, y, '0'+p, flags);
+    LcdFlags flags = 0;
+    if (attr) {
+      flags |= INVERS;
+      if (posHorz==p) flags |= BLINK;
+    }
+    if (value & (1<<p))
+      lcd_putcAtt(x, y, ' ', flags);
+    else
+      lcd_putcAtt(x, y, '0'+p, flags);
 #else
     lcd_putcAtt(x, y, '0'+p, ((posHorz==p) && attr) ? BLINK|INVERS : ((value & (1<<p)) ? 0 : INVERS));
 #endif
@@ -2620,6 +2650,7 @@ void insertExpoMix(uint8_t expo, uint8_t idx)
     memclear(expo, sizeof(ExpoData));
 #if defined(PCBTARANIS)
     expo->srcRaw = (s_currCh > 4 ? MIXSRC_Rud - 1 + s_currCh : MIXSRC_Rud - 1 + channel_order(s_currCh));
+    expo->curve.type = CURVE_REF_EXPO;
 #else
     expo->mode = 3; // pos&neg
 #endif
@@ -2758,14 +2789,20 @@ enum ExposFields {
   CASE_PCBTARANIS(EXPO_FIELD_SOURCE)
   EXPO_FIELD_WEIGHT,
   CASE_PCBTARANIS(EXPO_FIELD_OFFSET)
-  EXPO_FIELD_EXPO,
+  CASE_9X(EXPO_FIELD_EXPO)
   IF_CURVES(EXPO_FIELD_CURVE)
   IF_FLIGHT_MODES(EXPO_FIELD_FLIGHT_PHASE)
   EXPO_FIELD_SWITCH,
-  IF_9X(EXPO_FIELD_SIDE)
+  CASE_9X(EXPO_FIELD_SIDE)
   CASE_PCBTARANIS(EXPO_FIELD_TRIM)
   EXPO_FIELD_MAX
 };
+
+#if defined(PCBTARANIS)
+  #define CURVE_ROWS 1
+#else
+  #define CURVE_ROWS 0
+#endif
 
 void menuModelExpoOne(uint8_t event)
 {
@@ -2784,9 +2821,9 @@ void menuModelExpoOne(uint8_t event)
   putsMixerSource(7*FW+FW/2, 0, MIXSRC_Rud+ed->chn, 0);
 #endif
 
-  SUBMENU(STR_MENUINPUTS, EXPO_FIELD_MAX, {CASE_PCBTARANIS(0) IF_CPUARM(0) CASE_PCBTARANIS(0) 0, CASE_PCBTARANIS(0) 0, IF_CURVES(0) IF_FLIGHT_MODES((MAX_PHASES-1) | NAVIGATION_LINE_BY_LINE) 0 /*, ...*/});
+  SUBMENU(STR_MENUINPUTS, EXPO_FIELD_MAX, {CASE_PCBTARANIS(0) IF_CPUARM(0) CASE_PCBTARANIS(0) 0, CASE_PCBTARANIS(0) CASE_9X(0) IF_CURVES(CURVE_ROWS) IF_FLIGHT_MODES((MAX_PHASES-1) | NAVIGATION_LINE_BY_LINE) 0 /*, ...*/});
 
-  SET_SCROLLBAR_X(EXPO_ONE_2ND_COLUMN+2);
+  SET_SCROLLBAR_X(EXPO_ONE_2ND_COLUMN+10*FW);
 
   int8_t sub = m_posVert;
 
@@ -2803,36 +2840,37 @@ void menuModelExpoOne(uint8_t event)
     {
 #if defined(PCBTARANIS)
       case EXPO_FIELD_INPUT_NAME:
-        editSingleName(EXPO_ONE_2ND_COLUMN-sizeof(g_model.inputNames[ed->chn])*FW, y, "Input Name", g_model.inputNames[ed->chn], sizeof(g_model.inputNames[ed->chn]), event, attr);
+        editSingleName(EXPO_ONE_2ND_COLUMN, y, "Input Name", g_model.inputNames[ed->chn], sizeof(g_model.inputNames[ed->chn]), event, attr);
         break;
 #endif
 
 #if defined(CPUARM)
       case EXPO_FIELD_NAME:
-        editSingleName(EXPO_ONE_2ND_COLUMN-sizeof(ed->name)*FW, y, STR_EXPONAME, ed->name, sizeof(ed->name), event, attr);
+        editSingleName(EXPO_ONE_2ND_COLUMN-IF_9X(sizeof(ed->name)*FW), y, STR_EXPONAME, ed->name, sizeof(ed->name), event, attr);
         break;
 #endif
 
 #if defined(PCBTARANIS)
       case EXPO_FIELD_SOURCE:
         lcd_putsLeft(y, NO_INDENT(STR_SOURCE));
-        putsMixerSource(EXPO_ONE_2ND_COLUMN-3*FW, y, ed->srcRaw, STREXPANDED|attr);
+        putsMixerSource(EXPO_ONE_2ND_COLUMN, y, ed->srcRaw, STREXPANDED|attr);
         if (attr) ed->srcRaw = checkIncDec(event, ed->srcRaw, INPUTSRC_FIRST, INPUTSRC_LAST, EE_MODEL|INCDEC_SOURCE|NO_INCDEC_MARKS, isInputSourceAvailable);
         break;
 #endif
 
       case EXPO_FIELD_WEIGHT:
         lcd_putsLeft(y, STR_WEIGHT);
-        ed->weight = gvarMenuItem(EXPO_ONE_2ND_COLUMN, y, ed->weight, 0, 100, attr, event);
+        ed->weight = gvarMenuItem(EXPO_ONE_2ND_COLUMN, y, ed->weight, 0, 100, IF_PCBTARANIS(LEFT)|attr, event);
         break;
 
 #if defined(PCBTARANIS)
       case EXPO_FIELD_OFFSET:
         lcd_putsLeft(y, NO_INDENT(STR_OFFSET));
-        ed->offset = gvarMenuItem(EXPO_ONE_2ND_COLUMN, y, ed->offset, -100, 100, attr, event);
+        ed->offset = gvarMenuItem(EXPO_ONE_2ND_COLUMN, y, ed->offset, -100, 100, LEFT|attr, event);
         break;
 #endif
 
+#if !defined(PCBTARANIS)
       case EXPO_FIELD_EXPO:
         lcd_putsLeft(y, STR_EXPO);
         if (ed->curveMode==MODE_EXPO || ed->curveParam==0) {
@@ -2843,10 +2881,14 @@ void menuModelExpoOne(uint8_t event)
           lcd_putsAtt(EXPO_ONE_2ND_COLUMN-3*FW, y, STR_NA, attr);
         }
         break;
+#endif
 
 #if defined(CURVES)
       case EXPO_FIELD_CURVE:
         lcd_putsLeft(y, STR_CURVE);
+#if defined(PCBTARANIS)
+        editCurveRef(EXPO_ONE_2ND_COLUMN, y, ed->curve, event, attr);
+#else
         if (ed->curveMode!=MODE_EXPO || ed->curveParam==0) {
           putsCurve(EXPO_ONE_2ND_COLUMN-3*FW, y, ed->curveParam, attr);
           if (attr) {
@@ -2861,17 +2903,18 @@ void menuModelExpoOne(uint8_t event)
         else {
           lcd_putsAtt(EXPO_ONE_2ND_COLUMN-3*FW, y, STR_NA, attr);
         }
+#endif
         break;
 #endif
 
 #if defined(FLIGHT_MODES)
       case EXPO_FIELD_FLIGHT_PHASE:
-        ed->phases = editFlightModes(EXPO_ONE_2ND_COLUMN-EXPO_ONE_FP_WIDTH, y, event, ed->phases, attr);
+        ed->phases = editFlightModes(EXPO_ONE_2ND_COLUMN-IF_9X(EXPO_ONE_FP_WIDTH), y, event, ed->phases, attr);
         break;
 #endif
 
       case EXPO_FIELD_SWITCH:
-        ed->swtch = switchMenuItem(EXPO_ONE_2ND_COLUMN-3*FW, y, ed->swtch, attr, event);
+        ed->swtch = switchMenuItem(EXPO_ONE_2ND_COLUMN-IF_9X(3*FW), y, ed->swtch, attr, event);
         break;
 
 #if !defined(PCBTARANIS)
@@ -2885,7 +2928,7 @@ void menuModelExpoOne(uint8_t event)
         uint8_t not_stick = (ed->srcRaw > MIXSRC_Ail);
         int8_t carryTrim = -ed->carryTrim;
         lcd_putsLeft(y, STR_TRIM);
-        lcd_putsiAtt(EXPO_ONE_2ND_COLUMN-3*FW, y, STR_VMIXTRIMS, (not_stick && carryTrim == 0) ? 0 : carryTrim+1, m_posHorz==0 ? attr : 0);
+        lcd_putsiAtt(EXPO_ONE_2ND_COLUMN, y, STR_VMIXTRIMS, (not_stick && carryTrim == 0) ? 0 : carryTrim+1, m_posHorz==0 ? attr : 0);
         if (attr) ed->carryTrim = -checkIncDecModel(event, carryTrim, not_stick ? TRIM_ON : -TRIM_OFF, -TRIM_AIL);
         break;
 #endif
@@ -2917,7 +2960,7 @@ enum MixFields {
   MIX_FIELD_SOURCE,
   MIX_FIELD_WEIGHT,
   MIX_FIELD_OFFSET,
-  IF_9X(MIX_FIELD_TRIM)
+  CASE_9X(MIX_FIELD_TRIM)
   IF_CURVES(MIX_FIELD_CURVE)
   IF_FLIGHT_MODES(MIX_FIELD_FLIGHT_PHASE)
   MIX_FIELD_SWITCH,
@@ -2958,11 +3001,11 @@ void menuModelMixOne(uint8_t event)
 #else
   if (m_posVert == MIX_FIELD_TRIM && md2->srcRaw > NUM_STICKS)
 #endif  
-    SUBMENU_NOTITLE(MIX_FIELD_COUNT, {IF_CPUARM(0) 0, 0, 0, IF_9X(0) IF_CURVES(0) IF_FLIGHT_MODES((MAX_PHASES-1) | NAVIGATION_LINE_BY_LINE) 0, 0 /*, ...*/})
+    SUBMENU_NOTITLE(MIX_FIELD_COUNT, {IF_CPUARM(0) 0, 0, 0, CASE_9X(0) IF_CURVES(0) IF_FLIGHT_MODES((MAX_PHASES-1) | NAVIGATION_LINE_BY_LINE) 0, 0 /*, ...*/})
   else
-    SUBMENU_NOTITLE(MIX_FIELD_COUNT, {IF_CPUARM(0) 0, 0, 0, IF_9X(1) IF_CURVES(1) IF_FLIGHT_MODES((MAX_PHASES-1) | NAVIGATION_LINE_BY_LINE) 0, 0 /*, ...*/});
+    SUBMENU_NOTITLE(MIX_FIELD_COUNT, {IF_CPUARM(0) 0, 0, 0, CASE_9X(1) IF_CURVES(1) IF_FLIGHT_MODES((MAX_PHASES-1) | NAVIGATION_LINE_BY_LINE) 0, 0 /*, ...*/});
 #else
-  SUBMENU_NOTITLE(MIX_FIELD_COUNT, {IF_CPUARM(0) 0, 0, 0, IF_9X(1) IF_CURVES(1) IF_FLIGHT_MODES((MAX_PHASES-1) | NAVIGATION_LINE_BY_LINE) 0, 0 /*, ...*/});
+  SUBMENU_NOTITLE(MIX_FIELD_COUNT, {IF_CPUARM(0) 0, 0, 0, CASE_9X(1) IF_CURVES(1) IF_FLIGHT_MODES((MAX_PHASES-1) | NAVIGATION_LINE_BY_LINE) 0, 0 /*, ...*/});
 #endif
 
 #if MENU_COLUMNS > 1
@@ -3044,8 +3087,11 @@ void menuModelMixOne(uint8_t event)
 #if defined(CURVES)
       case MIX_FIELD_CURVE:
       {
-        int8_t curveParam = md2->curveParam;
         lcd_putsColumnLeft(COLUMN_X, y, STR_CURVE);
+#if defined(PCBTARANIS)
+        editCurveRef(COLUMN_X+MIXES_2ND_COLUMN, y, md2->curve, event, attr);
+#else
+        int8_t curveParam = md2->curveParam;
         if (md2->curveMode == MODE_CURVE) {
           putsCurve(COLUMN_X+MIXES_2ND_COLUMN, y, curveParam, attr);
           if (attr) {
@@ -3077,6 +3123,7 @@ void menuModelMixOne(uint8_t event)
             }
           }
         }
+#endif
         break;
       }
 #endif
@@ -3398,10 +3445,13 @@ void menuModelExpoMix(uint8_t expo, uint8_t event)
           if (expo) {
             ed->weight = gvarMenuItem(EXPO_LINE_WEIGHT_POS, y, ed->weight, 0, 100, attr | (isExpoActive(i) ? BOLD : 0), event);
 
+#if defined(PCBTARANIS)
+#else
             if (ed->curveMode == MODE_CURVE)
               putsCurve(EXPO_LINE_EXPO_POS-3*FW, y, ed->curveParam);
             else
               displayGVar(EXPO_LINE_EXPO_POS, y, ed->curveParam, -100, 100);
+#endif
 
             putsSwitches(EXPO_LINE_SWITCH_POS, y, ed->swtch, 0);
 
@@ -3444,13 +3494,15 @@ void menuModelExpoMix(uint8_t expo, uint8_t event)
 #endif
 #endif
             {
+#if defined(PCBTARANIS)
+#else
               if (md->curveParam) {
                 if (md->curveMode == MODE_CURVE)
                   putsCurve(MIX_LINE_CURVE_POS, y, md->curveParam);
                 else
                   displayGVar(MIX_LINE_CURVE_POS+3*FW, y, md->curveParam, -100, 100);
               }
-
+#endif
               if (md->swtch) putsSwitches(MIX_LINE_SWITCH_POS, y, md->swtch);
 
               char cs = ' ';
