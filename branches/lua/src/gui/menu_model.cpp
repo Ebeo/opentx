@@ -657,14 +657,16 @@ void menuModelFailsafe(uint8_t event)
   bool newLongNames = false;
   uint8_t ch;
 
-  SUBMENU_NOTITLE(32, {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0});
-
-  switch(event)
-  {
-    case EVT_KEY_BREAK(KEY_EXIT):
-      popMenu();
-      return;
+  if (event == EVT_KEY_BREAK(KEY_ENTER) && s_editMode) {
+    g_model.moduleData[g_moduleIdx].failsafeChannels[m_posVert] = channelOutputs[m_posVert];
+    eeDirty(EE_MODEL);
+    AUDIO_WARNING1();
+    SEND_FAILSAFE_NOW(g_moduleIdx);
   }
+
+  SIMPLE_SUBMENU_NOTITLE(32);
+
+  SET_SCROLLBAR_X(0);
 
   if (m_posVert >= 16)
     ch = 16;
@@ -694,15 +696,6 @@ void menuModelFailsafe(uint8_t event)
       else
         val = g_model.moduleData[g_moduleIdx].failsafeChannels[8*col+line];
 
-      if (m_posVert == ch && event == EVT_KEY_LONG(KEY_ENTER)) {
-        g_model.moduleData[g_moduleIdx].failsafeChannels[8*col+line] = val;
-        eeDirty(EE_MODEL);
-        s_editMode = 0;
-        AUDIO_WARNING1();
-        SEND_FAILSAFE_NOW(g_moduleIdx);
-        killEvents(event);
-      }
-
       // Channel name if present, number if not
       uint8_t lenLabel = zlen(g_model.limitData[ch].name, sizeof(g_model.limitData[ch].name));
       if (lenLabel > 4) {
@@ -714,18 +707,23 @@ void menuModelFailsafe(uint8_t event)
       else
         putsChn(x+1-ofs, y, ch+1, SMLSIZE);
 
-      uint8_t wbar = (longNames ? 48 : 58);
-
       // Value
-      LcdFlags flags = PREC1 | TINSIZE;
-
+      LcdFlags flags = TINSIZE;
       if (m_posVert == ch) {
         flags |= INVERS;
         if (s_editMode)
           flags |= BLINK;
       }
-
-      lcd_outdezNAtt(x+LCD_W/2-3-wbar-ofs, y+1, calcRESXto1000(val), flags);
+#if defined(PPM_UNIT_US)
+      uint8_t wbar = (longNames ? 54 : 64);
+      lcd_outdezAtt(x+LCD_W/2-4-wbar-ofs, y, PPM_CH_CENTER(ch)+val/2, flags);
+#elif defined(PPM_UNIT_PERCENT_PREC1)
+      uint8_t wbar = (longNames ? 48 : 58);
+      lcd_outdezAtt(x+LCD_W/2-4-wbar-ofs, y, calcRESXto1000(val), PREC1|flags);
+#else
+      uint8_t wbar = (longNames ? 54 : 64);
+      lcd_outdezAtt(x+LCD_W/2-4-wbar-ofs, y, calcRESXto1000(val)/10, flags);
+#endif
 
       // Gauge
       lcd_rect(x+LCD_W/2-3-wbar-ofs, y, wbar+1, 6);
@@ -742,7 +740,6 @@ void menuModelFailsafe(uint8_t event)
   }
 
   longNames = newLongNames;
-
 }
 #endif
 
@@ -2222,7 +2219,7 @@ void DrawFunction(FnFuncP fn, uint8_t offset=0)
 static uint8_t s_curveChan;
 int16_t curveFn(int16_t x)
 {
-  return intpol(x, s_curveChan);
+  return applyCustomCurve(x, s_curveChan);
 }
 
 struct point_t {
@@ -2374,20 +2371,20 @@ void menuModelCurveOne(uint8_t event)
   lcd_puts(9*FW, 0, "pt\003X\006Y");
   lcd_filled_rect(0, 0, LCD_W, FH, SOLID, FILL_WHITE|GREY_DEFAULT);
 
-  SIMPLE_SUBMENU(STR_MENUCURVE, 3 + 5+crv.points + (crv.type==CURVE_TYPE_CUSTOM ? 5+crv.points-2 : 0));
+  SIMPLE_SUBMENU(STR_MENUCURVE, 4 + 5+crv.points + (crv.type==CURVE_TYPE_CUSTOM ? 5+crv.points-2 : 0));
   lcd_outdezAtt(PSIZE(TR_MENUCURVE)*FW+1, 0, s_curveChan+1, INVERS|LEFT);
 
   lcd_putsLeft(FH+1, STR_NAME);
   editName(INDENT_WIDTH, 2*FH+1, g_model.curveNames[s_curveChan], sizeof(g_model.curveNames[s_curveChan]), event, m_posVert==0);
 
   uint8_t attr = (m_posVert==1 ? (s_editMode>0 ? INVERS|BLINK : INVERS) : 0);
-  lcd_putsLeft(3*FH+3, STR_TYPE);
-  lcd_putsiAtt(INDENT_WIDTH, 4*FH+3, "\010StandardCustom\0", crv.type, attr);
+  lcd_putsLeft(3*FH+1, STR_TYPE);
+  lcd_putsiAtt(INDENT_WIDTH, 4*FH+1, "\010StandardCustom\0", crv.type, attr);
   if (attr) {
     uint8_t newType = checkIncDecModelZero(event, crv.type, CURVE_TYPE_LAST);
     if (newType != crv.type) {
       for (int i=1; i<4+crv.points; i++)
-        points[i] = calcRESXto100(intpol(calc100toRESX(-100 + i*200/(4+crv.points)), s_curveChan));
+        points[i] = calcRESXto100(applyCustomCurve(calc100toRESX(-100 + i*200/(4+crv.points)), s_curveChan));
       moveCurve(s_curveChan, checkIncDec_Ret > 0 ? 3+crv.points : -3-crv.points);
       if (newType == CURVE_TYPE_CUSTOM) {
         for (int i=0; i<3+crv.points; i++)
@@ -2398,9 +2395,9 @@ void menuModelCurveOne(uint8_t event)
   }
 
   attr = (m_posVert==2 ? (s_editMode>0 ? INVERS|BLINK : INVERS) : 0);
-  lcd_putsLeft(5*FH+5, "Count");
-  lcd_outdezAtt(INDENT_WIDTH, 6*FH+5, 5+crv.points, LEFT|attr);
-  lcd_putsAtt(lcdLastPos, 6*FH+5, PSTR("pts"), attr);
+  lcd_putsLeft(5*FH+1, "Count");
+  lcd_outdezAtt(INDENT_WIDTH, 6*FH+1, 5+crv.points, LEFT|attr);
+  lcd_putsAtt(lcdLastPos, 6*FH+1, PSTR("pts"), attr);
   if (attr) {
     int8_t count = checkIncDecModel(event, crv.points, -3, 12); // 2pts - 17pts
     if (checkIncDec_Ret) {
@@ -2408,7 +2405,7 @@ void menuModelCurveOne(uint8_t event)
       newPoints[0] = points[0];
       newPoints[4+count] = points[4+crv.points];
       for (int i=1; i<4+count; i++)
-        newPoints[i] = calcRESXto100(intpol(calc100toRESX(-100 + (i*200) / (4+count)), s_curveChan));
+        newPoints[i] = calcRESXto100(applyCustomCurve(calc100toRESX(-100 + (i*200) / (4+count)), s_curveChan));
       moveCurve(s_curveChan, checkIncDec_Ret*(crv.type==CURVE_TYPE_CUSTOM?2:1));
       for (int i=0; i<5+count; i++) {
         points[i] = newPoints[i];
@@ -2419,9 +2416,14 @@ void menuModelCurveOne(uint8_t event)
     }
   }
 
+  lcd_putsLeft(7*FH+1, "Smooth");
+  menu_lcd_onoff(7*FW, 7*FH+1, crv.smooth, m_posVert==3 ? INVERS : 0);
+  if (m_posVert==3) crv.smooth = checkIncDecModel(event, crv.smooth, 0, 1);
+
   switch(event) {
     case EVT_ENTRY:
       pointsOfs = 0;
+      SET_SCROLLBAR_X(0);
       break;
     case EVT_KEY_LONG(KEY_ENTER):
       if (m_posVert > 1) {
@@ -2446,12 +2448,12 @@ void menuModelCurveOne(uint8_t event)
     point_t point = getPoint(i);
     uint8_t selectionMode = 0;
     if (crv.type==CURVE_TYPE_CUSTOM) {
-      if (m_posVert==3+2*i || (i==5+crv.points-1 && m_posVert==3+5+crv.points+5+crv.points-2-1))
+      if (m_posVert==4+2*i || (i==5+crv.points-1 && m_posVert==4+5+crv.points+5+crv.points-2-1))
         selectionMode = 2;
-      else if (i>0 && m_posVert==2+2*i)
+      else if (i>0 && m_posVert==3+2*i)
         selectionMode = 1;
     }
-    else if (m_posVert == 3+i) {
+    else if (m_posVert == 4+i) {
       selectionMode = 2;
     }
 
@@ -2470,7 +2472,7 @@ void menuModelCurveOne(uint8_t event)
       lcd_filled_rect(point.x-FW, point.y-1, 3, 3, SOLID);
       if (s_editMode > 0) {
         if (selectionMode == 1)
-          CHECK_INCDEC_MODELVAR(event, points[5+crv.points+i-1], i==1 ? -99 : points[5+crv.points+i-2], i==5+crv.points-2 ? 99 : points[5+crv.points+i]);  // edit X
+          CHECK_INCDEC_MODELVAR(event, points[5+crv.points+i-1], i==1 ? -100 : points[5+crv.points+i-2], i==5+crv.points-2 ? 100 : points[5+crv.points+i]);  // edit X
         else if (selectionMode == 2)
           CHECK_INCDEC_MODELVAR(event, points[i], -100, 100);
       }

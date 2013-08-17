@@ -56,7 +56,6 @@ inline void displayColumnHeader(const char **headers, uint8_t index)
   #define SET_SCROLLBAR_X(x)
 #endif
 
-
 #if LCD_W >= 212
   #if defined(TRANSLATIONS_FR)
     #define MENU_COLUMNS         1

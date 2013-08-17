@@ -746,7 +746,7 @@ bool check(check_event_t event, uint8_t curr, const MenuFuncP *menuTab, uint8_t 
   }
 
 #if LCD_W >= 212
-  if (maxrow > LCD_LINES-1)
+  if (maxrow > LCD_LINES-1 && scrollbar_X)
     displayScrollbar(scrollbar_X, FH, LCD_H-FH, s_pgOfs, menuTab ? maxrow : maxrow+1, LCD_LINES-1);
 #endif
 

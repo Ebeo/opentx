@@ -455,7 +455,7 @@ void generalDefault()
 #endif
 
 #if !defined(CPUM64)
-  g_eeGeneral.backlightMode = e_backlight_mode_both;
+  g_eeGeneral.backlightMode = e_backlight_mode_all;
   g_eeGeneral.lightAutoOff = 2;
   g_eeGeneral.inactivityTimer = 10;
 #endif
@@ -525,6 +525,123 @@ void modelDefault(uint8_t id)
   g_model.frsky.channels[0].ratio = 132;
 #endif
 }
+
+#if defined(PCBTARANIS)
+#define CUSTOM_POINT_X(points, count, idx) ((idx)==0 ? -100 : (((idx)==(count)-1) ? 100 : points[(count)+(idx)-1]))
+s32 compute_tangent(CurveInfo *crv, int8_t *points, int i)
+{
+    s32 m=0;
+    uint8_t num_points = crv->points + 5;
+    #define MMULT 1024
+    if (i == 0) {
+      //linear interpolation between 1st 2 points
+      //keep 3 decimal-places for m
+      if (crv->type == CURVE_TYPE_CUSTOM) {
+        int8_t x0 = CUSTOM_POINT_X(points, num_points, 0);
+        int8_t x1 = CUSTOM_POINT_X(points, num_points, 1);
+        if (x1 > x0) m = (MMULT * (points[1] - points[0])) / (x1 - x0);
+      }
+      else {
+        s32 delta = (2 * 100) / (num_points - 1);
+        m = (MMULT * (points[1] - points[0])) / delta;
+      }
+    }
+    else if (i == num_points - 1) {
+      //linear interpolation between last 2 points
+      //keep 3 decimal-places for m
+      if (crv->type == CURVE_TYPE_CUSTOM) {
+        int8_t x0 = CUSTOM_POINT_X(points, num_points, num_points-2);
+        int8_t x1 = CUSTOM_POINT_X(points, num_points, num_points-1);
+        if (x1 > x0) m = (MMULT * (points[num_points-1] - points[num_points-2])) / (x1 - x0);
+      }
+      else {
+        s32 delta = (2 * 100) / (num_points - 1);
+        m = (MMULT * (points[num_points-1] - points[num_points-2])) / delta;
+      }
+    }
+    else {
+        //apply monotone rules from
+        //http://en.wikipedia.org/wiki/Monotone_cubic_interpolation
+        //1) compute slopes of secant lines
+        s32 d0=0, d1=0;
+        if (crv->type == CURVE_TYPE_CUSTOM) {
+          int8_t x0 = CUSTOM_POINT_X(points, num_points, i-1);
+          int8_t x1 = CUSTOM_POINT_X(points, num_points, i);
+          int8_t x2 = CUSTOM_POINT_X(points, num_points, i+1);
+          if (x1 > x0) d0 = (MMULT * (points[i] - points[i-1])) / (x1 - x0);
+          if (x2 > x1) d1 = (MMULT * (points[i+1] - points[i])) / (x2 - x1);
+        }
+        else {
+          s32 delta = (2 * 100) / (num_points - 1);
+          d0 = (MMULT * (points[i] - points[i-1])) / (delta);
+          d1 = (MMULT * (points[i+1] - points[i])) / (delta);
+        }
+        //2) compute initial average tangent
+        m = (d0 + d1) / 2;
+        //3 check for horizontal lines
+        if (d0 == 0 || d1 == 0 || (d0 > 0 && d1 < 0) || (d0 < 0 && d1 > 0)) {
+          m = 0;
+        }
+        else if (MMULT * m / d0 >  3 * MMULT) {
+          m = 3 * d0;
+        }
+        else if (MMULT * m / d1 > 3 * MMULT) {
+          m = 3 * d1;
+        }
+    }
+    return m;
+}
+
+/* The following is a hermite cubic spline.
+   The basis functions can be found here:
+   http://en.wikipedia.org/wiki/Cubic_Hermite_spline
+   The tangents are computed via the 'cubic monotone' rules (allowing for local-maxima)
+*/
+int16_t hermite_spline(int16_t x, uint8_t idx)
+{
+  CurveInfo &crv = g_model.curves[idx];
+  int8_t *points = curveAddress(idx);
+  uint8_t count = crv.points+5;
+  bool custom = (crv.type == CURVE_TYPE_CUSTOM);
+
+  if (x < -RESX)
+    x = -RESX;
+  else if (x > RESX)
+    x = RESX;
+
+  for (int i=0; i<count-1; i++) {
+    s32 p0x, p3x;
+    if (custom) {
+      p0x = (i>0 ? calc100toRESX(points[count+i-1]) : -RESX);
+      p3x = (i<count-2 ? calc100toRESX(points[count+i]) : RESX);
+    }
+    else {
+      p0x = -RESX + (i*2*RESX)/(count-1);
+      p3x = -RESX + ((i+1)*2*RESX)/(count-1);
+    }
+
+    if (x >= p0x && x <= p3x) {
+      s32 p0y = calc100toRESX(points[i]);
+      s32 p3y = calc100toRESX(points[i+1]);
+      s32 m0 = compute_tangent(&crv, points, i);
+      s32 m3 = compute_tangent(&crv, points, i+1);
+      s32 y;
+      s32 h = p3x - p0x;
+      s32 t = (h > 0 ? (MMULT * (x - p0x)) / h : 0);
+      s32 t2 = t * t / MMULT;
+      s32 t3 = t2 * t / MMULT;
+      s32 h00 = 2*t3 - 3*t2 + MMULT;
+      s32 h10 = t3 - 2*t2 + t;
+      s32 h01 = -2*t3 + 3*t2;
+      s32 h11 = t3 - t2;
+      y = p0y * h00 + h * (m0 * h10 / MMULT) + p3y * h01 + h * (m3 * h11 / MMULT);
+      y /= MMULT;
+      return y;
+    }
+  }
+  return 0;
+}
+#endif
 
 int16_t intpol(int16_t x, uint8_t idx) // -100, -75, -50, -25, 0 ,25 ,50, 75, 100
 {
@@ -616,7 +733,7 @@ int16_t applyCurve(int16_t x, CurveRef & curve)
         curveParam = -curveParam;
       }
       if (curveParam > 0 && curveParam <= MAX_CURVES) {
-        return intpol(x, curveParam - 1);
+        return applyCustomCurve(x, curveParam - 1);
       }
       break;
     }
@@ -624,6 +741,16 @@ int16_t applyCurve(int16_t x, CurveRef & curve)
 
   return x;
 }
+
+int16_t applyCustomCurve(int16_t x, uint8_t idx)
+{
+  CurveInfo &crv = g_model.curves[idx];
+  if (crv.smooth)
+    return hermite_spline(x, idx);
+  else
+    return intpol(x, idx);
+}
+
 #else
 int16_t applyCurve(int16_t x, int8_t idx)
 {
@@ -650,7 +777,7 @@ int16_t applyCurve(int16_t x, int8_t idx)
     x = -x;
     idx = -idx + CURVE_BASE - 1;
   }
-  return intpol(x, idx - CURVE_BASE);
+  return applyCustomCurve(x, idx - CURVE_BASE);
 }
 #endif
 #else
@@ -932,11 +1059,11 @@ int16_t applyLimits(uint8_t channel, int32_t value)
 
 #if defined(PCBTARANIS)
   if (lim->curve) {
-    // TODO we loose precision here, intpol could work with int32_t on ARM boards...
+    // TODO we loose precision here, applyCustomCurve could work with int32_t on ARM boards...
     if (lim->curve > 0)
-      value = 256 * intpol(value/256, lim->curve-1);
+      value = 256 * applyCustomCurve(value/256, lim->curve-1);
     else
-      value = 256 * intpol(-value/256, -lim->curve-1);
+      value = 256 * applyCustomCurve(-value/256, -lim->curve-1);
   }
 #endif
 
@@ -1687,11 +1814,13 @@ FORCEINLINE void convertUnit(getvalue_t & val, uint8_t & unit)
 
 #define INAC_DEVISOR 512   // bypass splash screen with stick movement
 #define INAC_DEV_SHIFT 9   // shift right value for stick movement
-uint16_t stickMoveValue()
+uint8_t inputsMoveValue()
 {
-  uint16_t sum = 0;
+  uint8_t sum = 0;
   for (uint8_t i=0; i<NUM_STICKS; i++)
     sum += anaIn(i) >> INAC_DEV_SHIFT;
+  for (uint8_t i=0; i<NUM_SWITCHES; i++)
+    sum += getValue(MIXSRC_FIRST_SWITCH+i) >> 10;
   return sum;
 }
 
@@ -1706,7 +1835,7 @@ void checkBacklight()
   uint8_t x = g_blinkTmr10ms;
   if (tmr10ms != x) {
     tmr10ms = x;
-    uint16_t tsum = stickMoveValue();
+    uint8_t tsum = inputsMoveValue();
     if (tsum != inactivity.sum) {
       inactivity.sum = tsum;
       inactivity.counter = 0;
@@ -1766,7 +1895,7 @@ void doSplash()
 
     getADC(); // init ADC array
 
-    uint16_t inacSum = stickMoveValue();
+    uint8_t inacSum = inputsMoveValue();
 
     tmr10ms_t tgtime = get_tmr10ms() + SPLASH_TIMEOUT;
     while (tgtime != get_tmr10ms()) {
@@ -1778,7 +1907,7 @@ void doSplash()
 
       getADC();
 
-      uint16_t tsum = stickMoveValue();
+      uint8_t tsum = inputsMoveValue();
 
 #if defined(FSPLASH) || defined(XSPLASH)
       if (!(g_eeGeneral.splashMode & 0x04))

@@ -229,10 +229,6 @@ FLIGHT_MODES = YES
 # Values = YES, NO
 CURVES = YES
 
-# Customizable Curves
-# Values = YES, NO
-XCURVES = YES
-
 # Global Vars
 # Values = YES, NO
 GVARS = NO
@@ -274,7 +270,6 @@ ifeq ($(PCB), $(filter $(PCB), STD 9X 9XR))
   TRGT = avr-
   MCU = atmega64
   OPT = s  
-  XCURVES = NO
   SDCARD = NO
   THR_TRACE = NO
   EXTRAINCDIRS = targets/stock
@@ -789,10 +784,6 @@ endif
 
 ifeq ($(CURVES), YES)
   CPPDEFS += -DCURVES
-endif
-
-ifeq ($(XCURVES), YES)
-  CPPDEFS += -DXCURVES
 endif
 
 ifeq ($(GVARS), YES)

@@ -742,7 +742,7 @@ void watchdogSetTimeout(uint32_t timeout);
 struct t_inactivity
 {
   uint16_t counter;
-  uint16_t sum;
+  uint8_t  sum;
 };
 extern struct t_inactivity inactivity;
 
@@ -1162,8 +1162,13 @@ extern uint16_t           BandGap;
 #endif
 
 int16_t expo(int16_t x, int16_t k);
-int16_t intpol(int16_t, uint8_t);
-int16_t applyCurve(int16_t, int8_t);
+int16_t applyCurve(int16_t x, int8_t idx);
+
+#if defined(PCBTARANIS)
+  int16_t applyCustomCurve(int16_t x, uint8_t idx);
+#else
+  #define applyCustomCurve(x, idx) intpol(x, idx)
+#endif
 
 #if defined(PCBTARANIS)
   #define APPLY_EXPOS_EXTRA_PARAMS_INC , uint8_t ovwrIdx=0, int16_t ovwrValue=0
