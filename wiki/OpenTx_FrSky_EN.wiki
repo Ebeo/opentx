@@ -32,6 +32,7 @@ Use of some advanced features (voice announcements, telemetry data logging, cust
 == The radio ==
 
 The !FrSky Taranis is a ground-breaking radio because it's the first time a renowned player in the R/C industry and the creators of an open-source radio control firmware collaborate closely to improve both the hardware and software sides of a product, and come up with an open-source radio targeting the mainstream market. This means that while the Taranis is a low cost radio, it is free of the usual "marketing-driven" limitations that most manufacturers place on their offerings, and as such offers features that match and even exceed those of the highest end radios in the industry.
+
 It is also future-proof, as both teams are always there to respond to questions and suggestions. Things can evolve quickly to follow the needs of the various users! And should you have some programming experience - the entire source code of the firmware is available for you to play with and change to your liking.
 
 === An overview of the features ===
@@ -79,9 +80,11 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/photo06.jpg
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/photo07.jpg
 
 The back of the radio shows the JR-compatible module slot, along with a JR-style jack trainer port, USB connector and earphone jack. The battery bay houses a microSD card slot, a serial port and of course the battery connection. 
+
 The supplied battery is a 6-cell NiMH, but the plug will also accept a JST-style balance plug for a 2s Li-Po battery. Battery compartment dimensions are 108x31x28mm. Voltage range is 5.5-13V for the internal components, but be aware that external modules might require up to 12V, so observe your module's requirements when using one and choose the appropriate battery. 
 
 The right side of the radio sports the charger input plug, with the charging LED next to it on the back of the radio. When you connect the supplied power supply the LED will turn on, and shut off when the battery is charged (2-3 hours charge time for an empty battery).
+
 *PLEASE NOTE: The radio has an integrated Ni-MH charge circuitry designed to charge the supplied 6-cell battery.*
  * *Do not connect a smart charger to the charge plug. It should only be supplied with 12V DC, polarity however doesn't matter.*
  * *Do not use the charge plug if you have replaced the battery with a different type (chemistry or cell count).*
@@ -105,25 +108,28 @@ Now might be the time to put the battery on charge, so that after reading this s
 === Button navigation ===
 
 The Taranis has 6 input keys: a standard set of +/-/ENTER/EXIT, plus 2 contextual MENU and PAGE keys.
+
 On the main views, the PAGE key will switch between the different views described in the next section. A LONG press of the PAGE key will bring up the telemetry display. A SHORT press of the MENU key will call the model menu, while a LONG press will call the radio settings menu. In those 2 menus, a SHORT press of the PAGE key goes to the next page, while a LONG press goes back to the previous one. EXIT goes back to the main views. In all model menu pages a long press of the MENU key will bring up a channel monitor to allow quickly checking the influence of a change in settings on the outputs.
 
 The navigation in a menu is simple: The +/- keys will navigate up/down between editable fields, or lines of fields depending on the screen.
+
 ENTER will enter the line of fields when applicable, then edit mode. In edit mode, +/- will change the value, ENTER or EXIT will validate the input and return to navigation. EXIT always goes back to the previous navigation level.
 
 In edit mode, we have four 2-key shortcuts available: 
-+/- together: Invert value
--/ENTER: Set value to 100
-EXIT/PAGE: Set value to -100
-MENU/PAGE: Set value to 0
+ * +/- together: Invert value
+ * -/ENTER: Set value to 100
+ * EXIT/PAGE: Set value to -100
+ * MENU/PAGE: Set value to 0
 
 Another handy feature is the auto selection of physical inputs in the relevant fields. Instead of choosing a source or switch with the + and - keys, just move the pot or flick the switch you want, and it will be recognised. For switches the position is also auto-selected, and the +/- double key combination will allow selecting the opposite position in a pinch. 
 
 === Main views ===
 
 We have 3 main views showing the same basic information in the top part and different inputs/outputs on the lower part. On the main views a long press of the ENTER key brings up a menu where you can reset the timers, telemetry data (min/max, altitude, GPS home...), all of those, bring up a statistics view (throttle graph, timers), or show the development credits. As mentioned above, a short press of the PAGE key switches views.
+
 The new title bar includes radio battery voltage, receiver signal strength (for !FrSky receivers), main onboard voltage (can be receiver battery, flight battery, or anything else depending on sensors the "Voltage" parameter in the telmetry settings), status icons (SD present, USB connected, trainer port mode, logging in progress), audio volume and time.
-The other "always present" items are model name, flight mode, and trim/pot positions.
-The logo is of course customisable - if you have a microSD card in your radio, you'll be able to load your model's photo there!
+
+The other "always present" items are model name, flight mode, and trim/pot positions. The logo is of course customisable - if you have a microSD card in your radio, you'll be able to load your model's photo there!
 
 The first view lists the physical switch states in the bottom left zone, and the 2 timers (when enabled) on the right. 
 
@@ -196,7 +202,9 @@ A SHORT press of the PAGE key calls the trainer settings page:
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/09b_trainer.png
 
 This page allows you to configure the trainer function for "master" use (make sure the Trainer mode in model settings is set to Master). For each of the 4 main functions you will be able to set the mode (OFF, += for Add, := for Replace), ratio and input channel. 
+
 Start by setting the mode for each function (the "standard" way is Replace i.e. when the trainer function is activated the function is fully transferred to the student, Add allows both master and student to act upon the function together). Then select the source channel accordingly to the brand/model of the student radio, and set the ratio to 100% for now. Now ensure the student radio is connected and recognised (moving the sticks of the student radio should change the 4 numbers at the bottom of the screen) make sure all its trims are neutral, all its sticks are centered (including throttle). Select the CAL field and press ENTER twice. The numbers should now be 0.0 or very close.
+
 Now move the student radio's sticks and check the numbers vary from -100 to +100. Should they reach those values before the stick hits the end of its travel, reduce the ratio so that the throws match. Should they never reach -100 to +100 even with full stick deflection, use the Multiplier field to increase it. 
 
 Trainer input is now configured. Note that this setting is global, because it depends on the student radio regardless of the selected model. In order to use the Trainer function on a specific model you will need to assign the switch you want to the "Trainer" Custom Function for that model. More about this further.
@@ -212,6 +220,7 @@ When reporting a bug, please be sure to include the revision number you see on t
 ==== Diagnostics ====
 
 The next 2 pages are the switch and analog diagnostics, they will show you what the firmware reads from the radio's keys and potentiometers. This is the first place to go to if you run into issues with badly responding sticks / pots / switches. If things are wrong here (inconsistent stick centering or end point readings, flickering value,...) then you can be sure the problem is hardware-related and not due to wrong model setup. 
+
 The Analog page also features the battery calibration setting. It should be correct out of the box, but if not move the cursor to the field, and adjust it so that the displayed value matches the voltage you can measure on the battery terminals with a voltmeter.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/09d_switchdiag.png    
@@ -271,7 +280,9 @@ A SHORT press of the PAGE key will bring up the helicopter CCPM head mixer page.
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/14_heli.png
 
 The inputs of this mixer are the Ail and Ele sticks, plus the virtual channel selected in "Collective source". This channel would see entries added on the MIXER page for one or more pitch curves.
+
 The outputs of the CCPM mixer are CYC1, CYC2 and CYC3, which need to be assigned on the MIXER page to the channels you will connect your servos to. 
+
 Note that the settings made here have no effect unless you are using those CYC1, CYC2 and CYC3 sources. A multirotor or flybarless helicopter which uses onboard computers/mixers will NOT use them.
 
 ==== Flight modes ====
@@ -281,6 +292,7 @@ Next up is the flight modes screen.
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/15_FP.png
 
 8 flight modes plus the default one are available for use. Each of them can be named, has a selectable activation switch (physical or logical), a trim selection array (R, E, T, A when shown mean the mode has its own trim setting for that control, but each can be changed to a number from 0 to 9 and thus use the same value as the specified mode), and slow up/down parameters for smooth transitions between modes. 
+
 The priority of the flight modes is such as the first FM of 1-8 that has its switch ON is the active one. When none has its switch ON, the default FM0 is active. 
 
 ==== Sticks ====
@@ -291,7 +303,9 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/16_inputs.png
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/17_dr.png
 
 As many lines as required can be assigned to each stick (LONG press ENTER brings up a popup menu), and again the first one that has its switch on (starting from the top) will be the active one. This is commonly used to create dual, triple,... rates. A name can be defined for each entry, as well as the rate and exponential ratio. A curve (built-in or custom) can also be used instead of the "simple" exponential function. 
+
 The Modes line allows to choose in which mode(s) (highlighted numbers) that line can be active. If the current mode is not selected, turning on the switch will not activate that formatting line. 
+
 The Side parameter limits the effect of that formatting line to only one side of the stick. A summary of the selected modes for each line is shown on the main screen.
 
 ==== Mixer ====
@@ -301,6 +315,7 @@ The next page is where the actions on the controls will be mapped to servos. ope
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/18_mixer.png
 
 The various channels are outputs, for example CH1 being the servo plug #1 on your receiver (with the default protocol settings). A channel without a mixer line will just center a servo that would be connected to it.
+
 Each mixer line connects one input to the channel it's on. Inputs can be:
  * The 4 stick axes
  * The 4 pots and sliders
@@ -310,11 +325,13 @@ Each mixer line connects one input to the channel it's on. Inputs can be:
  * The 32 custom (logical) switches
  * The trainer port input channels (PPM1-8)
  * Each of the radio's 32 channels, which allows using channels as a virtual functions for clarity (mix several inputs into one reuseable function, that can then be assigned to one or more channels). Note that the settings of the SERVOS page are NOT taken into account there.
+
 All inputs work on a -100% to +100% basis. Sticks, pots, channels, CYC sources, trainer inputs will vary proportionally within this range. 3-position switches will return -100%, 0% or +100%. 2-position switches (and logic ones) will return -100% or +100%. MAX is always +100%. 
 
 If you want the servo connected to the #2 plug of your receiver to be controlled by the elevator stick, you will simply create a mixer entry on CH2 with Ele as source. Easy enough!
 
 There can be as many lines as needed on each channel, and the operation between each line can be selected. To create a new line, you would LONG press the ENTER key, and select insert before/after. By default all the lines on a same channel are added together, but a line can also multiply those before it, or replace them.
+
 For clarity, each line that is currently active and contributing to the channel's output will have its source displayed in *bold*. This can be very handy when many are present and to check switch functions.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/19_editmix.png
@@ -336,6 +353,7 @@ As a little example, if you wanted to add some compensation on the elevator chan
  * When do I want it to move? _When I move the throttle stick_, in addition to whatever would already be present (usually the elevator stick).
 
 So you would simply go on CH2, and insert a new line with Thr as source. Type would be Add as the compensation needs to be added to the "normal" elevator response. As the required compensation is likely small, you will dial in a small weight, maybe 5%. On the ground with motor disconnected, you will check the elevator compensates in the correct direction. If not, you'll invert the weight to -5%. 
+
 You could then assign a switch, in order to be able to activate/deactivate it in flight to see if the amount of compensation is actually appropriate. If the correction is more complicated, you might want to assign and create a curve that matches what's required.
 
 ==== Servos ====
@@ -359,6 +377,7 @@ The last line after CH32 is the "Trims to Offsets" function. It is used to take 
 ==== Curves ====
 
 Custom curves can be used either in input formatting or mixers. There are 16 of them available, and they can be of several types (3, 5, 9, 17pt, both with fixed or user-definable x coordinates). 3pt would be a 3-point curve with fixed x, 9pt' is a 9-point curve with user-defined x coordinates. 
+
 These curves are available in addition to the "built-in" curves:
  * x>0, x<0: If input is positive resp. negative return input, otherwise 0.
  * |x|: Return the absolute value of the input.
@@ -374,8 +393,11 @@ The curve editor allows you to define a name for the selected curve, the type, a
 ==== Global variables ====
 
 Global variables are values that can be substituted to the usual number on every Weight, Offset, Differential or Expo setting. Their main use is to group the adjustment of several parameters that should have the same value. For example, aileron differential on a glider with 4 surfaces responding to the aileron function. When trying to find the sweet spot for the differential value, instead of having to repeatedly edit the differential value in 4 mixers, all 4 can be set to use a global variable (e.g. GV1 resp. -GV1, selected by a LONG press of the ENTER key on the Differential field). Then adjusting GV1 on this page is all it takes for all differentials to be updated.
+
 Global variables are also flight mode specific, so instead of having to create separate mixer lines with different values depending on the flight mode one can simply use a global variable with different values for each flight mode. This can significantly help simplifying the mixer screen by avoiding many duplicate entries.
+
 Global variables can also be adjusted in flight thanks to the Adjust GVx Custom Function that will be described later, and help adjusting those parameters that are easier to tweak in flight like D/R ratios, expos or again differential.
+
 The Global variables screen allows setting a name for each of the 5 available variables for conveniency, and seeing/setting the value each of them will have in each of the 9 flight modes.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/22_gvars.png
@@ -384,10 +406,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/22_gvars.png
 
 These are logic switches that are used to compare values and combine various conditions.
 
-The first "operation" column lists a few arithmetical, logical and differential operations.
-In arithmetical ones a and b represent variables, x represents a constant. Variables can be every source, i.e. all those available in mixers, plus the 5 global variables and all telemetry values. 
-In logical operations the available sources are all physical and other custom switches.
-Differential functions compare the variation of a variable since last match to another value.
+The first "operation" column lists a few arithmetical, logical and differential operations. In arithmetical ones a and b represent variables, x represents a constant. Variables can be every source, i.e. all those available in mixers, plus the 5 global variables and all telemetry values. In logical operations the available sources are all physical and other custom switches. Differential functions compare the variation of a variable since last match to another value.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/23_CS.png
 
@@ -408,6 +427,7 @@ This is the place where switches can be used to trigger special functions such a
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/24_CF.png
 
 The first column selects the trigger, which can be any switch (physical or custom) or ON (always on). A LONG press of the ENTER key will switch to "toggle" mode (ending with t), i.e. the selected input will be turned on when the selected switch is activated, and will remain on until it is deactivated and reactivated again. 
+
 Scrolling through the list you will also find a few more options: One (triggers just once when loading a model or turning the radio on), SHdownS (short press of the momentary switch), SHdownL (long press of the momentary switch).
 
 The available functions are:
@@ -484,6 +504,7 @@ The radio will have created an empty model for you, so after having gone back to
 === openTx basics ===
 
 Now that everything works, it's time to stop a moment for some theory about the basic operation of the openTx firmware. 
+
 As briefly described above, openTx differs from the majority of mainstram radio by its programming philosphy. Owners of Multiplex radios will however feel at home very quickly, as the principles are very similar. 
 As opposed to common radios that offer a choice between a limited set of predefined usage scenarios (airplane, glider, helicopter), a number of functions that are commonly used with such models (delta, flaperon, camber, butterfly...), and have fixed assignations (sticks *always* control their respective channels), openTx offers a blank canvas on which you will build your setup: the mixer screen. This approach ensures maximum flexibility because whatever you do you will never have to work around what the radio expects you to do, which is a blessing for anybody having to work with "new" model types or configurations which still "don't exist" for mainstream radio manufacturers, and as such for which the built-in functions are usually useless. So you can see it that way: For some model types, usual predefined functions can allow setting up a model in seconds (just enable a function), but for others you'll spend hours trying to get around their limitations. On openTx everybody is more or less at the same level - it might take a little longer at the beginning to set up a seemingly simple model, but a complicated one won't take much more. As there is no existing function you can just turn on, it will require basic understanding of how your model is supposed to work, and what you want each control surface to do. This means that you might even learn something about your model in the process of setting it up!
 
@@ -492,6 +513,7 @@ The control order path starts from the hardware controls, goes through the STICK
 === Everthing about the mixer screen ===
 
 We'll start with this as it is the center of the radio. The mixer screen lists the 32 output channels to which you can link one or more inputs from a long list of physical controls (sticks, pots, trims, switches), logic sources, other channels and trainer inputs. Each assignation is done with a _mixer line_. A new model will have 4 predefined mixer lines on channels 1,2,3 and 4 that link the 4 sticks to them according to the channel order preference you have set. These are there purely for convenience, and can of course be edited or deleted. 
+
 Let's delete them all by highlighting them, pressing ENTER LONG and choosing "Delete". Your mixer screen is now empty, which means the radio does nothing at all. Well it does, it sends out the number of channels that are defined on the model setup page to the receiver (channels 1-8 by default), but as those channels are empty in the mixer screen no servo will respond, they'll all be centered. You won't go very far with that, so you'll want to add control inputs to those channels. You'll create a mixer line on CH1 by highlighting it and pressing ENTER LONG, and will end up in the INSERT MIX page. Scroll to the "Source" field, press ENTER, and select the control you want to act on CH1. You can do it by browsing the list with the + and - keys, or take the easy route and just move the desired control (if it's a physical one, of course). Move the aileron stick, and the field will change to Ail (it might have already been there if your channel order preference set in the general settings had A for the first channel, as that's taken into account). You can leave the other parameters at their default settings, which mean: 
  * The mix ratio of this input is 100%, so the scaling of the mixer line's output will be equal to its input. A value of -50% would mean the output would be half of the input, and inverted.
  * There is no offset, so with an input of 0 the output of the mixer line will also be 0. A value here would shift the response by that much percentage of (input x weight).
@@ -510,6 +532,7 @@ Note that at any time in the Mixer screen and the EDIT/INSERT MIX dialogs you ca
 The description is long, but in practice if we now do it again to control CH2 with the elevator stick it will only take a couple of seconds to select CH2, press ENTER LONG, scroll to Source, pres ENTER, move the Elevator stick, and press EXIT twice. Setting up the mixer for a vast number of basic models is as simple as that. In addition to the 4 basic channels, if you have a model with flaps that have their own servo and that you want to control with switch SB you'll just find a free channel to connect your servo to (let's say CH6), you'll scroll to CH6 on the mixer screen, insert a mixer line, flip the SB switch when in edit mode on the source field, and EXIT twice. If you want to adjust the up/mid/full positions, a good idea would be to set up a 3-point custom curve. In the Curve setting, select c1, exit edit mode, and still on the curve field press MENU. You will be brought to the curve editor. Select "3pt" as type, select the Y value of the first point, and adjust its position. Do the same for the other 2 points, and exit. 
 
 Now something more "complicated", if your model has retracts that you want to control with switch SA (which has 3 positions) but want only 2 possible output values (in and out) this won't work (choosing SA would give -100%, 0%, +100%). You'll then use the very convenient MAX source, that represents a fixed value. Create a mixer line on a channel (e.g. CH5) with MAX as source and +100% weight, you could name it "Gear Up". Now create a 2nd mixer line under the first one by pressing ENTER LONG on on it and selecting "Insert After". Choose MAX again as source, then set weight to -100%, for which it's time to remember the handy shortcut - enter edit mode, and press the + and - keys together. There, -100%. Scroll to the "Multpx" setting, and select "Replace". Now go to the switch setting, enter edit mode, flip SA in the UP position (flick it out of it first if it's already there), and press the + and - keys together. This will turn the "SAup" entry into "!SAup". This means the line is active whenever SA is NOT in the UP position. Name the line as "Gear Down" and you're done. What happens is: CH5 will be at 100% by default (the first mixer line is in effect), BUT when SA is either in the middle or in the down position the 2nd line will activate and replace the first one, turning the output to -100%. If you go back to the mixer screen and play with SA you'll see that when it's not in the UP position the 2nd line will turn bold as it becomes active, while the first one fades back to normal as it's been deactivated by the Replace type of the second line. Again that seems long, but takes as much as about 30 seconds when you're used to it. 
+
 Of course if you've followed you'll certainly understood that we could have set the second line to use switch "SAup", and that subsequently the role of the 2 lines would be swapped (second active when switch is up, first in the other 2 positions). But then I wouldn't have had the opportunity to explain the !, and also as a personal preference I like my switch default positions to be UP, and the first mixer line on a channel to be the default value. 
 
 A little simple one next: You have 2 ailerons with separate servos. Using a Y-cable to link them is too old-school nowadays, so let's use another channel. We already have the first aileron on CH1, CH5 and 6 are taken by gear and flaps, so let's use CH7. We have an aileron that must move with the aileron stick, which is actually just like the first one. So let's just copy the first mixer by highlighting it and pressing ENTER LONG, and selecting copy. Move it to CH7 and press ENTER. This would work just fine, but I'll throw in a personal preference again, and change its weight to -100% because "logically" that aileron is supposed to move in the opposite direction. We'll see later why this makes sense. 
@@ -517,19 +540,29 @@ A little simple one next: You have 2 ailerons with separate servos. Using a Y-ca
 Next up: a little mix. I'm going to be lazy and just tell you to go back up and check the [http://code.google.com/p/opentx/wiki/OpenTx_FrSky_EN#Mixer mixer screen description] a bit further up for the throttle -> elevator compensation. I'm sure it will seem much more clear now!
 
 Let's do a delta mix. Again, what kind of control surfaces do we have, and what do we want them to do?
+
 We have 2 elevons. They must move in the same direction when the elevator stick is moved, but they must move in opposite directions when the aileron stick is moved.
+
 So, let's pick 2 channels to connect our servos to. CH3 and 7, because... why not. Trying to make you forget about old school fixed channel assignments here ;)
+
 CH3 must move with the elevator stick, so we create a mixer line with Ele as source on it. CH3 must also move with the aileron stick, so we create a 2nd mixer line with Ail as source. We leave multiplexing set to "Add", as that's exactly what we want to do - the 2 inputs must be added together.
+
 Now let's discuss the weights a little. They are now set to 100%. This means that a full deflection of the aileron stick will create a full deflection of CH3, same for the elevator stick. But now as we add the 2 together, if we put the stick in the upper right corner (assuming mode 2) we have 100% + 100% = 200% output on CH3. Now, the limits defined on the SERVOS screen are set to 100% - which means that the output will be clipped. When the mixer's output for a channel goes beyond 100%, the servo won't move any further. This is not different from other radios - predefined delta mixes will usually give you ratios to enter for elevator and aileron authority, which is just the same. If you enter too high ratios some of the stick throw will be ineffective. 
+
 Now the discussion as to what to set the ratios to is probably endless - some are happy with 100% and clipping, some will like 50% so that there is never any clipping, and some like myself will like something a bit in the middle - I use 70%. 
+
 So, let's say we now have 2 mixer lines on CH3, 70% Ail and 70% Ele. As we said, CH7 must respond the same way to the elevator input, so we add a 70% Ele mixer too. It must respond to the aileron stick by the same amount, but in the opposite direction, so we'll set... -70%. 
+
 This is the reason for which I set -100% in the previous dual aileron example. Forcing yourself to enforce that logic thinking even when not really necessary will help you to get it right when it's needed. For example in the dual aileron scenario we could have set both ailerons to 100%, then used servo reverse to invert one aileron to achieve the same result on the model. BUT in the delta scenario this wouldn't work. 
 
 === Servos screen ===
 
 Now that the mixer is configured and the controls' behaviors are defined, the next step is to set up the way these orders will be carried through to the servos. At this point you'll want to actually connect your servos to your receiver, remove the control horns from the servos, the props from the motors (safety first), and connect a receiver battery. Bind the receiver if not done yet. 
+
 Center all controls (you can look at the channel monitor and aim for 0), and for each servo start by mounting the horns so that they're as close to perpendicular to the control linkage they're going to drive as possible. Murphy's law ensures that it's always right between 2 of the steps, so use the PPM center adjustment to make them perfectly perpendicular. Using this setting instead of subtrim avoids losing throw, and makes sure the outputs seen in the channel monitor are real "control" inputs. Connect your linkages so that the control surfaces are at neutral (or middle of their expected throw for things such as flaps). 
+
 Now move the radio's controls carefully to exercise the servos but being aware of possible mechanical binding. Set servo reverse where needed. Adjust the linkages in order to have a little more throw than what you'll ever need in both directions. If there is a little binding on one side to reach the appropriate side on the other and/or the throws are not symmetrical it's not a problem. 
+
 Then adjust the min and max limits. These should be set so that:
  * You have a little bit more throw than what you'll ever need
  * There is no mechanical binding
@@ -540,7 +573,9 @@ We're done for this screen. You've already named your channels of course ;)
 === Sticks screen ===
 
 You've probably noticed there's one thing we haven't done yet - adjust throws. That's what we'll do now.
+
 For each stick, create a rate line. Set the weight to achieve the desired throws. Add expo if desired. This is your default rate, so don't choose a switch.
+
 If you want multiple rates, create a new line *before* the default one, enter the new rate/expo, choose a switch. Repeat as many times as desired. What's important to know is that the *first line* that has its switch on (starting from the top) will be the active one. So if you create rates below one with no switch - it will never be active. Think about the priority if you choose switch combinations that can lead to 2 rates having their switch on - the top one will override the other. Ideally you should choose your switches so that never happens. 
 
 There, we can go and fly!
@@ -556,9 +591,11 @@ Time for a little summary. As we've seen, there's literally an infinite number o
 Now the throws are adjusted, the mixer is set for good logic and the outputs are set for good mechanical fit. As every part of the setup is clearly separated, should you need to change something any adjustment will only require intervention on one of the screens. If you crash or change something mechanically, it will be the SERVOS screen. If your throws are too big, Sticks screen. If a compensation amount or mixing ratio is wrong, mixer screen.
 
 Remember that there are custom switches that can be set to combine various functions, for example allow activation of some mixers only if another one is active, etc. 
+
 It is also good practice to make use of the "Safety CHx" custom function to define a safety switch for the throttle channel of electric models. Select your throttle lock switch, select the correct function for your throttle channel, set the value to -100, then tick the box. While you should always set up your model without it being powered, or at least without a prop mounted, the safety box is there to avoid forcing the channel to the default value of 0 (mid throttle) while browsing the function list if your switch is active.
 
 The "Instant Trim" custom function allows adding the current stick positions to their respective trims. It's useful for example on a new model that might be badly out of trim. Instead of having to press and hold the trim tab until the effect is sufficient, just hold the stick where required to keep level flight, and flick the selected Instant Trim switch (it should be momentary). This custom Function should be disabled once the model is trimmed, as hitting it by mistake can have the opposite effect.
+
 Once the flight is over, the "Trims -> Offsets" function at the bottom of the SERVOS page can be used to transfer the trim contents into the subtrim settings. Be aware that unless the servo mode is set to "=" an excessive subtrim amount can lead to dissymetric throws and affect settings like differential. 
 
 == Advanced features ==
@@ -572,11 +609,15 @@ Flight modes in openTx are relatively simple compared to most radios. The settin
 The following will assume your radio is loaded with a microSD card and a valid voice pack. Again, we recommend the use of the voice capability as the radio has advanced warning capabilities, and the replacement beeps used when no voice pack is available can be difficult to understand under stress.
 
 Probably the most important telemetry value is RSSI, which is an indictation of how much signal the receiver in the model is seeing from the radio, and will warn you in advance if you are at risk of losing control be it due to external interference, excessive distance, badly oriented or damaged antennas etc. The [http://code.google.com/p/opentx/wiki/OpenTx_FrSky_EN#Telemetry telemetry settings] page gives you 2 alarm levels you can set that will be announced in clear voice ("RF signal low" and "RF signal critical"). They are set by default to levels that have been considered suitable and safe for normal line of sight flight (45 and 42), but if you want to adjust them yourself the following explanations will be useful:   
+
 RSSI on FrSky equipment is represented using a logarithmic scale (dB), not in %. This means that when RSSI is high, a small difference in distance between the transmitter and receiver will lead to a big change of the RSSI value. It is perfectly normal to see a value of about 100 when next to the model, and already down in the 70's by the time you've walked to the other end of the field. When you have a reading of 50, it will however take a lot of extra distance to reach the alarm level of 45. The basic approximation rule is that a doubling of distance between pilot and model will result in a drop of 6dB of the RSSI value, which should make the previous explanation clear: If you are 5m away from the model it only takes another 5m to reduce RSSI by 6dB, but if you are 600m away from the model it will then take another 600m to reduce the value by the "same" 6dB. 
+
 Loss of control will happen when RSSI reaches a value of about 38, so setting an alarm at 10 is useless. From the above explanation you can see that between the default critical alarm (42) and usual practical loss of control we have a margin of about 4dB, or range factor of around 1.5. The alarms are thus rather conservative, and in normal conditions even if you heard the critical alarm you would still be far from losing control (you should be at around >1000m distance, with another 500m to spare). Intermittent loss due to local fades and antenna orientation mismatches could however get more and more frequent.
+
 As mentioned the default alarms are deemed safe for usual line of sight flight, but for example with FPV setups especially when coupled with automatic return to home systems and properly configured failsafes the safety margin can be reduced and you should be able to extract more or less double of the standard range out of the system. It is up to you to (safely!) experiment as once the margin gets reduced influence of external interference sources will start to become more noticeable, such as it is impossible to predict the behavior of a given installation in a particular model.
 
 The Taranis also has an alarm that will warn you of the telemetry downlink being lost or recovered. The telemetry link behaves similarly to the control link and is transmitted with the same power level, so it should have essentially similar range, and the conservative alarms for the control link described above should ensure the telemetry link is always available. However, it is possible that for any reason (manufacturing tolerances resulting in slightly different range of the up and down links, local interference sources in close proximity to the radio,...) the telemetry link is lost prematurely, in which case a warning is essential as you need to be aware that any telemetry-based alarms will NOT sound anymore. Obviously, if the radio can't pick up the RSSI info from the receiver it won't be able to warn you about low RSSI. Similarly, if you are for example relying on information from an onboard voltage or current sensor to know when to land, the alarms you set for this won't sound if telemetry data is unavailable. So be aware of the "Telemetry lost" audio alert and act accordingly, whether by falling back to other sources of info or by turning back to land and investigate the reason for the loss of telemetry feed.
+
 Note that when the radio and receiver are very close to each other (usually <1m) you may get spurious "telemetry lost" and "telemetry recovered" alarms. This is not a malfunction and will stop when the 2 devices are separated. 
 
 The rest of the telemetry subject in itself has mostly been covered already. The telemetry settings page allows you to configure the different parameters that have been explained in the menu overviews. The telemetry views will show the data as configured. If you have a microSD card in your radio, you can use the "SD Logs" custom function to record the telemetry data while in flight. It can then be played back in companion9x or opened in spreadsheet programs. 
@@ -584,7 +625,9 @@ The rest of the telemetry subject in itself has mostly been covered already. The
 === Audio ===
 
 One of the major features of the radio is the speech output function. Provided a microSD card (FAT12/16/32 format) loaded with the sound pack available for download from within companion9x is inserted in the slot in the battery compartment, the radio will be able to play audio files in response to various events like reaching trim center/ends and activation of a switch (physical or custom), to play a background music file, and last but not least to announce every available value (telemetry, parameter, stick position) in clear voice. Custom sounds can be placed in the SOUNDS/language folder of the card and will be avilable for use. Language is set in the radio general settings and can be changed on the fly as long as the pack for that language is loaded on the card.
+
 ZIP files with the standard voice packs can be downloaded from within companion9x, or [http://85.18.253.250/voices/opentx-taranis/ here]. Extract the ZIP file to the root of the SD card, and it will create the necessary subdirectories (e.g. SOUNDS/en for the English pack).
+
 Audio operation is relatively simple as it only consists of 5 "and a half" Custom Functions:
  * Play Track: Just play an audio file from the SD card when the associated switch is active. A repeat option is available, when set the sound will repeat at the set interval as long as the switch is active. This can be used to announce flight modes, gear position, flap position etc when the associated switch is activated or on request.
  * Play Value: Say the value of the selected parameter when the switch is active. The repeat parameter is available too.
@@ -600,7 +643,9 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/28_audioCFs.png
 === Global variables ===
 
 We have already mentioned how global variables could be used to group multiple adjustments in one place, and to make that adjustment flight mode specific. It was also noted that these could be adjusted in flight - this is done using the AdjustGVx custom functions. Any time the custom function's switch is ON, the value of the global variable will follow the selected input. As a reminder, there are 4 groups of inputs that can be switched between by pressing ENTER LONG on the input field, and don't forget to tick the safety box once you're done configuring and you've made sure the switch is off - again to avoid overwriting your GVAR by mistake while scrolling the source list. 
+
 This is the way to adjust values in flight. The custom function's switch serves as a "lock" to freeze the value or allow adjustment. When a variable is being updated, a popup with the variable name and new value will show up on the main views.
+
 One of the available sources for adjusting global vars is the list of channels. This is probably the main way you'll use to adjust GVARs for a simple reason: Let's say you want to adjust a D/R ratio with the S1 pot. If you select GV1 as the weight parameter of that rate line and just use the Adjust GV1 custom function with S1 as source, you will now be adjusting your rate between -100% and +100%. Being able to disable and even reverse your rate doesn't sound terribly fun, so you'll want to limit the adjustment range. The easiest way is to use a free channel for that. Create a mixer line on say CH12, and use the weight/offset/curve parameters to make that channel's output cover a range of say +50 to +80% over the pot's throw. Then, set the Adjust GV1 source to CH12. 
 
 === A few interaction examples ===
@@ -612,6 +657,7 @@ But as we know that custom switches can be used anywhere a switch is definable, 
 == Introduction to companion9x ==
 
 As we have briefly mentioned, openTx comes with a computer-based conterpart that runs on Windows, Mac OS and Linux, [http://code.google.com/p/companion9x/ companion9x].
+
 This software will allow you to backup, edit and share your radio's settings. It can also simulate both a model's setup and the radio's own interface on the computer, so it's a great tool to try things even without a radio. When you have one, it can speed up new model setups significantly thanks to the PC interface that's not limited to a small screen and a few buttons.
 
 === Basic concepts ===
@@ -625,6 +671,7 @@ An important thing to understand is how things are stored on the radio. We will 
  * EEPROM is the separate settings/model memory. Reading it allows backing up and editing in companion9x, writing it sends the result of the edits back to the radio. On the Taranis, this is done with the radio *ON*. Turn it on, dismiss any warnings in order to get to the main views, then plug the USB cable. You will see two USB drives appear, one is the SD card, and one is the EEPROM virtual drive. 
 
 Companion9x will thus handle 2 different types of files. Firmware files, that can be downloaded from the Preferences dialog, which are non-editable and can just be transferred to/from the radio, and EEPROM files for which companion9x provides an editor that allows to change anything in the same way that would be done on the radio itself.
+
 When creating (File->New) or opening (either by dragging it onto the main window or via the File->Open menu command) an EEPROM file, a document window will appear. Several of those windows can be open at the same time, allowing you to copy models or settings between files. Trying to open a firmware file the same way will throw an error saying the file is invalid - this doesn't mean that the firmware is invalid, but simply that it is not a settings file. 
  
 
@@ -671,11 +718,13 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/profile_chooser.pn
  * Joystick: This lets you configure a joystick to simulate the sticks in the radio simulator. 
    
 For a Taranis radio, the first thing you would do is select "openTx for !FrSky Taranis" in the firmware dropdown. Select your firmware language, and the voice language. The top Download button will compile and download the latest available firmware version with the selected language and options. The bottom Download button will open your web browser on a page showing you a selection of voice packs available for the selected language.
+
 Set your flight mode and preferred channel order in the dropdowns below, and dismiss the Preferences dialog with OK for now.
 
 === Simulating the radio ===
 
 You can now create a new document. A window will appear, with the first line being the radio's general settings, and the next being the model slots. You can have a look in the general settings and create a model by double-clicking in an empty slot. 
+
 There are 2 ways to simulate either a model or the whole radio.
  * In the model editor, the bottom Simulate button will open the model simulator with the current settings. Note that if a change is made in the model while the simulator is open, it needs to be closed and reopened.
  * At the bottom of the "document" window is a "Simulate Tx" button that will open a similar simulator, however this time with an extra tab showing the radio's LCD screen and UI buttons. The virtual radio will have the same data as the document when the simulator is started. Note that changes on the radio interface are not carried over back to the document.
