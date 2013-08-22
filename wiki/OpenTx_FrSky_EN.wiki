@@ -191,7 +191,7 @@ On each file or folder, pressing ENTER will bring up a contextual menu with some
 Folders are organised as such:
 
  * BMP folder: This is where you should place the 64x32, 4-bit grayscale .bmp files that you want to use as model logos. Filenames must be 10 chars long or less (not including extension). A collection of files is available [http://openrcforums.com/forum/viewtopic.php?f=92&t=3530 here]. Placing the cursor over a valid file in this folder will show it on the right side of the screen, and in the contextual menu you will find an entry to assign the selected image to the current model. 
- * LOGS folder: This is where you will find telemetry logs if enabled. Files will be created with the same name as the model they were saved from, and logging further flights just appends the data to the same file.  
+ * LOGS folder: This is where you will find telemetry logs if enabled. Files will be created with the same name as the model they were saved from, with the date appended. One log file is created per day for each model.  
  * MODELS folder: Model files saved by the "Archive model" command of the model selection screen will be placed here. Similarly, models you want to reload using the "Restore model" of the same page need to be placed there beforehand.
  * SOUNDS folder: This is where voice packs need to be placed. ZIP files with the standard voice packs can be downloaded from within companion9x, or [http://85.18.253.250/voices/opentx-taranis/ here]. Extract the ZIP file to the root of the SD card, and it will create the necessary subdirectories (e.g. SOUNDS/en for the English pack). Any file you want to have available for the "Play Track" custom function needs to be placed within the language's directory as well. In this folder, the contextual menu includes a preview function.
 
@@ -420,6 +420,8 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/23_CS.png
 
 Custom switches offer 3 more parameters: An extra AND condition (if selected, must be on for the custom switch to become active), a Duration parameter (the minimum time a custom switch will be active for even if its conditions become false instantly), and a delay parameter (that affects both activation and deactivation). See the title bar header to see the function of the field the cursor is on.
 
+A long press of the ENTER key on a custom switch's label will bring up a popup menu that allows you to copy/paste/delete an entry for more convenient entry of similar settings.
+
 ==== Custom Functions ====
 
 This is the place where switches can be used to trigger special functions such as trainer mode, soundtrack playback, speech output of variables etc. 
@@ -448,6 +450,8 @@ The available functions are:
    * A proportional control, or a channel with for example specified curve/weight/offset to limit the adjustment range
    * Another GVAR
    * +1/-1, to increment/decrement the GVAR with each activation.
+
+A long press of the ENTER key on a custom function's label will bring up a popup menu that allows you to copy/paste/delete an entry for more convenient entry of similar settings.      
 
 ==== Telemetry ====
 

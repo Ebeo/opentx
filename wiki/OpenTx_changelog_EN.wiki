@@ -2,34 +2,69 @@
 #labels Featured
 
 <wiki:comment>
-=== [**all] ===
- * Fix for Replace type mixes with Slow Down >0
- * Fix for custom switches that refer another custom switch 
 
-=== [**SD-card enabled boards] ===
- * Logs now include more values, fix for some negative numbers
-
-=== [**ARM boards] ===
- * All fonts now support language-specific special characters  
-
-=== [**!FrSky Taranis] ===
- * Fix for a decoding bug in telemtry data  
- * Sliders' center points now included in calibration 
 </wiki:comment>
   
 = openTx version history =
 
 <wiki:toc max_depth="2" />
 
+== 2688 / Jul 28 2013 ==
+
+=== [**stock] ===
+ * Fix bug with imperial units 
+
+=== [**gruvin9x] ===
+ * Fix bug with imperial units 
+ * Fix small bug with SOMO 14D 
+
+=== [**!Boards with SD card] ===
+ * Telemetry logs now split by date
+
+----
+
+== 2667 / Jul 25 2013 (Taranis only) ==
+
+=== [**!FrSky Taranis] ===
+ * Backlight brightness adjustment added
+ * SWR units removed (audio)
+ * Copy/paste/delete of custom switches and custom functions
+ 
+----
+
+== 2647 / Jul 21 2013 ==
+
+=== [**all] ===
+ * Fix for Replace type mixes with Slow Down >0
+ * Fix for custom switches that refer another custom switch 
+ * Negative timer display fix 
+
+=== [**SD-card enabled boards] ===
+ * Logs now include more values, fix for some negative numbers
+
+=== [**ARM boards] ===
+ * All fonts now support language-specific special characters  
+ * Useless sources (e.g. empty channels) don't appear in the sources anymore
+
+=== [**!FrSky Taranis] ===
+ * Fix for a decoding bug in telemtry data  
+ * Sliders' center points now included in calibration 
+
+----
+
 == 2604 / Jul 13 2013 (Taranis only) ==
 
 === [**!FrSky Taranis] ===
  * Contrast adjustment added
 
+----
+
 == 2590 / Jul 8 2013 (Taranis only) ==
 
 === [**!FrSky Taranis] ===
  * First official release version!
+
+----
 
 == 2491 / Jun 24 2013 ==
 
@@ -47,6 +82,8 @@
 === [**sky9x] ===
  * Audio mixer: several sounds can now be played simulataneously, and beeps won't interrupt and clear voice alerts anymore. Note that sound files now need to have sampling rates of either 8, 16 or 32kHz and may need to be replaced. 
 
+----
+
 == 2413 / May 22 2013 ==
 
 === [**all] ===
@@ -62,6 +99,8 @@
  * Audio language can now be selected in the general settings! Note that the sound files need to be moved to subfolders of the SOUNDS folder (SOUNDS/en for English, same with it, fr, de, pt, se, cz)
  * More settings for the 2nd PPM port 
 
+----
+
 == 2215 / Apr 05 2013 ==
 
 === [**all] ===
@@ -70,7 +109,6 @@
 === [**stock] ===
  * All prompts renumbered to have the "custom" prompts starting at 0 and to be able to use PlayTrack(GVAR) with Adjust(GVAR) to play tracks sequences
   
-
 === [**gruvin9x] ===
  * Possibility to have both BEEPER and SPEAKER enable in the same time
 
