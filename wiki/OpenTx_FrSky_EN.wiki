@@ -3,7 +3,6 @@
 
 <wiki:comment>
 TODO: 
- * Contrast on capture
 </wiki:comment>
 
 = openTx for !FrSky Taranis =
@@ -42,10 +41,10 @@ It is also future-proof, as both teams are always there to respond to questions 
  * Numerous input controls (4 sticks, 4 trims, 2 sliders, 2 pots, 8 switches), all freely assignable
  * 60 model memories
  * 32 logical channels
- * Internal telemetry-enabled RF module capable of transmitting up to 16 channels, with a refresh rate of 9ms. Supports the existing D8 protocol (useable with all D-type and VxR-II receivers) as well as the new X16 and LR12 modes
+ * Internal telemetry-enabled RF module capable of transmitting up to 16 channels, with a refresh rate of 9ms. Supports the existing D8 protocol (useable with all D-type and VxR-II receivers) as well as the new D16 and LR12 modes
  * JR-compatible external RF module slot (no 6V supply) supporting transmission of up to 16 channels (depending on module) in various common protocols (PXX for !FrSky modules and PPM for 3rd-party modules). Support for serial DSM2 for DIY Spektrum modules will be added via firmware upgrades post-launch.
  * Mapping of the transmitted channels is free, so once an external module is added you have the choice of either creating a redundant system where the same channels are transmitted via both internal and external RF, transmitting up to 32 independent channels simultaneously, or anything in between.
- * Internal RF (and external RF when an !FrSky XJT module is fitted) supports receiver match, and allows configuring failsafe conveniently from the radio with 3 modes: Hold, Stop pulses, Custom positions. 
+ * Internal RF (and external RF when an !FrSky XJT module is fitted) supports receiver lock and allows configuring failsafe conveniently from the radio with 3 modes: Hold, Stop pulses, Custom positions (these features are only available with X-series receivers). 
  * Telemetry with 3 customisable screens and fully configurable speech announcements, supports existing receivers and sensors as well as new Smart Port sensors. Configurable metric or imperial units. Integrated audio variometer (sensor required on the model). Data logging (requires microSD card).
  * Selectable stick mode (1-4), totally free output channel assignment.
  * 2 timers, values can be stored when the radio is powered off
@@ -81,6 +80,11 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/photo07.jpg
 
 The back of the radio shows the JR-compatible module slot, along with a JR-style jack trainer port, USB connector and earphone jack. The battery bay houses a microSD card slot, a serial port and of course the battery connection. 
 The supplied battery is a 6-cell NiMH, but the plug will also accept a JST-style balance plug for a 2s Li-Po battery. Battery compartment dimensions are 108x31x28mm. Voltage range is 5.5-13V for the internal components, but be aware that external modules might require up to 12V, so observe your module's requirements when using one and choose the appropriate battery. 
+
+The right side of the radio sports the charger input plug, with the charging LED next to it on the back of the radio. When you connect the supplied power supply the LED will turn on, and shut off when the battery is charged (2-3 hours charge time for an empty battery).
+*PLEASE NOTE: The radio has an integrated Ni-MH charge circuitry designed to charge the supplied 6-cell battery.*
+ * *Do not connect a smart charger to the charge plug. It should only be supplied with 12V DC, polarity however doesn't matter.*
+ * *Do not use the charge plug if you have replaced the battery with a different type (chemistry or cell count).*
 
 The gimbals have adjustable length and tension, and each of the vertical axes is fitted with a spring disable feature as well as a ratchet and brake. This means that there is no need to swap parts to change modes, and that if you want to you can have either both or none of the vertical axes spring-loaded.
 
@@ -164,6 +168,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/08_radio_setup.png
  * Country code: Must match your geographical location to keep RF transmission parameters within regulatory requirements.
  * Voice language: Allows you to choose the language of the voice announcements. Note that the list contains all supported languages, but you also need to ensure a voice pack for that language has been loaded onto the SD card (in a subfolder of the SOUNDS directory).  
  * Units: Allows choosing between metric and imperial units for telemetry values. 
+ * FAI mode (if the "FAI choice" option is selected in companion9x): Disables all telemetry displays other than RSSI and voltage to comply with contest regulations. This is one-way, i.e. when you turn it on with this menu option it can't be disabled anymore, you need to connect the radio to the PC and use companion9x to turn it off again (to prevent cheating). This allows you to come to the field, do your checks / test flights with telemetry, and turn the restricted mode on before the beginning of the contest on the radio itself.  
  * Default channel order: Defines the order of the 4 default mixers that are inserted on channels 1-4 when creating a new model. Set this to your preference. They can of course always be moved later, this is just a time-saving option.
  * Mode: This is your stick mode, e.g. Mode 1 for throttle and aileron on the right stick, Mode 2 for throttle and rudder on the left stick. 
 
@@ -244,11 +249,11 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/12_model_setup.png
  * Switch warning: Defines whether the radio requests the switches to be in predefined positions on power on/model change. To set them, arrange your switches the way you like, and LONG press ENTER.
  * Center beep: Makes a beep when the active control(s) pass the center point.
  * Internal RF: 
-   * Mode: Transmission mode of the internal RF module (OFF, X16, D8, LR12).
+   * Mode: Transmission mode of the internal RF module (OFF, D16, D8, LR12).
    * Channel range: Choice of which of the radio's internal channels are actually transmitted over the air.
-   * Receiver no. defines the behavior of the receiver match function. This number is sent to the receiver, which will only respond to the number it was bound to. By default this is the number of the model's slot when it is created. It can however be changed manually, and will not change if a model is moved or copied. If manual setting, a move or copy operation results in 2 or more models on the radio having the same number, a warning popup will show up. It is then up to the user to determine if this is the desired behavior or not.
+   * Receiver no: defines the behavior of the receiver lock function. This number is sent to the receiver, which will only respond to the number it was bound to. By default this is the number of the model's slot when it is created. It can however be changed manually, and will not change if a model is moved or copied. If manual setting, a move or copy operation results in 2 or more models on the radio having the same number, a warning popup will show up. It is then up to the user to determine if this is the desired behavior or not.
    * Bind and range check fields get activated by a press of the ENTER key. The internal module will beep every few seconds to confirm. Range check will display a popup with the RSSI value to evaluate how reception quality is behaving.
-   * Failsafe mode allows choosing between simply holding the last received positions, turning off pulses (like old PPM MHz receivers), or moving the servos to custom predefined positions. For custom positions a SET field will call the failsafe settings page, where the position can be defined separately for each channel. Select the desired channel, press ENTER to get in edit mode, move the control to the desired position, and LONG press ENTER to save. *Please note that this failsafe setting is only effective in X16 mode, along with X-series receivers! For V-II and D-series receivers, follow the receiver's instruction manual to set failsafe on the receiver itself.*  
+   * Failsafe mode allows choosing between simply holding the last received positions, turning off pulses (like old PPM MHz receivers), or moving the servos to custom predefined positions. For custom positions a SET field will call the failsafe settings page, where the position can be defined separately for each channel. Select the desired channel, press ENTER to get in edit mode, move the control to the desired position, and LONG press ENTER to save. *Please note that this failsafe setting is only effective in D16 mode, along with X-series receivers! For V-II and D-series receivers, follow the receiver's instruction manual to set failsafe on the receiver itself.*  
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/13_failsafeset.png
  * External RF:
@@ -444,7 +449,7 @@ Each field can be one of the various available parameters, of course the corresp
 
  * Tmr1,2: Both timers
  * SWR: Transmitter antenna quality. Should always be below 51, or a popup warning will appear and an audio alarm will sound to warn you to check the radio's antenna. The value itself is of little meaning.
- * RSSI: Lowest of the RSSI values from the radio and receiver in D8 mode. In X16 mode, RSSI of the receiver.
+ * RSSI: Lowest of the RSSI values from the radio and receiver in D8 mode. In D16 mode, RSSI of the receiver.
  * A1,2: Analog ports on D receivers (only A1 available on X8R receivers, with receiver voltage)
  * Alt: Barometric altitude sensor
  * Rpm: Engine speed, number of blades is adjusted in the settings above
@@ -564,7 +569,17 @@ Flight modes in openTx are relatively simple compared to most radios. The settin
 
 === Telemetry ===
 
-This subject in itself has actually mostly been covered already. The telemetry settings page allows you to configure the different parameters that have been explained in the menu overviews. The telemetry views will show the data as configured. If you have a microSD card in your radio, you can use the "SD Logs" custom function to record the telemetry data while in flight. It can then be played back in companion9x or opened in spreadsheet programs. 
+The following will assume your radio is loaded with a microSD card and a valid voice pack. Again, we recommend the use of the voice capability as the radio has advanced warning capabilities, and the replacement beeps used when no voice pack is available can be difficult to understand under stress.
+ 
+Probably the most important telemetry value is RSSI, which is an indictation of how much signal the receiver in the model is seeing from the radio, and will warn you in advance if you are at risk of losing control be it due to external interference, excessive distance, badly oriented or damaged antennas etc. The [http://code.google.com/p/opentx/wiki/OpenTx_FrSky_EN#Telemetry telemetry settings] page gives you 2 alarm levels you can set that will be announced in clear voice ("RF signal low" and "RF signal critical"). They are set by default to levels that have been considered suitable and safe for normal line of sight flight (45 and 42), but if you want to adjust them yourself the following explanations will be useful:   
+RSSI on FrSky equipment is represented using a logarithmic scale (dB), not in %. This means that when RSSI is high, a small difference in distance between the transmitter and receiver will lead to a big change of the RSSI value. It is perfectly normal to see a value of about 100 when next to the model, and already down in the 70's by the time you've walked to the other end of the field. When you have a reading of 50, it will however take a lot of extra distance to reach the alarm level of 45. The basic approximation rule is that a doubling of distance between pilot and model will result in a drop of 6dB of the RSSI value, which should make the previous explanation clear: If you are 5m away from the model it only takes another 5m to reduce RSSI by 6dB, but if you are 600m away from the model it will then take another 600m to reduce the value by the "same" 6dB. 
+Loss of control will happen when RSSI reaches a value of about 38, so setting an alarm at 10 is useless. From the above explanation you can see that between the default critical alarm (42) and usual practical loss of control we have a margin of about 4dB, or range factor of around 1.5. The alarms are thus rather conservative, and in normal conditions even if you heard the critical alarm you would still be far from losing control (you should be at around >1000m distance, with another 500m to spare). Intermittent loss due to local fades and antenna orientation mismatches could however get more and more frequent.
+As mentioned the default alarms are deemed safe for usual line of sight flight, but for example with FPV setups especially when coupled with automatic return to home systems and properly configured failsafes the safety margin can be reduced and you should be able to extract more or less double of the standard range out of the system. It is up to you to (safely!) experiment as once the margin gets reduced influence of external interference sources will start to become more noticeable, such as it is impossible to predict the behavior of a given installation in a particular model.   
+ 
+The Taranis also has an alarm that will warn you of the telemetry downlink being lost or recovered. The telemetry link behaves similarly to the control link and is transmitted with the same power level, so it should have essentially similar range, and the conservative alarms for the control link described above should ensure the telemetry link is always available. However, it is possible that for any reason (manufacturing tolerances resulting in slightly different range of the up and down links, local interference sources in close proximity to the radio,...) the telemetry link is lost prematurely, in which case a warning is essential as you need to be aware that any telemetry-based alarms will NOT sound anymore. Obviously, if the radio can't pick up the RSSI info from the receiver it won't be able to warn you about low RSSI. Similarly, if you are for example relying on information from an onboard voltage or current sensor to know when to land, the alarms you set for this won't sound if telemetry data is unavailable. So be aware of the "Telemetry lost" audio alert and act accordingly, whether by falling back to other sources of info or by turning back to land and investigate the reason for the loss of telemetry feed.
+Note that when the radio and receiver are very close to each other (usually <1m) you may get spurious "telemetry lost" and "telemetry recovered" alarms. This is not a malfunction and will stop when the 2 devices are separated. 
+ 
+The rest of the telemetry subject in itself has mostly been covered already. The telemetry settings page allows you to configure the different parameters that have been explained in the menu overviews. The telemetry views will show the data as configured. If you have a microSD card in your radio, you can use the "SD Logs" custom function to record the telemetry data while in flight. It can then be played back in companion9x or opened in spreadsheet programs. 
 
 === Audio ===
 
