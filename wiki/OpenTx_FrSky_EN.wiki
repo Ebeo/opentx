@@ -1,4 +1,4 @@
-#summary openTx for FrSky radios 
+#summary openTx for FrSky radios
 #labels Featured
 
 <wiki:comment>
@@ -643,6 +643,17 @@ Audio operation is relatively simple as it only consists of 5 "and a half" Custo
 The following example shows a few Custom Functions set to announce what switches activate when they are, as well as SHdown triggering playback of the value of Timer 2 followed by the consumption (mAh count obtained from an !FrSky FAS-100 current sensor onboard).
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/28_audioCFs.png  
+
+==== Custom Sounds - without using a function ====
+
+As a rule, the assignment of any sounds is always done via the custom functions screen.  There are however some exceptions to this rule - where simply loading a file to the correct location on the sd card will enable sound playback.  
+
+ * Flight Phase Change
+  * /SOUNDS/(lang)/modelname/fpname-ON.wav
+  * /SOUNDS/(lang)/modelname/fpname-OFF.wav
+
+
+
 
 === Global variables ===
 
