@@ -9,6 +9,54 @@
 
 <wiki:toc max_depth="2" />
 
+== 2768 / 20 Sep 2013 ==
+
+=== [**Tous] ===
+ * Nom de modèle mal affiché après déplacement/copie/restauration
+
+=== [**stock] ===
+ * Inters personnalisés comparant un chrono avec une valeur fixe ne fonctionnaient pas (uniquement si pas de modif télémesure) 
+
+=== [**Cartes avec SD] ===
+ * Corrections dans la fonction de log
+ * Fenêtre de confirmation pour le formatage de la carte SD
+
+=== [**!FrSky Taranis] ===
+ * Photo du modèle pas rechargée après déplacement/copie/restauration/effacement
+
+----
+
+== 2751 / 01 Sep 2013 ==
+
+=== [**Tous] ===
+ * Correction de traductions (FR, IT, PT)
+
+----
+
+== 2746 / 30 Aou 2013 ==
+
+=== [**Tous] ===
+ * Limites maintenant [-125:0] et [0:125] au lieu de [-125:25] and [-25:125]  
+ * Le rétroéclairage est maintenant activé par toutes les commandes au lieu des manches uniquement
+ * Correction d'un bug dans les modèles de courbes 
+
+=== [**stock] ===
+ * Correction d'un bug de calibration de batterie
+ * Les inters THR and AIL peuvent maintenant être connectés au 14051 (modif télémesure) 
+ * Le signal PPM du canal 1 était tronqué
+
+=== [**Cartes avec SD] ===
+ * Fichiers son par défaut pour les modes de vol: /SOUNDS/(lang)/modelname/fpname-ON.wav et /SOUNDS/(lang)/modelname/fpname-OFF.wav
+ 
+=== [**!FrSky Taranis] ===
+ * La tension de récepteur n'était pas affichée sur l'écran d'accueil si VFAS ou CELS étaient choisis
+ * Les GVARS peuvent maintenant faire référence aux GVARS des autres phases de vol
+ * Correction de bugs pour l'altitude et le vario
+ * PPM_UNIT=PREC0 / US pris en compte dans le moniteur de canaux
+ * DJT supprimé de la liste des protocoles et no de récepteur caché si le protocole n'est pas D16
+
+----
+
 == 2688 / 28 Jul 2013 ==
 
 === [**stock] ===
@@ -18,7 +66,7 @@
  * Correction d'un bug avec les unités impériales
  * Correction d'un bug audio
 
-=== [**!Cartes avec SD] ===
+=== [**Cartes avec SD] ===
  * Logs de télémesure maintenant séparés par jour
 
 ----

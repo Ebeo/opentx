@@ -9,6 +9,54 @@
 
 <wiki:toc max_depth="2" />
 
+== 2768 / Sep 20 2013 ==
+
+=== [**all] ===
+ * Name badly displayed after SD Model Restore
+
+=== [**stock] ===
+ * Custom switches not working when comparing a timer with a value (stock only without telemetry mod)
+
+=== [**Boards with SD card] ===
+ * Fixes in logging function
+ * Confirmation Popup before SD Format
+
+=== [**!FrSky Taranis] ===
+ * Model image not reloaded after Copy/Move/Delete/Restore
+
+----
+
+== 2751 / Sep 01 2013 ==
+
+=== [**all] ===
+ * Fixes in translations (FR, IT, PT)
+
+----
+
+== 2746 / Aug 30 2013 ==
+
+=== [**all] ===
+ * Limits are now [-125:0] and [0:125] instead of [-125:25] and [-25:125]  
+ * INPUTS instead of STICKS for BL activation
+ * Curves presets bug fix  
+
+=== [**stock] ===
+ * Fix bug with Battery calibration
+ * 14051 can be used for THR and AIL connections (telemetry) 
+ * CH1 PPM output was truncated
+
+=== [**Boards with SD card] ===
+ * Flight mode sound files now are read from: /SOUNDS/(lang)/modelname/fpname-ON.wav and /SOUNDS/(lang)/modelname/fpname-OFF.wav
+ 
+=== [**!FrSky Taranis] ===
+ * Rx voltage was not displayed on main screen if VFAS or CELLS chosen 
+ * GVARS can now refer to the GVAR of another phase
+ * Vario and Altitude bug fixes
+ * PPM_UNIT=PREC0 / US taken into account in channels view  
+ * DJT removed and receiver number hidden from PXX settings when proto != D16   
+
+----
+
 == 2688 / Jul 28 2013 ==
 
 === [**stock] ===
@@ -18,7 +66,7 @@
  * Fix bug with imperial units 
  * Fix small bug with SOMO 14D 
 
-=== [**!Boards with SD card] ===
+=== [**Boards with SD card] ===
  * Telemetry logs now split by date
 
 ----
@@ -47,7 +95,7 @@
  * Useless sources (e.g. empty channels) don't appear in the sources anymore
 
 === [**!FrSky Taranis] ===
- * Fix for a decoding bug in telemtry data  
+ * Fix for a decoding bug in telemetry data  
  * Sliders' center points now included in calibration 
 
 ----
