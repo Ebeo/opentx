@@ -272,7 +272,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/13_failsafeset.png
    * Channel range: same as for internal module.
    * Receiver no, Bind, Range check (when module type is XJT): Same as above.
    * PPM Frame (when module type is PPM): Allows setting the frame length, pulse length, and polarity of the PPM frame. The frame length is automatically adjusted to a safe value when the number of transmitted channels is changed. Advanced users can still adjust it afterwards if necessary. 
-   * Failsafe mode: When module type is XJT and protocol is D16, same as above. 
+   * Failsafe mode: When module type is XJT, same as above. 
  * Trainer mode: Master or slave, this setting defines which way the trainer port works. An icon is shown in the main view when the cable is inserted showing which mode is in use. In Slave (output) mode, the channels that should be sent and the PPM frame parameters are customizable just like for External RF -> PPM. 
 
 ==== Helicopter setup ====
@@ -646,7 +646,7 @@ The following example shows a few Custom Functions set to announce what switches
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/28_audioCFs.png  
 
-In addition to the custom function solution, there are a few predefined sounds that will be played automatically if an appropriately named file is placed in the right folder when an event happens. Currently this supports the following events:
+In addition to the sounds played by custom functions, there are a few predefined sounds that will be played automatically when an event happens if an appropriately named file is placed in the right folder. Currently the following events are supported:
 
  * Flight Mode Change:
   * When flight mode is activated, file /SOUNDS/(lang)/modelname/fpname-ON.wav is played if present
