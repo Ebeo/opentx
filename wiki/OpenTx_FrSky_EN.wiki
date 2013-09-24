@@ -633,6 +633,11 @@ The rest of the telemetry subject in itself has mostly been covered already. The
 One of the major features of the radio is the speech output function. Provided a microSD card (FAT12/16/32 format) loaded with the sound pack available for download from within companion9x is inserted in the slot in the battery compartment, the radio will be able to play audio files in response to various events like reaching trim center/ends and activation of a switch (physical or custom), to play a background music file, and last but not least to announce every available value (telemetry, parameter, stick position) in clear voice. Custom sounds can be placed in the SOUNDS/language folder of the card and will be avilable for use. Language is set in the radio general settings and can be changed on the fly as long as the pack for that language is loaded on the card.
 
 ZIP files with the standard voice packs can be downloaded from within companion9x, or [http://85.18.253.250/voices/opentx-taranis/ here]. Extract the ZIP file to the root of the SD card, and it will create the necessary subdirectories (e.g. SOUNDS/en for the English pack).
+If you wish to create your own files, the required format is:
+ * WAV, 8 or 16 bit
+ * 8, 16 or 32kHz sample rate
+ * PCM, u-law or a-law compression
+The stock sounds above use the best available quality, i.e. 16bit, 32kHz and PCM.      
 
 Audio operation is relatively simple as it only consists of 5 "and a half" Custom Functions:
  * Play Track: Just play an audio file from the SD card when the associated switch is active. A repeat option is available, when set the sound will repeat at the set interval as long as the switch is active. This can be used to announce flight modes, gear position, flap position etc when the associated switch is activated or on request.
