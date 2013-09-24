@@ -7,7 +7,7 @@ TODO:
 
 = openTx for !FrSky Taranis =
 
-Manual by [http://www.andrebernet.ch Andre Bernet], based on openTx r2688. 
+Manual by [http://www.andrebernet.ch Andre Bernet], based on openTx r2768. 
 Commercial use forbidden without explicit authorization of the authors and translators. We don't bite, but like to know what's going on, so just ask :)
 
 So as everybody probably knows now, !FrSky have chosen openTx as the operating system for their new [http://www.frsky-rc.com/NewProducts/ Taranis] radio :)
@@ -167,7 +167,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/08_radio_setup.png
  * Sound settings: Mode, Master volume, individual volumes of all mixed sources (Beeps, sound files, variometer, background music), beep duration and pitch. 
  * Contrast: Screen contrast setting. 
  * Alarms -> Sound off: if "Sound Mode" is "Quiet", the radio will not even sound warnings like a low battery. This alarm will remind you of that when turning the radio on. Inactivity alarm will remind you if you have forgotten to turn the radio off.
- * Backlight -> Mode: If set to Stks, Keys or Both, the backlight will turn on when a stick is moved and/or a key is pressed, for the duration set below.
+ * Backlight -> Mode: If set to Keys, Controls or Both, the backlight will turn on when a stick/switch is moved and/or a key is pressed, for the duration set below.
  * Backlight -> Alarm: Backlight will flash when an alarm sounds.
  * Splash screen: On Taranis the splash will always be shown as the EEPROM takes some time to load. Setting this on will just show it for longer. 
  * GPS time zone is there to show you the correct time when a GPS is present, and coordinate format lets you adjust display format to your liking. 
@@ -194,6 +194,8 @@ Folders are organised as such:
  * LOGS folder: This is where you will find telemetry logs if enabled. Files will be created with the same name as the model they were saved from, with the date appended. One log file is created per day for each model.  
  * MODELS folder: Model files saved by the "Archive model" command of the model selection screen will be placed here. Similarly, models you want to reload using the "Restore model" of the same page need to be placed there beforehand.
  * SOUNDS folder: This is where voice packs need to be placed. ZIP files with the standard voice packs can be downloaded from within companion9x, or [http://85.18.253.250/voices/opentx-taranis/ here]. Extract the ZIP file to the root of the SD card, and it will create the necessary subdirectories (e.g. SOUNDS/en for the English pack). Any file you want to have available for the "Play Track" custom function needs to be placed within the language's directory as well. In this folder, the contextual menu includes a preview function.
+
+The microSD card can be formatted by selecting the relevant option in the menu that appears when pressing MENU LONG. A confirmation will be required.  
 
 ==== Trainer ====
 
@@ -245,7 +247,7 @@ A SHORT press of the PAGE key brings up the basic model setup page:
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/12_model_setup.png
 
- * Mode name: Self-explanatory... Change letter with +/- keys, go to the next with ENTER SHORT, or press ENTER LONG to capitalize the current letter before switching to the next.
+ * Model name: Self-explanatory... Change letter with +/- keys, go to the next with ENTER SHORT, or press ENTER LONG to capitalize the current letter before switching to the next.
  * Model image: There you can select a 64x32px, 16-grayscale .bmp file located in the BMP folder of the SD card as your model logo. To be able to preview the images in the folder, use the [http://code.google.com/p/opentx/wiki/OpenTx_FrSky_EN#SD_browser SD Browser].
  * Timers: There are 2 fully programmable timers, that can count either up or down. If the value is set to 00:00 they will count up from 0, if not they will count down from the preset value. The trigger is set using the field next to the timer value, ABS counts up all the time, THs runs whenever the throttle stick isn't at idle, THt starts the timer the first time throttle is advanced, TH% counts up as a percentage of the full stick range. Persistent, if ticked, means the value is stored in memory when the radio is powered off or model is changed, and will be reloaded next time the model is used. Minute call will beep / say the time every full minute, while countdown will also give announcements several more times during the last minute. 
  * Extended limits allow setting servo movement limits up to 125% instead of 100%.
@@ -260,17 +262,17 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/12_model_setup.png
  * Internal RF: 
    * Mode: Transmission mode of the internal RF module (OFF, D16, D8, LR12).
    * Channel range: Choice of which of the radio's internal channels are actually transmitted over the air.
-   * Receiver no: defines the behavior of the receiver lock function. This number is sent to the receiver, which will only respond to the number it was bound to. By default this is the number of the model's slot when it is created. It can however be changed manually, and will not change if a model is moved or copied. If manual setting, a move or copy operation results in 2 or more models on the radio having the same number, a warning popup will show up. It is then up to the user to determine if this is the desired behavior or not.
+   * Receiver no (D16 / LR12 only): defines the behavior of the receiver lock function. This number is sent to the receiver, which will only respond to the number it was bound to. By default this is the number of the model's slot when it is created. It can however be changed manually, and will not change if a model is moved or copied. If manual setting, a move or copy operation results in 2 or more models on the radio having the same number, a warning popup will show up. It is then up to the user to determine if this is the desired behavior or not.
    * Bind and range check fields get activated by a press of the ENTER key. The internal module will beep every few seconds to confirm. Range check will display a popup with the RSSI value to evaluate how reception quality is behaving.
-   * Failsafe mode allows choosing between simply holding the last received positions, turning off pulses (like old PPM MHz receivers), or moving the servos to custom predefined positions. For custom positions a SET field will call the failsafe settings page, where the position can be defined separately for each channel. Select the desired channel, press ENTER to get in edit mode, move the control to the desired position, and LONG press ENTER to save. *Please note that this failsafe setting is only effective in D16 mode, along with X-series receivers! For V-II and D-series receivers, follow the receiver's instruction manual to set failsafe on the receiver itself.*  
+   * Failsafe mode (D16 / LR12 only): Allows choosing between simply holding the last received positions, turning off pulses (like old PPM MHz receivers), or moving the servos to custom predefined positions. For custom positions a SET field will call the failsafe settings page, where the position can be defined separately for each channel. Select the desired channel, press ENTER to get in edit mode, move the control to the desired position, and press ENTER to save. In D8 mode this field is hidden, failsafe needs to be set on the receiver as described in the receiver's manual. 
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/13_failsafeset.png
  * External RF:
-   * Module type: PPM for generic modules, XJT (same operation modes as above), DJT (no function at this point, planned for potential firmware upgrade of DJT modules, use PPM instead for now).
+   * Module type: PPM for generic modules, XJT (same operation modes as above).
    * Channel range: same as for internal module.
    * Receiver no, Bind, Range check (when module type is XJT): Same as above.
    * PPM Frame (when module type is PPM): Allows setting the frame length, pulse length, and polarity of the PPM frame. The frame length is automatically adjusted to a safe value when the number of transmitted channels is changed. Advanced users can still adjust it afterwards if necessary. 
-   * Failsafe mode: When module type is XJT, same as above. 
+   * Failsafe mode: When module type is XJT and protocol is D16, same as above. 
  * Trainer mode: Master or slave, this setting defines which way the trainer port works. An icon is shown in the main view when the cable is inserted showing which mode is in use. In Slave (output) mode, the channels that should be sent and the PPM frame parameters are customizable just like for External RF -> PPM. 
 
 ==== Helicopter setup ====
@@ -644,15 +646,11 @@ The following example shows a few Custom Functions set to announce what switches
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/28_audioCFs.png  
 
-==== Custom Sounds - without using a function ====
+In addition to the custom function solution, there are a few predefined sounds that will be played automatically if an appropriately named file is placed in the right folder when an event happens. Currently this supports the following events:
 
-As a rule, the assignment of any sounds is always done via the custom functions screen.  There are however some exceptions to this rule - where simply loading a file to the correct location on the sd card will enable sound playback.  
-
- * Flight Phase Change
-  * /SOUNDS/(lang)/modelname/fpname-ON.wav
-  * /SOUNDS/(lang)/modelname/fpname-OFF.wav
-
-
+ * Flight Mode Change:
+  * When flight mode is activated, file /SOUNDS/(lang)/modelname/fpname-ON.wav is played if present
+  * When flight mode is deactivated, file /SOUNDS/(lang)/modelname/fpname-OFF.wav is played if present.
 
 
 === Global variables ===
