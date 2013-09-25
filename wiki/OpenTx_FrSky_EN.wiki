@@ -630,7 +630,7 @@ The rest of the telemetry subject in itself has mostly been covered already. The
 
 === Audio ===
 
-One of the major features of the radio is the speech output function. Provided a microSD card (FAT12/16/32 format) loaded with the sound pack available for download from within companion9x is inserted in the slot in the battery compartment, the radio will be able to play audio files in response to various events like reaching trim center/ends and activation of a switch (physical or custom), to play a background music file, and last but not least to announce every available value (telemetry, parameter, stick position) in clear voice. Custom sounds can be placed in the SOUNDS/language folder of the card and will be avilable for use. Language is set in the radio general settings and can be changed on the fly as long as the pack for that language is loaded on the card.
+One of the major features of the radio is the speech output function. Provided a microSD card (FAT12/16/32 format) loaded with the sound pack available for download from within companion9x is inserted in the slot in the battery compartment, the radio will be able to play audio files in response to various events like reaching trim center/ends and activation of a switch (physical or custom), to play a background music file, and last but not least to announce every available value (telemetry, parameter, stick position) in clear voice. Custom sounds can be placed in the SOUNDS/language folder of the card and will be available for use. Language is set in the radio general settings and can be changed on the fly as long as the pack for that language is loaded on the card.
 
 ZIP files with the standard voice packs can be downloaded from within companion9x, or [http://85.18.253.250/voices/opentx-taranis/ here]. Extract the ZIP file to the root of the SD card, and it will create the necessary subdirectories (e.g. SOUNDS/en for the English pack).
 If you wish to create your own files, the required format is:
@@ -784,9 +784,9 @@ When the driver is properly installed, you should see this in the device manager
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/devman.png
 
-==== Installing the flashing utility (for Mac OS only) ====
+==== Installing the flashing utility (for Mac OS and Linux) ====
 
-Download and install the [https://code.google.com/p/companion9x/downloads/detail?name=dfu-util-0.7.mpkg dfu-util] package for Mac OS X.
+Download and install the [https://code.google.com/p/companion9x/downloads/detail?name=dfu-util-0.7.mpkg dfu-util] package for Mac OS X, or the [https://code.google.com/p/companion9x/downloads/detail?name=dfu-util-0.7_0.7-1~precise_i386.deb 32-bit] / [https://code.google.com/p/companion9x/downloads/detail?name=dfu-util-0.7_0.7-1~precise_amd64.deb 64-bit] package for Ubuntu 12.04 and later.
 
 ==== Downloading and flashing the firmware ====
 
