@@ -634,7 +634,7 @@ One of the major features of the radio is the speech output function. Provided a
 
 ZIP files with the standard voice packs can be downloaded from within companion9x, or [http://85.18.253.250/voices/opentx-taranis/ here]. Extract the ZIP file to the root of the SD card, and it will create the necessary subdirectories (e.g. SOUNDS/en for the English pack).
 If you wish to create your own files, the required format is:
- * WAV, 8 or 16 bit
+ * WAV, 8 or 16 bit, Mono
  * 8, 16 or 32kHz sample rate
  * PCM, u-law or a-law compression
 The stock sounds above use the best available quality, i.e. 16bit, 32kHz and PCM.      
@@ -654,8 +654,11 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/28_audioCFs.png
 In addition to the sounds played by custom functions, there are a few predefined sounds that will be played automatically when an event happens if an appropriately named file is placed in the right folder. Currently the following events are supported:
 
  * Flight Mode Change:
-  * When flight mode is activated, file /SOUNDS/(lang)/modelname/fpname-ON.wav is played if present
-  * When flight mode is deactivated, file /SOUNDS/(lang)/modelname/fpname-OFF.wav is played if present.
+  * When flight mode is activated, file /SOUNDS/(lang)/modelname/flightmodename-ON.wav is played if present
+  * When flight mode is deactivated, file /SOUNDS/(lang)/modelname/flightmodename-OFF.wav is played if present.
+
+Of course only the files you want and place on the card will be played, if something doesn't interest you then just don't put a file for it.
+    
 
 
 === Global variables ===
