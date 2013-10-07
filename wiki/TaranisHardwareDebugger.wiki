@@ -1,4 +1,4 @@
-#summary !HowTo use an hardware debugger on FrSky Taranis
+#summary HowTo use an hardware debugger on FrSky Taranis
 
 <wiki:comment>
 TODO: 
@@ -31,7 +31,7 @@ TODO:
 
 === Preparation === 
 
- * Solder the 100 Ohm resistor on the empty slot R2 of the discovery board
+ * Solder the 100 Ohm resistor on the empty slot !R2 of the discovery board
 
  * Solder the mini JST plug on the Taranis board here:
 
