@@ -1,4 +1,4 @@
-#summary HowTo use an hardware debugger on FrSky Taranis
+#summary !HowTo use an hardware debugger on FrSky Taranis
 
 <wiki:comment>
 TODO: 
@@ -84,4 +84,3 @@ set unexpectedShutdown = 0
 cont
 
 => The asterisk is removed now
-
