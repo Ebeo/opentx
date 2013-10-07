@@ -6,7 +6,7 @@
 
  * These 1.25 plugs: Mini. Micro 1.25 T-1 4-Pin JST Connector w/.Wire x 10 sets (you will also find them on [http://cgi.ebay.fr/ws/eBayISAPI.dll?ViewItem&item=181198791446#ht_3569wt_1031 ebay])
 
- * One 100 Ohms CMS resistor
+ * One 100 Ohms SMD resistor
 
  * One JWT 4 pins connector (I got them from [http://www.hobbyking.com/hobbyking/store/uh_viewItem.asp?idProduct=29279 HobbyKing])
 
@@ -55,8 +55,7 @@ openocd-stlinkv2.bat
 
  * Start another cmd window, go inside the openTX src directory and launch gdb this way:
 {{{
-"C:\Program Files (x86)\GNU Tools ARM Embedded\4.7
- 2013q3\bin\arm-none-eabi-gdb.exe" opentx.elf
+"C:\Program Files (x86)\GNU Tools ARM Embedded\4.7 2013q3\bin\arm-none-eabi-gdb.exe" opentx.elf
 }}}
 
  * Now inside gdb:
