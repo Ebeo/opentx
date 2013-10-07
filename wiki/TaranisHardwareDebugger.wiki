@@ -48,22 +48,22 @@ https://opentx.googlecode.com/svn/wiki/images_debugger/discovery.jpg
    "C:\Program Files (x86)\GNU Tools ARM Embedded\4.7 2013q3\bin\arm-none-eabi-gdb.exe" opentx.elf
    }}}
  * Now inside gdb:
-  {{{
-  target remote :3333
-  monitor reset
-  break perMain
-  cont
-  }}}
-  The program should stop in perMain
-  {{{
-  set unexpectedShutdown = 1
-  cont
-  }}}
-  You should now see the asterisk in the notification bar
-  {{{
-  set unexpectedShutdown = 0
-  cont
-  }}}
-  The asterisk should be removed now!
+   {{{
+   target remote :3333
+   monitor reset
+   break perMain
+   cont
+   }}}
+ The program should stop in perMain
+ {{{
+ set unexpectedShutdown = 1
+ cont
+ }}}
+ You should now see the asterisk in the notification bar
+ {{{
+ set unexpectedShutdown = 0
+ cont
+ }}}
+ The asterisk should be removed now!
 
 Enjoy!
