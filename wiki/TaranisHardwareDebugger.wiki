@@ -1,11 +1,5 @@
 #summary HowTo use an hardware debugger on FrSky Taranis
 
-<wiki:comment>
-TODO: 
-</wiki:comment>
-
-<wiki:toc max_depth="4" />
-
 === The Hardware you'll need ===
 
  * This board: STM32F4 DISCOVERY USB STM32F407VGT6 STM32 ARM Cortex-M4 Development Board (you will find it on [http://cgi.ebay.fr/ws/eBayISAPI.dll?ViewItem&item=151033382663 eBay])
