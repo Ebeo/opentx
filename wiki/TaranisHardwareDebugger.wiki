@@ -4,31 +4,29 @@
 TODO: 
 </wiki:comment>
 
-= HowTo use an hardware debugger on !FrSky Taranis  =
-
 <wiki:toc max_depth="4" />
 
 === The Hardware you'll need ===
 
- * This board: STM32F4 DISCOVERY USB STM32F407VGT6 STM32 ARM Cortex-M4 Development Board (you will find it on [eBay]http://cgi.ebay.fr/ws/eBayISAPI.dll?ViewItem&item=151033382663)
+ * This board: STM32F4 DISCOVERY USB STM32F407VGT6 STM32 ARM Cortex-M4 Development Board (you will find it on [eBay http://cgi.ebay.fr/ws/eBayISAPI.dll?ViewItem&item=151033382663])
 
- * These 1.25 plugs: Mini. Micro 1.25 T-1 4-Pin JST Connector w/.Wire x 10 sets (you will also find them on [ebay]http://cgi.ebay.fr/ws/eBayISAPI.dll?ViewItem&item=181198791446#ht_3569wt_1031)
+ * These 1.25 plugs: Mini. Micro 1.25 T-1 4-Pin JST Connector w/.Wire x 10 sets (you will also find them on [ebay http://cgi.ebay.fr/ws/eBayISAPI.dll?ViewItem&item=181198791446#ht_3569wt_1031])
 
  * One 100 Ohms CMS resistor
 
- * One JWT 4 pins connector (I got them from [HobbyKing]http://www.hobbyking.com/hobbyking/store/uh_viewItem.asp?idProduct=29279)
+ * One JWT 4 pins connector (I got them from [HobbyKing http://www.hobbyking.com/hobbyking/store/uh_viewItem.asp?idProduct=29279])
 
  * The mini USB cable (the one you use to flash your radio everyday)
 
 
 === The Software you'll need === 
 
- * STM32 ST-LINK utility with the associated driver ([here]http://www.st.com/web/en/catalog/tools/PF258168)
+ * STM32 ST-LINK utility with the associated driver ([here http://www.st.com/web/en/catalog/tools/PF258168])
 
  * OpenOCD 0.7.0 (André prepared a beautiful zip for us here)
 
 
- * The GCC ARM toolchain ([here]https://launchpad.net/gcc-arm-embedded/+download)
+ * The GCC ARM toolchain ([here https://launchpad.net/gcc-arm-embedded/+download])
 
 
 === Preparation === 
@@ -65,22 +63,25 @@ openocd-stlinkv2.bat
 
  * Inside gdb:
 
+{{{
 target remote :3333
-
 monitor reset
-
 break perMain
-
 cont
+}}}
 
+The program should stop in perMain
+
+{{{
 set unexpectedShutdown = 1
-
 cont
+}}}
 
-=> You will see the asterisk in the notification bar
+You should now see the asterisk in the notification bar
 
+{{{
 set unexpectedShutdown = 0
-
 cont
+}}}
 
-=> The asterisk is removed now
+The asterisk should be removed now
