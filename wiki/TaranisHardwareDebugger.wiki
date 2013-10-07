@@ -17,24 +17,27 @@
 
  * STM32 ST-LINK utility with the associated driver ([http://www.st.com/web/en/catalog/tools/PF258168 here])
 
- * OpenOCD 0.7.0 (André prepared a beautiful zip for us here)
-
+ * OpenOCD 0.7.0 (André prepared a beautiful zip for us [https://code.google.com/p/opentx/downloads/detail?name=openocd-0.7.0.zip here])
 
  * The GCC ARM toolchain ([https://launchpad.net/gcc-arm-embedded/+download here])
 
 
 === Preparation === 
 
- * Solder the 100 Ohm resistor on the empty slot !R2 of the discovery board
+ * Solder the 100 Ohm resistor on the empty R2 slot of the discovery board (next to the SWD connector)
 
  * Solder the mini JST plug on the Taranis board here:
 
  * Prepare your cable according to this schema:
 
-JTMS -> SWDIO
-JTCK -> SWCLK
-GND  -> GND
-VCC  -> VDD
+   * JTMS -> SWDIO
+   * JTCK -> SWCLK
+   * GND  -> GND
+   * VCC  -> VDD
+   
+https://opentx.googlecode.com/svn/wiki/images_debugger/taranis_swd.jpg
+
+https://opentx.googlecode.com/svn/wiki/images_debugger/discovery.jpg
 
 === Installation ===
 
