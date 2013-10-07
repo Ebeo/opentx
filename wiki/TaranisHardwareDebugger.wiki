@@ -49,13 +49,17 @@ VCC  -> VDD
  * Connect everything
 
  * Start a cmd window and launch OpenOCD with this script:
+{{{
 openocd-stlinkv2.bat
+}}}
 
  * Start another cmd window, go inside the openTX src directory and launch gdb this way:
+{{{
 "C:\Program Files (x86)\GNU Tools ARM Embedded\4.7
  2013q3\bin\arm-none-eabi-gdb.exe" opentx.elf
+}}}
 
- * Inside gdb:
+ * Now inside gdb:
 
 {{{
 target remote :3333
