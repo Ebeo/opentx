@@ -21,7 +21,7 @@ TODO:
 
 === The Software you'll need === 
 
- * STM32 ST-LINK utility with the associated driver ([http://www.st.com/web/en/catalog/tools/PF258168 here ])
+ * STM32 ST-LINK utility with the associated driver ([http://www.st.com/web/en/catalog/tools/PF258168 here])
 
  * OpenOCD 0.7.0 (André prepared a beautiful zip for us here)
 
