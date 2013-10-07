@@ -29,7 +29,6 @@
  * Solder the mini JST plug on the Taranis board here:
 
  * Prepare your cable according to this schema:
-
    * JTMS -> SWDIO
    * JTCK -> SWCLK
    * GND  -> GND
