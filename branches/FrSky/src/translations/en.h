@@ -53,8 +53,8 @@
 #define LEN_VRENAVIG           "\003"
 #define TR_VRENAVIG            "No REaREb"
 
-#define LEN_VBLMODE            "\004"
-#define TR_VBLMODE             "OFF ""Keys""Stks""Both""ON\0"
+#define LEN_VBLMODE            TR("\004", "\010")
+#define TR_VBLMODE             TR("OFF\0""Keys""Ctrl""Both""ON\0 ", "OFF\0    ""Keys\0   ""Controls""Both\0   ""ON\0     ")
 
 #define LEN_TRNMODE            "\003"
 #define TR_TRNMODE             "OFF"" +="" :="
@@ -269,7 +269,11 @@
 #define TR_VOLTSRC             "---""A1\0""A2\0""FAS""Cel"
 
 #define LEN_VARIOSRC           "\005"
-#define TR_VARIOSRC            "Alti\0""Alti+""Vario""A1\0  ""A2\0"
+#if defined(FRSKY_SPORT)
+  #define TR_VARIOSRC          "Vario""A1\0  ""A2\0"
+#else
+  #define TR_VARIOSRC          "Alti\0""Alti+""Vario""A1\0  ""A2\0"
+#endif
 
 #define LEN_VSCREEN            "\004"
 #define TR_VSCREEN             "Nums""Bars"
@@ -461,7 +465,7 @@
 #define TR_VTRIM               "Trim- +"
 #define TR_BG                  "BG:"
 #define TR_MENUTOSTART         CENTER "\006" TR_ENTER " TO START"
-#define TR_SETMIDPOINT         CENTER "\003SET STICKS MIDPOINT"
+#define TR_SETMIDPOINT         TR(CENTER "\003SET STICKS MIDPOINT",CENTER "\003CENTER STICKS/SLIDERS")
 #define TR_MOVESTICKSPOTS      CENTER "\006MOVE STICKS/POTS"
 #define TR_RXBATT              "Rx Batt:"
 #define TR_TXnRX               "Tx:\0Rx:"
@@ -559,16 +563,16 @@
 #define TR_ALARMSWARN          "ALARMS"
 #define TR_SWITCHWARN          "SWITCH"
 #define TR_INVERT_THR          TR("Invert Thr?","Invert Throttle?")
-#define TR_SPEAKER_VOLUME      INDENT"Volume"
+#define TR_SPEAKER_VOLUME      INDENT "Volume"
 #define TR_LCD                 "LCD"
-#define TR_BRIGHTNESS          "Brightness"
+#define TR_BRIGHTNESS          INDENT "Brightness"
 #define TR_CPU_TEMP            "CPU Temp.\016>"
 #define TR_CPU_CURRENT         "Current\022>"
 #define TR_CPU_MAH             "Consumpt."
 #define TR_COPROC              "CoProc."
 #define TR_COPROC_TEMP         "MB Temp. \016>"
-#define TR_CAPAWARNING         INDENT"Capacity Low"
-#define TR_TEMPWARNING         INDENT"Overheat"
+#define TR_CAPAWARNING         INDENT "Capacity Low"
+#define TR_TEMPWARNING         INDENT "Overheat"
 #define TR_FUNC                "Func"
 #define TR_V1                  "V1"
 #define TR_V2                  "V2"
@@ -618,6 +622,7 @@
 #define TR_INSERT_AFTER        "Insert After"
 #define TR_COPY                "Copy"
 #define TR_MOVE                "Move"
+#define TR_PASTE               "Paste"
 #define TR_DELETE              "Delete"
 #define TR_RESET_FLIGHT        "Reset Flight"
 #define TR_RESET_TIMER1        "Reset Timer1"
@@ -650,11 +655,11 @@
 // About screen
 #define TR_ABOUTUS             TR(" ABOUT ", "ABOUT")
 
-#define TR_ABOUT_OPENTX_1      TR("OpenTX\001is\001open\001source,\001non", "The firmware on this radio is")
-#define TR_ABOUT_OPENTX_2      TR("commercial,\001wo\001warranties.", "supported\001by\001FrSky.")
-#define TR_ABOUT_OPENTX_3      TR("It\001was\001developed\001for\001free.", "OpenTX is free, open-source")
-#define TR_ABOUT_OPENTX_4      TR("Support through donations", "and comes with no warranties.")
-#define TR_ABOUT_OPENTX_5      TR("is welcome!", "User donations are welcome!")
+#define TR_ABOUT_OPENTX_1      TR("OpenTX\001is\001open\001source,\001non", "OpenTX is open source, non-")
+#define TR_ABOUT_OPENTX_2      TR("commercial,\001wo\001warranties.", "commercial and comes with no")
+#define TR_ABOUT_OPENTX_3      TR("It\001was\001developed\001for\001free.", "warranties. It was developed")
+#define TR_ABOUT_OPENTX_4      TR("Support through donations", "for free. Support through")
+#define TR_ABOUT_OPENTX_5      TR("is welcome!", "donations is welcome!")
 
 #define TR_ABOUT_BERTRAND_1    "Bertrand Songis"
 #define TR_ABOUT_BERTRAND_2    "OpenTX main author"
@@ -698,3 +703,8 @@
 #define TR_CHR_LONG   'l'
 #define TR_CHR_TOGGLE 't'
 #define TR_CHR_HOUR   'h'
+
+#define TR_BEEP_VOLUME         "Beep Volume"
+#define TR_WAV_VOLUME          "Wav Volume"
+#define TR_VARIO_VOLUME        "Vario Volume"
+#define TR_BG_VOLUME           "Bg Volume"

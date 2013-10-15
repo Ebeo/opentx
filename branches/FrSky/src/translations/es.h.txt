@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Authors (alphabetical order)
  * - Bertrand Songis <bsongis@gmail.com>
  * - Bernet Andre <bernet.andre@gmail.com>
@@ -269,7 +269,11 @@
 #define TR_VOLTSRC             "---""A1\0""A2\0""FAS""Cel"
 
 #define LEN_VARIOSRC           "\005"
-#define TR_VARIOSRC            "Alti\0""Alti+""Vario""A1\0  ""A2\0"
+#if defined(FRSKY_SPORT)
+  #define TR_VARIOSRC          "Vario""A1\0  ""A2\0"
+#else
+  #define TR_VARIOSRC          "Alti\0""Alti+""Vario""A1\0  ""A2\0"
+#endif
 
 #define LEN_VSCREEN            "\004"
 #define TR_VSCREEN             "Nums""Bars"
@@ -559,16 +563,16 @@
 #define TR_ALARMSWARN          "ALARMAS"
 #define TR_SWITCHWARN          "INTERPTOR"
 #define TR_INVERT_THR          TR("Invertir Acel?", "Invertir Acel.?")
-#define TR_SPEAKER_VOLUME      INDENT"Volumen"
+#define TR_SPEAKER_VOLUME      INDENT "Volumen"
 #define TR_LCD                 "LCD"
-#define TR_BRIGHTNESS          "Brillo"
+#define TR_BRIGHTNESS          INDENT "Brillo"
 #define TR_CPU_TEMP            "CPU Temp.\016>"
 #define TR_CPU_CURRENT         "Actual\022>"
 #define TR_CPU_MAH             "Consumo"
 #define TR_COPROC              "CoProc."
 #define TR_COPROC_TEMP         "MB Temp. \016>"
-#define TR_CAPAWARNING         INDENT"Capacidad Baja"
-#define TR_TEMPWARNING         INDENT"Sobrecalent"
+#define TR_CAPAWARNING         INDENT "Capacidad Baja"
+#define TR_TEMPWARNING         INDENT "Sobrecalent"
 #define TR_FUNC                "Func"
 #define TR_V1                  "V1"
 #define TR_V2                  "V2"
@@ -618,6 +622,7 @@
 #define TR_INSERT_AFTER        "Insertar despues"
 #define TR_COPY                "Copiar"
 #define TR_MOVE                "Mover"
+#define TR_PASTE               "Pegar"
 #define TR_DELETE              "Borrar"
 #define TR_RESET_FLIGHT        "Reset Vuelo"
 #define TR_RESET_TIMER1        "Reset Reloj1"
@@ -679,16 +684,27 @@
 #define TR_ABOUT_MARTIN_1      "Martin Hotar"
 #define TR_ABOUT_MARTIN_2      "Disegno grafico"
 
-#define TR_ABOUT_HARDWARE_1    "FrSky"
-#define TR_ABOUT_HARDWARE_2    "Productor disegno de hardware"
+#if defined(PCBTARANIS)
+  #define TR_ABOUT_HARDWARE_1  "FrSky"
+  #define TR_ABOUT_HARDWARE_2  "Productor disegno de hardware"
+  #define TR_ABOUT_HARDWARE_3  "Firmware contributor"
+#else
+  #define TR_ABOUT_HARDWARE_1  "Brent Nelson"
+  #define TR_ABOUT_HARDWARE_2  "Sky9x designer/producer"
+  #define TR_ABOUT_HARDWARE_3  ""
+#endif
 
 #define TR_ABOUT_PARENTS_1     "Padres del proyecto"
 #define TR_ABOUT_PARENTS_2     "ersky9x (Mike Blandford)"
 #define TR_ABOUT_PARENTS_3     "ER9X (Erez Raviv)"
 #define TR_ABOUT_PARENTS_4     "TH9X (Thomas Husterer)"
-#define TR_ABOUT_HARDWARE_3    ""
 
 #define TR_CHR_SHORT  's'
 #define TR_CHR_LONG   'l'
 #define TR_CHR_TOGGLE 't'
 #define TR_CHR_HOUR   'h'
+
+#define TR_BEEP_VOLUME         "Beep Volume"
+#define TR_WAV_VOLUME          "Wav Volume"
+#define TR_VARIO_VOLUME        "Vario Volume"
+#define TR_BG_VOLUME           "Bg Volume"

@@ -86,7 +86,12 @@ int8_t p2valdiff;
 #endif
 
 int8_t  checkIncDec_Ret;
+
+#if defined(CPUARM)
+int16_t checkIncDec(uint8_t event, int16_t val, int16_t i_min, int16_t i_max, uint8_t i_flags, IsValueAvailable isValueAvailable)
+#else
 int16_t checkIncDec(uint8_t event, int16_t val, int16_t i_min, int16_t i_max, uint8_t i_flags)
+#endif
 {
   int16_t newval = val;
   
@@ -126,7 +131,19 @@ int16_t checkIncDec(uint8_t event, int16_t val, int16_t i_min, int16_t i_max, ui
 #else
   if (event==EVT_KEY_FIRST(KEY_RIGHT) || event==EVT_KEY_REPT(KEY_RIGHT) || (s_editMode>0 && (IS_ROTARY_RIGHT(event) || event==EVT_KEY_FIRST(KEY_UP) || event==EVT_KEY_REPT(KEY_UP)))) {
 #endif
+#if defined(CPUARM)
+    do {
+      newval++;
+    } while (isValueAvailable && !isValueAvailable(newval) && newval<=i_max);
+    if (newval > i_max) {
+      newval = val;
+      killEvents(event);
+      AUDIO_WARNING2();
+    }
+    else
+#else
     newval++;
+#endif
     AUDIO_KEYPAD_UP();
   }
 #if defined(PCBTARANIS)
@@ -134,7 +151,19 @@ int16_t checkIncDec(uint8_t event, int16_t val, int16_t i_min, int16_t i_max, ui
 #else
   else if (event==EVT_KEY_FIRST(KEY_LEFT) || event==EVT_KEY_REPT(KEY_LEFT) || (s_editMode>0 && (IS_ROTARY_LEFT(event) || event==EVT_KEY_FIRST(KEY_DOWN) || event==EVT_KEY_REPT(KEY_DOWN)))) {
 #endif
+#if defined(CPUARM)
+    do {
+      newval--;
+    } while (isValueAvailable && !isValueAvailable(newval) && newval>=i_min);
+    if (newval < i_min) {
+      newval = val;
+      killEvents(event);
+      AUDIO_WARNING2();
+    }
+    else
+#else
     newval--;
+#endif
     AUDIO_KEYPAD_DOWN();
   }
 
@@ -287,6 +316,10 @@ void title(const pm_char * s)
 
 #define INC(val, min, max) if (val<max) {val++;} else {val=min;}
 #define DEC(val, min, max) if (val>min) {val--;} else {val=max;}
+
+#if LCD_W >= 212
+uint8_t scrollbar_X = LCD_W-1;
+#endif
 
 bool check(check_event_t event, uint8_t curr, const MenuFuncP *menuTab, uint8_t menuTabSize, const pm_uint8_t *horTab, uint8_t horTabMax, vertpos_t maxrow)
 {
@@ -447,6 +480,7 @@ bool check(check_event_t event, uint8_t curr, const MenuFuncP *menuTab, uint8_t 
     case EVT_ENTRY:
       l_posVert = POS_VERT_INIT;
       l_posHorz = POS_HORZ_INIT(l_posVert);
+      SET_SCROLLBAR_X(LCD_W-1);
 #if defined(ROTARY_ENCODER_NAVIGATION)
       if (menuTab) {
         s_editMode = EDIT_MODE_INIT;
@@ -462,6 +496,7 @@ bool check(check_event_t event, uint8_t curr, const MenuFuncP *menuTab, uint8_t 
     case EVT_ENTRY_UP:
       s_editMode = 0;
       l_posHorz = POS_HORZ_INIT(l_posVert);
+      SET_SCROLLBAR_X(LCD_W-1);
       break;
 
     case EVT_ROTARY_BREAK:
@@ -473,6 +508,7 @@ bool check(check_event_t event, uint8_t curr, const MenuFuncP *menuTab, uint8_t 
 #elif defined(ROTARY_ENCODER_NAVIGATION)
     case EVT_ENTRY_UP:
       s_editMode = 0;
+      SET_SCROLLBAR_X(LCD_W-1);
       break;
 
     case EVT_ROTARY_BREAK:
@@ -720,8 +756,8 @@ bool check(check_event_t event, uint8_t curr, const MenuFuncP *menuTab, uint8_t 
   }
 
 #if LCD_W >= 212
-  if (maxrow > LCD_LINES-1)
-    displayScrollbar(LCD_W-1, FH, LCD_H-FH, s_pgOfs, maxrow, LCD_LINES-1);
+  if (maxrow > LCD_LINES-1 && scrollbar_X)
+    displayScrollbar(scrollbar_X, FH, LCD_H-FH, s_pgOfs, maxrow, LCD_LINES-1);
 #endif
 
 #else
@@ -903,12 +939,12 @@ int16_t gvarMenuItem(uint8_t x, uint8_t y, int16_t value, int16_t min, int16_t m
     }
 
     if (idx < 0) { 
-      value = (int16_t) GV_CALC_VALUE_IDX_NEG(idx,delta);
+      value = (int16_t) GV_CALC_VALUE_IDX_NEG(idx, delta);
       idx = -idx;
       lcd_putcAtt(x-6, y, '-', attr);
     }
     else {
-      value = (int16_t) GV_CALC_VALUE_IDX_POS(idx,delta);
+      value = (int16_t) GV_CALC_VALUE_IDX_POS(idx, delta);
       idx++;
     }
     putsStrIdx(x, y, STR_GV, idx, attr);
@@ -1065,5 +1101,42 @@ void drawStatusLine()
     lcd_putsAtt(5, 8*FH+1-statusLineHeight, statusLineMsg, BSS);
     lcd_filled_rect(0, 8*FH-statusLineHeight, LCD_W, 8, SOLID);
   }
+}
+#endif
+
+#if defined(CPUARM)
+bool isSourceAvailable(int16_t source)
+{
+#if !defined(HELI)
+  if (source>=MIXSRC_CYC1 && source<=MIXSRC_CYC3)
+    return false;
+#endif
+
+  if (source>=MIXSRC_CH1 && source<=MIXSRC_LAST_CH) {
+    uint8_t destCh = source-MIXSRC_CH1;
+    for (uint8_t i = 0; i < MAX_MIXERS; i++) {
+      MixData *md = mixAddress(i);
+      if (md->srcRaw == 0) return false;
+      if (md->destCh==destCh) return true;
+    }
+    return false;
+  }
+
+  if (source>=MIXSRC_SW1 && source<=MIXSRC_LAST_CSW) {
+    CustomSwData * cs = cswAddress(source-MIXSRC_SW1);
+    return (cs->func != CS_OFF);
+  }
+
+#if !defined(GVARS)
+  if (source>=MIXSRC_GVAR1 && source<=MIXSRC_LAST_GVAR)
+    return false;
+#endif
+
+  return true;
+}
+
+bool isSourceP1Available(int16_t source)
+{
+  return isSourceAvailable(source+1);
 }
 #endif

@@ -47,18 +47,25 @@
 
  
 /*!	\brief Top Mavlink Menu definition
- *	\details Registers button events and handles that info. Buttons select menus, these
- *	are launched from the MAVLINK_menu switch statement.
+ *	\details Registers button events and handles that info. Buttons select menus,
+ *	these are launched from the MAVLINK_menu switch statement. Setup menu is
+ *	lanuched by the menu button. On exit (with exit button) the mavlink
+ *	extension is reinitialized.
  */
 void menuTelemetryMavlink(uint8_t event) {
+	
+	static bool setup;
 
 	switch (event) // new event received, branch accordingly
 	{
 	case EVT_ENTRY:
 		MAVLINK_menu = MENU_INFO;
+		setup = false;
 		break;
 
 	case EVT_KEY_FIRST(KEY_UP):
+		if (setup)
+			break;
 		if (MAVLINK_menu > 0)
 		{
 			MAVLINK_menu--;
@@ -70,37 +77,54 @@ void menuTelemetryMavlink(uint8_t event) {
 			return;
 		}
 	case EVT_KEY_FIRST(KEY_DOWN):
+		if (setup)
+			break;
 		if (MAVLINK_menu < MAX_MAVLINK_MENU - 1)
 			MAVLINK_menu++;
 		break;
 	case EVT_KEY_FIRST(KEY_MENU):
+		setup = true;
+		return;
 	case EVT_KEY_FIRST(KEY_EXIT):
-		//MAVLINK_Quit();
+		if (setup)
+		{
+			setup = false;
+			MAVLINK_Init();
+			break;
+		}
 		chainMenu(menuMainView);
 		return;
 	}
 
-	switch (MAVLINK_menu) {
-	case MENU_INFO:
-		menuTelemetryMavlinkInfos();
-		break;
-	case MENU_MODE:
-		menuTelemetryMavlinkFlightMode();
-		break;
-	case MENU_BATT:
-		menuTelemetryMavlinkBattery();
-		break;
-	case MENU_GPS:
-		menuTelemetryMavlinkGPS();
-		break;
-#ifdef DUMP_RX_TX
-	case MENU_DUMP_TX:
-	case MENU_DUMP_RX:
-		menuTelemetryMavlinkDump(event);
-		break;
-#endif
-	default:
-		break;
+	if (setup)
+		menuTelemetryMavlinkSetup(event);
+	else
+	{
+		switch (MAVLINK_menu) {
+		case MENU_INFO:
+			menuTelemetryMavlinkInfos();
+			break;
+		case MENU_MODE:
+			menuTelemetryMavlinkFlightMode();
+			break;
+		case MENU_BATT:
+			menuTelemetryMavlinkBattery();
+			break;
+		case MENU_NAV:
+			menuTelemetryMavlinkNavigation();
+			break;
+		case MENU_GPS:
+			menuTelemetryMavlinkGPS();
+			break;
+	#ifdef DUMP_RX_TX
+		case MENU_DUMP_TX:
+		case MENU_DUMP_RX:
+			menuTelemetryMavlinkDump(event);
+			break;
+	#endif
+		default:
+			break;
+		}
 	}
 
 }
@@ -122,12 +146,15 @@ void lcd_outdezFloat(uint8_t x, uint8_t y, float val, uint8_t precis, uint8_t mo
 	int16_t lnum = val;
 	uint8_t x1 = x;
 	val -= lnum;
+	uint8_t xinc = FWNUM;
+	if (mode & DBLSIZE)
+		xinc *= 2;
 
 	int8_t i = 0;
 	lnum = abs(lnum);
 	for (; i < 4; i++) {
 		c = (lnum % 10) + '0';
-		x1 -= FWNUM;
+		x1 -= xinc;
 		lcd_putcAtt(x1, y, c, mode);
 		lnum /= 10;
 		if (lnum == 0) {
@@ -144,21 +171,128 @@ void lcd_outdezFloat(uint8_t x, uint8_t y, float val, uint8_t precis, uint8_t mo
 	} else {
 		if (val < 0) {
 			val = -val;
-			x1 -= FWNUM;
+			x1 -= xinc;
 			lcd_putcAtt(x1, y, '-', mode);
 		}
 		if (precis)
-			lcd_putcAtt(x, y, '.', mode);
-
+		{
+			uint8_t y_temp = y;
+			if (mode & DBLSIZE)
+				y_temp += FH;
+			lcd_putcAtt(x, y_temp, '.', (mode & (~DBLSIZE)));
+			x -= (xinc / 2);
+		}
 		for (i = 0; i < precis; i++) {
 			val *= 10;
 			int a = val;
 			c = a + '0';
-			x += FWNUM;
+			x += xinc;
 			lcd_putcAtt(x, y, c, mode);
 			val -= a;
 		}
 	}
+}
+
+/*!	\brief Fightmode decode helper
+ *	\details Decodes the flight mode from Mavlink custom mode enum to a string.
+ *	This funtion can handle ArduPilot and ArduCoper code.
+ */
+
+const char * mav_mode_to_string(uint32_t custom_mode) //, const char * mode_text_p)
+{
+	const char * mode_text_p;
+	switch (telemetry_data.type_autopilot) {
+	case MAVLINK_ARDUCOPTER:
+		switch(custom_mode) {
+		case AC_STABILIZE:
+			mode_text_p = PSTR("Stabilize");
+			break;
+		case AC_ACRO:
+			mode_text_p = PSTR("Acro");
+			break;
+		case AC_ALT_HOLD:
+			mode_text_p = PSTR("Alt Hold");
+			break;
+		case AC_AUTO:
+			mode_text_p = PSTR("Auto");
+			break;
+		case AC_GUIDED:
+			mode_text_p = PSTR("Guided");
+			break;
+		case AC_LOITER:
+			mode_text_p = PSTR("Loiter");
+			break;
+		case AC_RTL:
+			mode_text_p = PSTR("RTL");
+			break;
+		case AC_CIRCLE:
+			mode_text_p = PSTR("Circle");
+			break;
+		case AC_POSITION:
+			mode_text_p = PSTR("Pos Hold");
+			break;
+		case AC_LAND:
+			mode_text_p = PSTR("Land");
+			break;
+		case AC_OF_LOITER:
+			mode_text_p = PSTR("OF Loiter");
+			break;
+		case AC_TOY_A:
+			mode_text_p = PSTR("Toy A");
+			break;
+		case AC_TOY_M:
+			mode_text_p = PSTR("Toy M");
+			break;
+		default:
+			mode_text_p = PSTR("INVALID");
+			break;
+		}
+		break;
+	case MAVLINK_ARDUPLANE:
+		switch(custom_mode) {
+		case AP_MANUAL:
+			mode_text_p = PSTR("Manual");
+			break;
+		case AP_CIRCLE:
+			mode_text_p = PSTR("Circle");
+			break;
+		case AP_STABILIZE:
+			mode_text_p = PSTR("Stabilize");
+			break;
+		case AP_TRAINING:
+			mode_text_p = PSTR("Training");
+			break;
+		case AP_FLY_BY_WIRE_A:
+			mode_text_p = PSTR("Fly by Wire A");
+			break;
+		case AP_FLY_BY_WIRE_B:
+			mode_text_p = PSTR("Fly by Wire A");
+			break;
+		case AP_AUTO:
+			mode_text_p = PSTR("Auto");
+			break;
+		case AP_RTL:
+			mode_text_p = PSTR("RTL");
+			break;
+		case AP_LOITER:
+			mode_text_p = PSTR("Loiter");
+			break;
+		case AP_GUIDED:
+			mode_text_p = PSTR("Guided");
+			break;
+		case AP_INITIALISING:
+			mode_text_p = PSTR("Initialising");
+			break;
+		default:
+			mode_text_p = PSTR("INVALID");
+			break;
+		}
+		break;
+	default:
+		mode_text_p = PSTR("INVALID MAV TYPE");
+		break;
+	}
+	return mode_text_p;
 }
 
 /*!	\brief Menu header
@@ -229,51 +363,7 @@ void menuTelemetryMavlinkFlightMode(void) {
 	
 	mav_title(PSTR("MODE"), MAVLINK_menu);
 	
-	const char * mode_text_p;
-	switch(telemetry_data.custom_mode) {
-	case AP_STABILIZE:
-		mode_text_p = PSTR("Stabilize");
-		break;
-	case AP_ACRO:
-		mode_text_p = PSTR("Acro");
-		break;
-	case AP_ALT_HOLD:
-		mode_text_p = PSTR("Alt Hold");
-		break;
-	case AP_AUTO:
-		mode_text_p = PSTR("Auto");
-		break;
-	case AP_GUIDED:
-		mode_text_p = PSTR("Guided");
-		break;
-	case AP_LOITER:
-		mode_text_p = PSTR("Loiter");
-		break;
-	case AP_RTL:
-		mode_text_p = PSTR("RTL");
-		break;
-	case AP_CIRCLE:
-		mode_text_p = PSTR("Circle");
-		break;
-	case AP_POSITION:
-		mode_text_p = PSTR("Pos Hold");
-		break;
-	case AP_LAND:
-		mode_text_p = PSTR("Land");
-		break;
-	case AP_OF_LOITER:
-		mode_text_p = PSTR("OF Loiter");
-		break;
-	case AP_TOY_A:
-		mode_text_p = PSTR("Toy A");
-		break;
-	case AP_TOY_M:
-		mode_text_p = PSTR("Toy M");
-		break;
-	default:
-		mode_text_p = PSTR("INVALID");
-		break;
-	}
+	const char * mode_text_p =  mav_mode_to_string(telemetry_data.custom_mode);
 	
 	uint8_t x, y;
 	x = 0;
@@ -332,9 +422,45 @@ void menuTelemetryMavlinkBattery(void) {
 	lcd_puts(x + 7 * FWNUM, ynum + FH, PSTR("%"));
 	x += 8 * (2 * FWNUM);
     lcd_puts(x, y, PSTR("PC RSSI"));
-	lcd_outdezAtt(x + 7 * FWNUM, ynum, telemetry_data.pc_rssi, (DBLSIZE | UNSIGN));
+	lcd_outdezAtt(x + 7 * FWNUM, ynum, telemetry_data.pc_rssi, (DBLSIZE));
 	lcd_puts(x + 7 * FWNUM, ynum + FH,  PSTR("%"));
     
+}
+
+/*!	\brief Navigation dislplay
+ *	\details Shows Navigation telemetry.
+ */
+void menuTelemetryMavlinkNavigation(void) {
+	
+	mav_title(PSTR("NAV"), MAVLINK_menu);
+	
+	uint8_t x, y, ynum;
+	x = 7 * FWNUM;
+//	x = xnum + 0 * FW;
+	ynum = 2 * FH;
+	y = FH;
+	
+    
+	x = 0;	
+    lcd_puts  (x, y, PSTR("Course"));
+	lcd_outdezAtt(x + 7 * FWNUM, ynum, telemetry_data.course, (DBLSIZE | UNSIGN));
+	lcd_puts(x + 7 * FWNUM, ynum, PSTR("o"));
+	x += 8 * (2 * FWNUM);
+    lcd_puts(x, y, PSTR("Heading"));
+	lcd_outdezAtt(x + 7 * FWNUM, ynum, telemetry_data.heading, (DBLSIZE | UNSIGN));
+	lcd_puts(x + 7 * FWNUM, ynum,  PSTR("o"));
+	y += 3 * FH;
+	ynum += 3 * FH;
+	
+	x = 0;	
+    lcd_puts  (x, y, PSTR("Bearing"));
+	lcd_outdezAtt(x + 7 * FWNUM, ynum, telemetry_data.bearing, (DBLSIZE | UNSIGN));
+	lcd_puts(x + 7 * FWNUM, ynum, PSTR("o"));
+	x += 8 * (2 * FWNUM);
+    lcd_puts(x, y, PSTR("Altitude"));
+	lcd_outdezFloat(x + 2 * FWNUM - 1, ynum, telemetry_data.altitude, 2, (DBLSIZE));
+	lcd_puts(x + 7 * FWNUM, ynum + FH,  PSTR("m"));
+ 
 }
 
 
@@ -443,3 +569,37 @@ void menuTelemetryMavlinkDump(uint8_t event) {
 	}
 }
 #endif
+
+
+/*!	\brief Mavlink General setup menu.
+ *	\details Setup menu for generic mavlink settings.
+ *	- Baudrate select item.
+ *	MENU funtion is used to create the tab based menu.
+ */
+void menuTelemetryMavlinkSetup(uint8_t event) {
+	
+	MENU(STR_MAVMENUSETUP, menuTabMav, e_MavSetup, ITEM_MAVLINK_MAX+1, {0, 0, 1/*to force edit mode*/});
+	
+	uint8_t sub = m_posVert - 1;
+
+	for (uint8_t i=0; i<LCD_LINES-1; i++) {
+		uint8_t y = 1 + 1*FH + i*FH;
+		uint8_t k = i+s_pgOfs;
+		uint8_t blink = ((s_editMode>0) ? BLINK|INVERS : INVERS);
+		uint8_t attr = (sub == k ? blink : 0);
+		switch(k) {	
+		case ITEM_MAVLINK_BAUD:
+			g_eeGeneral.spare2 = selectMenuItem(RADIO_SETUP_2ND_COLUMN,  //Y
+				y, 					// Y
+				STR_MAVLINK_BAUD_LABEL, 			// pm_char *label
+				STR_MAVLINK_BAUDS, 		// pm_char *values
+//				PSTR("4800""9600""14400""19200""38400""57600""76800""115200"),
+				g_eeGeneral.spare2, 	// value
+				0, 	// min
+				7, 	// max
+				attr,  // attr
+				event);	// event
+			break;
+		}
+	}
+}

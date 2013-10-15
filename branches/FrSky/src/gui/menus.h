@@ -45,6 +45,17 @@ inline void displayColumnHeader(const char **headers, uint8_t index)
   lcd_putsAtt(17*FW, 0, headers[index], 0);
 }
 
+#if !defined(CPUM64)
+  void displayScrollbar(xcoord_t x, uint8_t y, uint8_t h, uint16_t offset, uint16_t count, uint8_t visible);
+#endif
+
+#if LCD_W >= 212
+  extern uint8_t scrollbar_X;
+  #define SET_SCROLLBAR_X(x) scrollbar_X = (x);
+#else
+  #define SET_SCROLLBAR_X(x)
+#endif
+
 #if LCD_W >= 212
   #if defined(TRANSLATIONS_FR)
     #define MENU_COLUMNS         1
@@ -154,7 +165,12 @@ extern int8_t s_editMode;       // global editmode
 #define TITLE_ROW      ((uint8_t)-1)
 #define HIDDEN_ROW     ((uint8_t)-2)
 
+#if defined(CPUARM)
+typedef bool (*IsValueAvailable)(int16_t);
+int16_t checkIncDec(uint8_t event, int16_t i_pval, int16_t i_min, int16_t i_max, uint8_t i_flags=0, IsValueAvailable isValueAvailable=NULL);
+#else
 int16_t checkIncDec(uint8_t event, int16_t i_pval, int16_t i_min, int16_t i_max, uint8_t i_flags=0);
+#endif
 
 #if defined(CPUM64)
 int8_t checkIncDecModel(uint8_t event, int8_t i_val, int8_t i_min, int8_t i_max);
@@ -173,19 +189,24 @@ int8_t checkIncDecGen(uint8_t event, int8_t i_val, int8_t i_min, int8_t i_max);
   var = checkIncDecModelZero(event,var,max)
 
 #if defined(AUTOSWITCH)
-#define AUTOSWITCH_ENTER_LONG() (attr && event==EVT_KEY_LONG(KEY_ENTER))
-#define CHECK_INCDEC_MODELSWITCH(event, var, min, max) \
-  var = checkIncDec(event,var,min,max,EE_MODEL|INCDEC_SWITCH)
+  #define AUTOSWITCH_ENTER_LONG() (attr && event==EVT_KEY_LONG(KEY_ENTER))
+  #define CHECK_INCDEC_MODELSWITCH(event, var, min, max) \
+    var = checkIncDec(event,var,min,max,EE_MODEL|INCDEC_SWITCH)
 #else
-#define AUTOSWITCH_ENTER_LONG() (0)
-#define CHECK_INCDEC_MODELSWITCH CHECK_INCDEC_MODELVAR
+  #define AUTOSWITCH_ENTER_LONG() (0)
+  #define CHECK_INCDEC_MODELSWITCH CHECK_INCDEC_MODELVAR
 #endif
 
-#if defined(AUTOSOURCE)
-#define CHECK_INCDEC_MODELSOURCE(event, var, min, max) \
-  var = checkIncDec(event,var,min,max,EE_MODEL|INCDEC_SOURCE)
+#if defined(CPUARM)
+  bool isSourceAvailable(int16_t source);
+  bool isSourceP1Available(int16_t source);
+  #define CHECK_INCDEC_MODELSOURCE(event, var, min, max) \
+    var = checkIncDec(event,var,min,max,EE_MODEL|INCDEC_SOURCE|NO_INCDEC_MARKS, isSourceAvailable)
+#elif defined(AUTOSOURCE)
+  #define CHECK_INCDEC_MODELSOURCE(event, var, min, max) \
+    var = checkIncDec(event,var,min,max,EE_MODEL|INCDEC_SOURCE|NO_INCDEC_MARKS)
 #else
-#define CHECK_INCDEC_MODELSOURCE CHECK_INCDEC_MODELVAR
+  #define CHECK_INCDEC_MODELSOURCE CHECK_INCDEC_MODELVAR
 #endif
 
 #define CHECK_INCDEC_GENVAR(event, var, min, max) \
@@ -280,13 +301,13 @@ void displayWarning(uint8_t event);
 
 #if defined(CPUARM)
   #define DISPLAY_WARNING       (*popupFunc)
-  #define POPUP_WARNING(s)      do { s_warning = s; popupFunc = displayWarning; } while(0)
-  #define POPUP_CONFIRMATION(s) do { s_warning = s; s_warning_type = WARNING_TYPE_CONFIRM; popupFunc = displayWarning; } while(0)
-  #define POPUP_INPUT(s, func, start, min, max) do { s_warning = s; s_warning_type = WARNING_TYPE_INPUT; popupFunc = func; s_warning_input_value = start; s_warning_input_min = min; s_warning_input_max = max; } while(0)
+  #define POPUP_WARNING(s)      (s_warning = s, popupFunc = displayWarning)
+  #define POPUP_CONFIRMATION(s) (s_warning = s, s_warning_type = WARNING_TYPE_CONFIRM, popupFunc = displayWarning)
+  #define POPUP_INPUT(s, func, start, min, max) (s_warning = s, s_warning_type = WARNING_TYPE_INPUT, popupFunc = func, s_warning_input_value = start, s_warning_input_min = min, s_warning_input_max = max)
 #else
   #define DISPLAY_WARNING       displayWarning
   #define POPUP_WARNING(s)      s_warning = s
-  #define POPUP_CONFIRMATION(s) do { s_warning = s; s_warning_type = WARNING_TYPE_CONFIRM; } while(0)
+  #define POPUP_CONFIRMATION(s) (s_warning = s, s_warning_type = WARNING_TYPE_CONFIRM)
 #endif
 
 #if defined(SDCARD) || (defined(ROTARY_ENCODER_NAVIGATION) && !defined(CPUM64))

@@ -159,7 +159,7 @@ PACK(typedef struct t_TrainerMix {
   uint8_t srcChn:6; // 0-7 = ch1-8
   uint8_t mode:2;   // off,add-mode,subst-mode
   int8_t  studWeight;
-}) TrainerMix; //
+}) TrainerMix;
 
 PACK(typedef struct t_TrainerData {
   int16_t        calib[4];
@@ -242,7 +242,7 @@ enum ModuleIndex {
 };
 #define MODELDATA_BITMAP  char bitmap[LEN_BITMAP_NAME];
 #define MODELDATA_EXTRA   uint8_t externalModule; uint8_t trainerMode; ModuleData moduleData[NUM_MODULES+1]; char curveNames[MAX_CURVES][6];
-#define LIMITDATA_EXTRA   char name[6];
+#define LIMITDATA_EXTRA   char name[LEN_CHANNEL_NAME];
 #define swstate_t         uint16_t
 #elif defined(PCBSKY9X)
 #define MODELDATA_BITMAP
@@ -257,10 +257,10 @@ enum ModuleIndex {
 #endif
 
 enum BacklightMode {
-  e_backlight_mode_off = 0,
-  e_backlight_mode_keys,
-  e_backlight_mode_sticks,
-  e_backlight_mode_both,
+  e_backlight_mode_off  = 0,
+  e_backlight_mode_keys = 1,
+  e_backlight_mode_sticks = 2,
+  e_backlight_mode_all = e_backlight_mode_keys+e_backlight_mode_sticks,
   e_backlight_mode_on
 };
 
@@ -323,6 +323,7 @@ PACK(typedef struct t_EEGeneral {
 #define LEN_BITMAP_NAME    10
 #define LEN_EXPOMIX_NAME   8
 #define LEN_FP_NAME        10
+#define LEN_CHANNEL_NAME   6
 #elif defined(PCBSKY9X)
 #define LEN_MODEL_NAME     10
 #define LEN_EXPOMIX_NAME   6
@@ -685,7 +686,7 @@ PACK(typedef struct t_CustomFnData { // Function Switches data
 #define CFN_PLAY_REPEAT(p) ((p)->active)
 #define CFN_GVAR_MODE(p)   ((p)->mode)
 #define CFN_PARAM(p)       ((p)->param.composite.val)
-#define CFN_RESET_PARAM(p) memset(&(p)->param, 0, sizeof((p)->param))
+#define CFN_RESET(p)       { p->active = 0; memset(&(p)->param, 0, sizeof((p)->param)); }
 #else
 PACK(typedef struct t_CustomFnData { // Function Switches data
   int8_t  swtch; // input
@@ -714,7 +715,7 @@ PACK(typedef struct t_CustomFnData { // Function Switches data
 #define CFN_PLAY_REPEAT(p) ((p)->internal.func_param.param)
 #define CFN_GVAR_MODE(p)   ((p)->internal.func_param_enable.param)
 #define CFN_PARAM(p)       ((p)->param)
-#define CFN_RESET_PARAM(p) CFN_PARAM(p) = 0
+#define CFN_RESET(p)       {(p)->internal.func_param_enable.active = 0; CFN_PARAM(p) = 0;}
 #endif
 
 enum TelemetryUnit {
@@ -806,14 +807,25 @@ enum TelemetrySource {
   TELEM_GPS_TIME,
   TELEM_CSW_MAX = TELEM_POWER,
   TELEM_NOUSR_MAX = TELEM_A2,
+#if defined(FRSKY)
   TELEM_DISPLAY_MAX = TELEM_MAX_POWER,
-  TELEM_STATUS_MAX = TELEM_GPS_TIME
+#else
+  TELEM_DISPLAY_MAX = TELEM_TM2, // because used also in PlayValue
+#endif
+  TELEM_STATUS_MAX = TELEM_GPS_TIME,
+#if defined(FRSKY_SPORT)
+  TELEM_SWR = TELEM_RSSI_TX,
+  TELEM_FIRST_STREAMED_VALUE = TELEM_RSSI_RX,
+#else
+  TELEM_FIRST_STREAMED_VALUE = TELEM_RSSI_TX,
+#endif
 };
 
 enum VarioSource {
-  VARIO_SOURCE_FIRST = 0,
-  VARIO_SOURCE_ALTI = VARIO_SOURCE_FIRST,
+#if !defined(FRSKY_SPORT)
+  VARIO_SOURCE_ALTI,
   VARIO_SOURCE_ALTI_PLUS,
+#endif
   VARIO_SOURCE_VARIO,
   VARIO_SOURCE_A1,
   VARIO_SOURCE_A2,
@@ -1172,8 +1184,10 @@ enum MixSources {
   MIXSRC_LAST_GVAR = MIXSRC_GVAR1+MAX_GVARS-1,
 
   MIXSRC_FIRST_TELEM,
-  MIXSRC_LAST_TELEM = MIXSRC_FIRST_TELEM+NUM_TELEMETRY-1,
+  MIXSRC_LAST_TELEM = MIXSRC_FIRST_TELEM+NUM_TELEMETRY-1
 };
+
+#define MIXSRC_LAST MIXSRC_LAST_CH
 
 #define MIN_POINTS 3
 #define MAX_POINTS 17
@@ -1247,7 +1261,6 @@ enum ModuleTypes {
   MODULE_TYPE_NONE = 0,
   MODULE_TYPE_PPM,
   MODULE_TYPE_XJT,
-  MODULE_TYPE_DJT,
 #if defined(DSM2)
   MODULE_TYPE_DSM2,
 #endif

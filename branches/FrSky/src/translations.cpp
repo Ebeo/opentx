@@ -343,10 +343,10 @@ const pm_char STR_CURRENT_CALIB[] PROGMEM = TR_CURRENT_CALIB;
 const pm_char STR_UNITSSYSTEM[]   PROGMEM = TR_UNITSSYSTEM;
 const pm_char STR_VOICELANG[] PROGMEM = TR_VOICELANG;
 const pm_char STR_MODELIDUSED[] PROGMEM = TR_MODELIDUSED;
-const pm_char STR_BEEP_VOLUME[] PROGMEM = INDENT "Beep Volume";
-const pm_char STR_WAV_VOLUME[] PROGMEM = INDENT "Wav Volume";
-const pm_char STR_VARIO_VOLUME[] PROGMEM = INDENT "Vario Volume";
-const pm_char STR_BG_VOLUME[] PROGMEM = INDENT "Bg Volume";
+const pm_char STR_BEEP_VOLUME[] PROGMEM = INDENT TR_BEEP_VOLUME;
+const pm_char STR_WAV_VOLUME[] PROGMEM = INDENT TR_WAV_VOLUME;
+const pm_char STR_VARIO_VOLUME[] PROGMEM = INDENT TR_VARIO_VOLUME;
+const pm_char STR_BG_VOLUME[] PROGMEM = INDENT TR_BG_VOLUME;
 #endif
 
 #if defined(NAVIGATION_MENUS)
@@ -360,6 +360,7 @@ const pm_char STR_INSERT_BEFORE[] PROGMEM = TR_INSERT_BEFORE;
 const pm_char STR_INSERT_AFTER[] PROGMEM = TR_INSERT_AFTER;
 const pm_char STR_COPY[] PROGMEM = TR_COPY;
 const pm_char STR_MOVE[] PROGMEM = TR_MOVE;
+const pm_char STR_PASTE[] PROGMEM = TR_PASTE;
 const pm_char STR_DELETE[] PROGMEM = TR_DELETE;
 const pm_char STR_RESET_FLIGHT[] PROGMEM = TR_RESET_FLIGHT;
 const pm_char STR_RESET_TIMER1[] PROGMEM = TR_RESET_TIMER1;
@@ -507,99 +508,100 @@ const pm_char STR_CHANNELS_MONITOR[] PROGMEM = TR_CHANNELS_MONITOR;
 #endif
 
 const pm_uchar font_5x7[] PROGMEM = {
-#include "fonts/std/font_05x07.lbm"
+#include "font_05x07.lbm"
 #if defined(TRANSLATIONS_DE)
-#include "fonts/std/font_de_05x07.lbm"
+#include "font_de_05x07.lbm"
 #elif defined(TRANSLATIONS_CZ)
-#include "fonts/std/font_cz_05x07.lbm"
+#include "font_cz_05x07.lbm"
 #elif defined(TRANSLATIONS_ES)
-#include "fonts/std/font_es_05x07.lbm"
+#include "font_es_05x07.lbm"
 #elif defined(TRANSLATIONS_FR)
-#include "fonts/std/font_fr_05x07.lbm"
+#include "font_fr_05x07.lbm"
 #elif defined(TRANSLATIONS_IT)
-#include "fonts/std/font_it_05x07.lbm"
+#include "font_it_05x07.lbm"
 #elif defined(TRANSLATIONS_PT)
-#include "fonts/std/font_pt_05x07.lbm"
+#include "font_pt_05x07.lbm"
 #elif defined(TRANSLATIONS_SE)
-#include "fonts/std/font_se_05x07.lbm"
+#include "font_se_05x07.lbm"
 #endif
 };
 
 const pm_uchar font_10x14[] PROGMEM = {
-#include "fonts/std/font_10x14_compressed.lbm"
+#include "font_10x14_compressed.lbm"
 #if defined(CPUARM)
   #if defined(TRANSLATIONS_DE)
-  #include "fonts/std/font_de_10x14.lbm"
+  #include "font_de_10x14.lbm"
   #elif defined(TRANSLATIONS_CZ)
-  #include "fonts/std/font_cz_10x14.lbm"
+  #include "font_cz_10x14.lbm"
   #elif defined(TRANSLATIONS_ES)
-  #include "fonts/std/font_es_10x14.lbm"
+  #include "font_es_10x14.lbm"
   #elif defined(TRANSLATIONS_FR)
-  #include "fonts/std/font_fr_10x14.lbm"
+  #include "font_fr_10x14.lbm"
   #elif defined(TRANSLATIONS_IT)
-  #include "fonts/std/font_it_10x14.lbm"
+  #include "font_it_10x14.lbm"
   #elif defined(TRANSLATIONS_PT)
-  #include "fonts/std/font_pt_10x14.lbm"
+  #include "font_pt_10x14.lbm"
   #elif defined(TRANSLATIONS_SE)
-  #include "fonts/std/font_se_10x14.lbm"
+  #include "font_se_10x14.lbm"
   #endif
 #endif
 };
 
 #if defined(CPUARM)
 const pm_uchar font_3x5[] PROGMEM = {
-#include "fonts/std/font_03x05.lbm"
+#include "font_03x05.lbm"
 };
 
 const pm_uchar font_4x6[] PROGMEM = {
-#include "fonts/std/font_04x06.lbm"
+#include "font_04x06.lbm"
 #if defined(TRANSLATIONS_DE)
-#include "fonts/std/font_de_04x06.lbm"
+#include "font_de_04x06.lbm"
 #elif defined(TRANSLATIONS_CZ)
-#include "fonts/std/font_cz_04x06.lbm"
+#include "font_cz_04x06.lbm"
 #elif defined(TRANSLATIONS_ES)
-#include "fonts/std/font_es_04x06.lbm"
+#include "font_es_04x06.lbm"
 #elif defined(TRANSLATIONS_FR)
-#include "fonts/std/font_fr_04x06.lbm"
+#include "font_fr_04x06.lbm"
 #elif defined(TRANSLATIONS_IT)
-#include "fonts/std/font_it_04x06.lbm"
+#include "font_it_04x06.lbm"
 #elif defined(TRANSLATIONS_PT)
-#include "fonts/std/font_pt_04x06.lbm"
+#include "font_pt_04x06.lbm"
 #elif defined(TRANSLATIONS_SE)
-#include "fonts/std/font_se_04x06.lbm"
+#include "font_se_04x06.lbm"
 #endif
 };
 
 const pm_uchar font_8x10[] PROGMEM = {
-#include "fonts/std/font_08x10.lbm"
+#include "font_08x10.lbm"
 #if defined(TRANSLATIONS_DE)
-#include "fonts/std/font_de_08x10.lbm"
+#include "font_de_08x10.lbm"
 #elif defined(TRANSLATIONS_CZ)
-#include "fonts/std/font_cz_08x10.lbm"
+#include "font_cz_08x10.lbm"
 #elif defined(TRANSLATIONS_ES)
-#include "fonts/std/font_es_08x10.lbm"
+#include "font_es_08x10.lbm"
 #elif defined(TRANSLATIONS_FR)
-#include "fonts/std/font_fr_08x10.lbm"
+#include "font_fr_08x10.lbm"
 #elif defined(TRANSLATIONS_IT)
-#include "fonts/std/font_it_08x10.lbm"
+#include "font_it_08x10.lbm"
 #elif defined(TRANSLATIONS_PT)
-#include "fonts/std/font_pt_08x10.lbm"
+#include "font_pt_08x10.lbm"
 #elif defined(TRANSLATIONS_SE)
-#include "fonts/std/font_se_08x10.lbm"
+#include "font_se_08x10.lbm"
 #endif
 };
 
 const pm_uchar font_4x6_extra[] PROGMEM = {
-#include "fonts/std/font_04x06_extra.lbm"
+#include "font_04x06_extra.lbm"
 };
 
 const pm_uchar font_5x7_extra[] PROGMEM = {
-#include "fonts/std/font_05x07_extra.lbm"
+#include "font_05x07_extra.lbm"
 };
 
 const pm_uchar font_10x14_extra[] PROGMEM = {
-#include "fonts/std/font_10x14_extra.lbm"
+#include "font_10x14_extra.lbm"
 };
 
 #endif
+
 

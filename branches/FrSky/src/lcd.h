@@ -74,9 +74,9 @@
 #define INVERS          0x02
 #define DBLSIZE         0x04
 #ifdef BOLD_FONT
-#define BOLD            0x40
+  #define BOLD            0x40
 #else
-#define BOLD            0x00
+  #define BOLD            0x00
 #endif
 
 /* lcd putc flags */
@@ -85,6 +85,7 @@
 /* lcd puts flags */
 /* no 0x80 here because of "GV"1 which is aligned LEFT */
 /* no 0x10 here because of "MODEL"01 which uses LEADING0 */
+#define STRCONDENSED    0x10 /* means that THRm will be displayed as THR */
 #define BSS             0x20
 #define ZCHAR           0x80
 
@@ -104,9 +105,6 @@
   #define FILL_WHITE    0x10
 #endif
 
-/* switches flags */
-#define SWCONDENSED     0x20 /* means that THRm will be displayed as THR */
-
 /* telemetry flags */
 #define NO_UNIT         0x40
 
@@ -114,10 +112,12 @@
   #define MIDSIZE       0x0100
   #define SMLSIZE       0x0200
   #define TINSIZE       0x0400
+  #define STREXPANDED   0x0800
 #else
   #define MIDSIZE       DBLSIZE
   #define SMLSIZE       0x00
   #define TINSIZE       0x00
+  #define STREXPANDED   0x00
 #endif
 
 #if defined(PCBTARANIS)

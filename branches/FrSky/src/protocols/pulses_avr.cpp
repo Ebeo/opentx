@@ -97,6 +97,8 @@ uint8_t *pulses2MHzWPtr = pulses2MHz;
 #define CTRL_REP_1CMD -3
 #define CTRL_REP_2CMD -6
 
+#define SETUP_PULSES_DURATION 1000/*500us*/
+
 // TIMER1_COMPA_vect used for PPM and DSM2=SERIAL
 uint8_t g_ppmPulsePolarity = 0;
 ISR(TIMER1_COMPA_vect) //2MHz pulse generation (BLOCKING ISR)
@@ -106,12 +108,10 @@ ISR(TIMER1_COMPA_vect) //2MHz pulse generation (BLOCKING ISR)
   // Call setupPulses only after REST pulse had been sent.
   // Must do this before toggle PORTB to keep timing accurate
   if (IS_DSM2_SERIAL_PROTOCOL(s_current_protocol[0]) || *((uint16_t*)pulses2MHzRPtr) == 0) {
+    OCR1A = SETUP_PULSES_DURATION;
     setupPulses(); // does not sei() for setupPulsesPPM
     heartbeat |= HEART_TIMER_PULSES;
-    if (IS_PXX_PROTOCOL(s_current_protocol[0]) || IS_DSM2_PROTOCOL(s_current_protocol[0])) {
-      // !PPM protocols interrupts don't need COMPA
-      return;
-    }
+    return;
   }
 
 #if !defined(PCBGRUVIN9X)
@@ -163,7 +163,7 @@ void setupPulsesPPM(uint8_t proto)
     //The pulse ISR is 2mhz that's why everything is multiplied by 2
     uint8_t p = (proto == PROTO_PPM16 ? 16 : 8) + (g_model.ppmNCH * 2); //Channels *2
     uint16_t q = (g_model.ppmDelay*50+300)*2; // Stoplen *2
-    uint32_t rest = 22500u*2 - q; // Minimum Framelen=22.5ms
+    int32_t rest = 22500u*2 - q;
 
     rest += (int32_t(g_model.ppmFrameLength))*1000;
     for (uint8_t i=(proto==PROTO_PPM16) ? p-8 : 0; i<p; i++) {
@@ -174,14 +174,16 @@ void setupPulsesPPM(uint8_t proto)
     }
 
     *ptr++ = q;  
-    rest = (rest > 65535) ? 65535 : rest;
-    *ptr++ = rest;
+    if (rest > 65535) rest = 65535; /* prevents overflows */
+    if (rest < 9000)  rest = 9000;
 
     if (proto == PROTO_PPM) {
+      *ptr++ = rest - SETUP_PULSES_DURATION;
       pulses2MHzRPtr = pulses2MHz;
     }
     else {
-      B3_comp_value = rest - 1000 ;               // 500uS before end of sync pulse
+      *ptr++ = rest;    
+      B3_comp_value = rest - SETUP_PULSES_DURATION;               // 500uS before end of sync pulse
     }
 
     *ptr = 0;

@@ -89,6 +89,11 @@ NAVIGATION = NO
 # Values = YES, NO 
 AUTOSWITCH = NO
 
+# Swap Stick Inputs for AIL,ELE,RUD,THR
+# Used in some scenarios where stick/pot entries
+# cannot be changed by soldering the pots.
+
+
 # Sources automatic selection
 # Values = YES, NO 
 AUTOSOURCE = NO
@@ -133,6 +138,10 @@ SPLASH = YES
 GRAPHICS = YES
 BOLD = YES
 BATTGRAPH = NO
+
+# FONT TYPE
+# Values = STD, SQT5
+FONT = STD
 
 # PPM center adjustable
 # Values = YES, NO
@@ -229,10 +238,6 @@ FLIGHT_MODES = YES
 # Values = YES, NO
 CURVES = YES
 
-# Customizable Curves
-# Values = YES, NO
-XCURVES = YES
-
 # Global Vars
 # Values = YES, NO
 GVARS = NO
@@ -270,7 +275,6 @@ ifeq ($(PCB), $(filter $(PCB), STD 9X 9XR))
   TRGT = avr-
   MCU = atmega64
   OPT = s  
-  XCURVES = NO
   SDCARD = NO
   THR_TRACE = NO
   EXTRAINCDIRS = targets/stock
@@ -285,7 +289,11 @@ ifeq ($(PCB), $(filter $(PCB), STD 9X 9XR))
   else
     CPPDEFS += -DPCB9X
   endif
-    
+  
+  ifeq ($(TELEMETRY_MOD), 14051)
+    CPPDEFS += -DTELEMETRY_MOD_14051
+  endif
+  
   ifeq ($(AUDIO), YES)
     CPPDEFS += -DAUDIO
     CPPSRC += audio_avr.cpp
@@ -340,6 +348,10 @@ ifeq ($(PCB), $(filter $(PCB), STD128 9X128 9XR128))
   else
     CPPDEFS += -DPCB9X128
   endif
+  
+  ifeq ($(TELEMETRY_MOD), 14051)
+    CPPDEFS += -DTELEMETRY_MOD_14051
+  endif  
     
   ifeq ($(AUDIO), YES)
     CPPDEFS += -DAUDIO
@@ -673,7 +685,7 @@ TARGET = opentx
 
 # List C++ source files here. (C dependencies are automatically generated.)
 ifeq ($(PCB), $(filter $(PCB), SKY9X TARANIS))
-  TTS_SRC = translations/tts_cz.cpp translations/tts_de.cpp translations/tts_en.cpp translations/tts_es.cpp translations/tts_fr.cpp translations/tts_it.cpp translations/tts_pt.cpp translations/tts_sk.cpp
+  TTS_SRC = translations/tts_cz.cpp translations/tts_de.cpp translations/tts_en.cpp translations/tts_es.cpp translations/tts_fr.cpp translations/tts_it.cpp translations/tts_pt.cpp translations/tts_sk.cpp translations/tts_se.cpp
 else
   STD_TTS_SRC = translations/tts_$(shell sh -c "echo $(TTS) | tr '[:upper:]' '[:lower:]'").cpp
   TTS_SRC = $(shell sh -c "if test -f $(STD_TTS_SRC); then echo $(STD_TTS_SRC); else echo translations/tts_en.cpp; fi")
@@ -734,6 +746,11 @@ ifeq ($(AUTOSOURCE), YES)
   CPPDEFS += -DAUTOSOURCE
 endif
 
+ifeq ($(TARANIS_STICKS), YES)
+  CPPDEFS += -DTARANIS_STICKS
+endif
+
+
 ifeq ($(DBLKEYS), YES)
   ifeq ($(PCB), $(filter $(PCB), 9XR 9XR128 9XR2561))
     $(warning Sorry, DBLKEYS doesnt work on 9XR)
@@ -763,6 +780,11 @@ ifneq ($(PCB), TARANIS)
     CPPDEFS += -DBATTGRAPH
   endif
 endif
+
+ifneq ($(FONT), STD)
+  CPPDEFS += -DFONT_$(FONT)
+  EXTRAINCDIRS += fonts/$(shell sh -c "echo $(FONT) | tr '[:upper:]' '[:lower:]'")
+endif
   
 ifeq ($(THR_TRACE), YES)
   CPPDEFS += -DTHRTRACE
@@ -774,10 +796,6 @@ endif
 
 ifeq ($(CURVES), YES)
   CPPDEFS += -DCURVES
-endif
-
-ifeq ($(XCURVES), YES)
-  CPPDEFS += -DXCURVES
 endif
 
 ifeq ($(GVARS), YES)
@@ -962,6 +980,7 @@ CPPFLAGS += $(CPPDEFS)
 CPPFLAGS += -Wall
 CPPFLAGS += -fno-exceptions
 CPPFLAGS += -Wno-strict-aliasing
+EXTRAINCDIRS += fonts/std
 CPPFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
 
 MATH_LIB = -lm
@@ -1030,13 +1049,13 @@ all: begin gccversion sizebefore build sizeafter end
 
 # Change the build target to build a HEX file or a library.
 ifeq ($(ARCH), AVR)
-  build: stamp_header tra lbm allsrc.cpp elf remallsrc hex eep lss sym
+  build: stamp_header tra lbm allsrc.cpp elf remallsrc hex 
 else
-  build: stamp_header tra lbm allsrc.cpp elf remallsrc bin lss
+  build: stamp_header tra lbm allsrc.cpp elf remallsrc bin
 endif
 
 tra: translations/se.h
-lbm: fonts/std/font_05x07.lbm bitmaps/sticks.lbm
+lbm: fonts bitmaps/sticks.lbm
   
 elf: $(TARGET).elf
 bin: $(TARGET).bin
@@ -1108,50 +1127,14 @@ translations/se.h: translations/cz.h.txt translations/de.h.txt translations/es.h
 	$(TRANSLATE) translations/pt.h.txt translations/pt.h pt
 	@echo "Swedish"
 	$(TRANSLATE) translations/se.h.txt translations/se.h se
-	
-fonts/std/font_05x07.lbm: fonts/std/font_03x05.png fonts/std/font_04x06.png fonts/std/font_05x07.png fonts/std/font_08x10.png fonts/std/font_10x14.png fonts/std/font_10x14_compressed.png fonts/std/font_04x06_extra.png fonts/std/font_05x07_extra.png fonts/std/font_10x14_extra.png fonts/std/font_cz_04x06.png fonts/std/font_cz_05x07.png fonts/std/font_cz_08x10.png fonts/std/font_cz_10x14.png fonts/std/font_de_04x06.png fonts/std/font_de_05x07.png fonts/std/font_de_08x10.png fonts/std/font_de_10x14.png fonts/std/font_es_04x06.png fonts/std/font_es_05x07.png fonts/std/font_es_08x10.png fonts/std/font_es_10x14.png fonts/std/font_fr_04x06.png fonts/std/font_fr_05x07.png fonts/std/font_fr_08x10.png fonts/std/font_fr_10x14.png fonts/std/font_it_04x06.png fonts/std/font_it_05x07.png fonts/std/font_it_08x10.png fonts/std/font_it_10x14.png fonts/std/font_se_04x06.png fonts/std/font_se_05x07.png fonts/std/font_se_08x10.png fonts/std/font_se_10x14.png 
 
-	@echo
-	@echo "Convert fonts from png to lbm:"
-	$(IMG2LBM) fonts/std/font_03x05.png fonts/std/font_03x05.lbm 3x5
-	$(IMG2LBM) fonts/std/font_04x06.png fonts/std/font_04x06.lbm 4x6
-	$(IMG2LBM) fonts/std/font_05x07.png fonts/std/font_05x07.lbm 5x7
-	$(IMG2LBM) fonts/std/font_08x10.png fonts/std/font_08x10.lbm 8x10
-	$(IMG2LBM) fonts/std/font_10x14.png fonts/std/font_10x14.lbm 10x14
-	$(IMG2LBM) fonts/std/font_10x14_compressed.png fonts/std/font_10x14_compressed.lbm 10x14
-	$(IMG2LBM) fonts/std/font_04x06_extra.png fonts/std/font_04x06_extra.lbm 4x6
-	$(IMG2LBM) fonts/std/font_05x07_extra.png fonts/std/font_05x07_extra.lbm 5x7
-	$(IMG2LBM) fonts/std/font_10x14_extra.png fonts/std/font_10x14_extra.lbm 10x14
-	$(IMG2LBM) fonts/std/font_cz_04x06.png fonts/std/font_cz_04x06.lbm 4x6
-	$(IMG2LBM) fonts/std/font_cz_05x07.png fonts/std/font_cz_05x07.lbm 5x7
-	$(IMG2LBM) fonts/std/font_cz_08x10.png fonts/std/font_cz_08x10.lbm 8x10
-	$(IMG2LBM) fonts/std/font_cz_10x14.png fonts/std/font_cz_10x14.lbm 10x14
-	$(IMG2LBM) fonts/std/font_de_04x06.png fonts/std/font_de_04x06.lbm 4x6
-	$(IMG2LBM) fonts/std/font_de_05x07.png fonts/std/font_de_05x07.lbm 5x7
-	$(IMG2LBM) fonts/std/font_de_08x10.png fonts/std/font_de_08x10.lbm 8x10
-	$(IMG2LBM) fonts/std/font_de_10x14.png fonts/std/font_de_10x14.lbm 10x14
-	$(IMG2LBM) fonts/std/font_es_04x06.png fonts/std/font_es_04x06.lbm 4x6
-	$(IMG2LBM) fonts/std/font_es_05x07.png fonts/std/font_es_05x07.lbm 5x7
-	$(IMG2LBM) fonts/std/font_es_08x10.png fonts/std/font_es_08x10.lbm 8x10
-	$(IMG2LBM) fonts/std/font_es_10x14.png fonts/std/font_es_10x14.lbm 10x14
-	$(IMG2LBM) fonts/std/font_fr_04x06.png fonts/std/font_fr_04x06.lbm 4x6
-	$(IMG2LBM) fonts/std/font_fr_05x07.png fonts/std/font_fr_05x07.lbm 5x7
-	$(IMG2LBM) fonts/std/font_fr_08x10.png fonts/std/font_fr_08x10.lbm 8x10
-	$(IMG2LBM) fonts/std/font_fr_10x14.png fonts/std/font_fr_10x14.lbm 10x14
-	$(IMG2LBM) fonts/std/font_it_04x06.png fonts/std/font_it_04x06.lbm 4x6
-	$(IMG2LBM) fonts/std/font_it_05x07.png fonts/std/font_it_05x07.lbm 5x7
-	$(IMG2LBM) fonts/std/font_it_08x10.png fonts/std/font_it_08x10.lbm 8x10
-	$(IMG2LBM) fonts/std/font_it_10x14.png fonts/std/font_it_10x14.lbm 10x14
-	$(IMG2LBM) fonts/std/font_pt_04x06.png fonts/std/font_pt_04x06.lbm 4x6
-	$(IMG2LBM) fonts/std/font_pt_05x07.png fonts/std/font_pt_05x07.lbm 5x7
-	$(IMG2LBM) fonts/std/font_pt_08x10.png fonts/std/font_pt_08x10.lbm 8x10
-	$(IMG2LBM) fonts/std/font_pt_10x14.png fonts/std/font_pt_10x14.lbm 10x14
-	$(IMG2LBM) fonts/std/font_se_04x06.png fonts/std/font_se_04x06.lbm 4x6
-	$(IMG2LBM) fonts/std/font_se_05x07.png fonts/std/font_se_05x07.lbm 5x7
-	$(IMG2LBM) fonts/std/font_se_08x10.png fonts/std/font_se_08x10.lbm 8x10
-	$(IMG2LBM) fonts/std/font_se_10x14.png fonts/std/font_se_10x14.lbm 10x14
+.PHONY: fonts
+fonts: $(patsubst %.png,%.lbm,$(wildcard fonts/*/*.png)) 
 
-bitmaps/sticks.lbm: bitmaps/sticks_4x1.xbm bitmaps/splash_9x.xbm bitmaps/splash_taranis.png bitmaps/splash_frsky.bmp bitmaps/logo_taranis.bmp bitmaps/icons.png bitmaps/asterisk.xbm bitmaps/about_9x.png bitmaps/about_taranis.png bitmaps/asterisk_4bits.png
+fonts/%.lbm: fonts/%.png
+	$(IMG2LBM) $^ $@
+
+bitmaps/sticks.lbm: bitmaps/sticks_4x1.xbm bitmaps/splash_9x.xbm bitmaps/splash_taranis.png bitmaps/logo_taranis.bmp bitmaps/icons.png bitmaps/asterisk.xbm bitmaps/about_9x.png bitmaps/about_taranis.png bitmaps/asterisk_4bits.png
 	@echo
 	@echo "Convert bitmaps from xbm to lbm:"
 	$(IMG2LBM) bitmaps/sticks_4x1.xbm bitmaps/sticks.lbm img 4
