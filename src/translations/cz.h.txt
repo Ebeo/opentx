@@ -269,7 +269,11 @@
 #define TR_VOLTSRC             "---""A1\0""A2\0""FAS""Cel"
 
 #define LEN_VARIOSRC           "\005"
-#define TR_VARIOSRC            "Alti\0""Alti+""Vario""A1\0  ""A2\0"
+#if defined(FRSKY_SPORT)
+  #define TR_VARIOSRC          "Vario""A1\0  ""A2\0"
+#else
+  #define TR_VARIOSRC          "Alti\0""Alti+""Vario""A1\0  ""A2\0"
+#endif
 
 #define LEN_VSCREEN            "\010"
 #define TR_VSCREEN             "Hodnota ""Ukazatel"
@@ -559,9 +563,9 @@
 #define TR_ALARMSWARN          "ALARMU"
 #define TR_SWITCHWARN          "POZICE"
 #define TR_INVERT_THR          "Invertovat plyn?"
-#define TR_SPEAKER_VOLUME      INDENT"Hlasitost"
+#define TR_SPEAKER_VOLUME      INDENT "Hlasitost"
 #define TR_LCD                 "LCD"
-#define TR_BRIGHTNESS          "Jas"
+#define TR_BRIGHTNESS          INDENT "Jas"
 #define TR_CPU_TEMP            "Tepl. CPU\016>"
 #define TR_CPU_CURRENT         "Proud\030>"
 #define TR_CPU_MAH             "Spotřeba"
@@ -618,6 +622,7 @@
 #define TR_INSERT_AFTER        "Vložit za"
 #define TR_COPY                "Kopírovat"
 #define TR_MOVE                "Přesunout"
+#define TR_PASTE               "Vložit"
 #define TR_DELETE              "Odstranit"
 #define TR_RESET_FLIGHT        "Vynulovat let"
 #define TR_RESET_TIMER1        "Vynulovat Timer1"
@@ -650,11 +655,11 @@
 //Taranis About screen
 #define TR_ABOUTUS             TR("  O nás   ", "O nás")
 
-#define TR_ABOUT_OPENTX_1      TR("opentx je nekomerční,", "Firmware tohoto rádia")
-#define TR_ABOUT_OPENTX_2      TR("bez jakékoliv záruky.", " je podporován firmou FrSky.")
-#define TR_ABOUT_OPENTX_3      TR("Vytvořen ve volném čase.", "OpenTX je open-source,")
-#define TR_ABOUT_OPENTX_4      TR("Podpora vývoje pomocí", " bez jakékoliv záruky.")
-#define TR_ABOUT_OPENTX_5      TR("finančního daru je vítána!", "Finanční dary jsou vítány!")
+#define TR_ABOUT_OPENTX_1      TR("OpenTX je nekomerční,", "OpenTX\001je\001open-source,")
+#define TR_ABOUT_OPENTX_2      TR("opensource bez záruky.", "nekomerční a bez\001záruky.")
+#define TR_ABOUT_OPENTX_3      TR("Vytvořen ve volném čase.", "Byl\001vytvořen\001nadšenými\001modeláři")
+#define TR_ABOUT_OPENTX_4      TR("Podpora vývoje pomocí", "Podpora\001vývoje\001pomocí")
+#define TR_ABOUT_OPENTX_5      TR("finančního daru je vítána!", "drobného\001daru\001je\001vítána!")
 
 #define TR_ABOUT_BERTRAND_1    "Bertrand Songis"
 #define TR_ABOUT_BERTRAND_2    "Hlavní vývojář OpenTX"
@@ -698,3 +703,8 @@
 #define TR_CHR_LONG   'l'
 #define TR_CHR_TOGGLE 't'
 #define TR_CHR_HOUR   'h'
+
+#define TR_BEEP_VOLUME         "Beep Volume"
+#define TR_WAV_VOLUME          "Wav Volume"
+#define TR_VARIO_VOLUME        "Vario Volume"
+#define TR_BG_VOLUME           "Bg Volume"

@@ -269,7 +269,11 @@
 #define TR_VOLTSRC             "---""A1\0""A2\0""FAS""Cel"
 
 #define LEN_VARIOSRC           "\005"
-#define TR_VARIOSRC            "Alti\0""Alti+""Vario""A1\0  ""A2\0"
+#if defined(FRSKY_SPORT)
+  #define TR_VARIOSRC          "Vario""A1\0  ""A2\0"
+#else
+  #define TR_VARIOSRC          "Alti\0""Alti+""Vario""A1\0  ""A2\0"
+#endif
 
 #define LEN_VSCREEN            "\010"
 #define TR_VSCREEN             "Hodnota ""Ukazatel"
@@ -559,9 +563,9 @@
 #define TR_ALARMSWARN          "ALARMU"
 #define TR_SWITCHWARN          "POZICE"
 #define TR_INVERT_THR          "Invertovat plyn?"
-#define TR_SPEAKER_VOLUME      INDENT"Hlasitost"
+#define TR_SPEAKER_VOLUME      INDENT "Hlasitost"
 #define TR_LCD                 "LCD"
-#define TR_BRIGHTNESS          "Jas"
+#define TR_BRIGHTNESS          INDENT "Jas"
 #define TR_CPU_TEMP            "Tepl. CPU\016>"
 #define TR_CPU_CURRENT         "Proud\030>"
 #define TR_CPU_MAH             "Spot\206eba"
@@ -618,6 +622,7 @@
 #define TR_INSERT_AFTER        "Vlo\217it za"
 #define TR_COPY                "Kop\204rovat"
 #define TR_MOVE                "P\206esunout"
+#define TR_PASTE               "Vlo\217it"
 #define TR_DELETE              "Odstranit"
 #define TR_RESET_FLIGHT        "Vynulovat let"
 #define TR_RESET_TIMER1        "Vynulovat Timer1"
@@ -650,11 +655,11 @@
 //Taranis About screen
 #define TR_ABOUTUS             TR("  O n\200s   ", "O n\200s")
 
-#define TR_ABOUT_OPENTX_1      TR("opentx je nekomer\201n\204,", "Firmware tohoto r\200dia")
-#define TR_ABOUT_OPENTX_2      TR("bez jak\202koliv z\200ruky.", " je podporov\200n firmou FrSky.")
-#define TR_ABOUT_OPENTX_3      TR("Vytvo\206en ve voln\202m \201ase.", "OpenTX je open-source,")
-#define TR_ABOUT_OPENTX_4      TR("Podpora v\212voje pomoc\204", " bez jak\202koliv z\200ruky.")
-#define TR_ABOUT_OPENTX_5      TR("finan\201n\204ho daru je v\204t\200na!", "Finan\201n\204 dary jsou v\204t\200ny!")
+#define TR_ABOUT_OPENTX_1      TR("OpenTX je nekomer\201n\204,", "OpenTX\001je\001open-source,")
+#define TR_ABOUT_OPENTX_2      TR("opensource bez z\200ruky.", "nekomer\201n\204 a bez\001z\200ruky.")
+#define TR_ABOUT_OPENTX_3      TR("Vytvo\206en ve voln\202m \201ase.", "Byl\001vytvo\206en\001nad\207en\212mi\001model\200\206i")
+#define TR_ABOUT_OPENTX_4      TR("Podpora v\212voje pomoc\204", "Podpora\001v\212voje\001pomoc\204")
+#define TR_ABOUT_OPENTX_5      TR("finan\201n\204ho daru je v\204t\200na!", "drobn\202ho\001daru\001je\001v\204t\200na!")
 
 #define TR_ABOUT_BERTRAND_1    "Bertrand Songis"
 #define TR_ABOUT_BERTRAND_2    "Hlavn\204 v\212voj\200\206 OpenTX"
@@ -698,3 +703,8 @@
 #define TR_CHR_LONG   'l'
 #define TR_CHR_TOGGLE 't'
 #define TR_CHR_HOUR   'h'
+
+#define TR_BEEP_VOLUME         "Beep Volume"
+#define TR_WAV_VOLUME          "Wav Volume"
+#define TR_VARIO_VOLUME        "Vario Volume"
+#define TR_BG_VOLUME           "Bg Volume"

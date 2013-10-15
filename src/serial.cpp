@@ -137,6 +137,47 @@ void SERIAL_startTX(void) {
 	}
 }
 
+static void uart_4800(void) {
+#ifndef SIMU
+#define BAUD 4800
+#include <util/setbaud.h>
+  UBRR0H = UBRRH_VALUE;
+  UBRR0L = UBRRL_VALUE;
+#if USE_2X
+  UCSR0A |= (1 << U2X0);
+#else
+	UCSR0A &= ~(1 << U2X0);
+#endif
+#endif
+}
+
+static void uart_9600(void) {
+#ifndef SIMU
+#define BAUD 9600
+#include <util/setbaud.h>
+  UBRR0H = UBRRH_VALUE;
+  UBRR0L = UBRRL_VALUE;
+#if USE_2X
+  UCSR0A |= (1 << U2X0);
+#else
+	UCSR0A &= ~(1 << U2X0);
+#endif
+#endif
+}
+
+static void uart_14400(void) {
+#ifndef SIMU
+#define BAUD 14400
+#include <util/setbaud.h>
+  UBRR0H = UBRRH_VALUE;
+  UBRR0L = UBRRL_VALUE;
+#if USE_2X
+  UCSR0A |= (1 << U2X0);
+#else
+	UCSR0A &= ~(1 << U2X0);
+#endif
+#endif
+}
 
 static void uart_19200(void) {
 #ifndef SIMU
@@ -182,6 +223,39 @@ static void uart_57600(void) {
 #endif
 }
 
+
+static void uart_76800(void) {
+#ifndef SIMU
+#undef BAUD  // avoid compiler warning
+#define BAUD 76800
+#include <util/setbaud.h>
+  UBRR0H = UBRRH_VALUE;
+  UBRR0L = UBRRL_VALUE;
+#if USE_2X
+  UCSR0A |= (1 << U2X0);
+#else
+	UCSR0A &= ~(1 << U2X0);
+#endif
+#endif
+}
+
+
+static void uart_115200(void) {
+#ifndef SIMU
+#undef BAUD  // avoid compiler warning
+#define BAUD 115200
+#include <util/setbaud.h>
+  UBRR0H = UBRRH_VALUE;
+  UBRR0L = UBRRL_VALUE;
+#if USE_2X
+  UCSR0A |= (1 << U2X0);
+#else
+	UCSR0A &= ~(1 << U2X0);
+#endif
+#endif
+}
+
+
 inline void SERIAL_EnableTXD(void) {
 	//UCSR0B |= (1 << TXEN0); // enable TX
 	UCSR0B |= (1 << TXEN0) | (1 << UDRIE0); // enable TX and TX interrupt
@@ -199,19 +273,34 @@ void SERIAL_Init(void) {
 	PORTE &= ~(1 << PORTE0); // disable pullup on RXD0 pin
 
 	uint8_t b = 2; // TODO g_eeGeneral.baudRate;
-
-	if (b == 0) {
+//	g_eeGeneral.spare2 = BAUD_57600;
+	switch (g_eeGeneral.spare2) {
+	case BAUD_4800:
+		uart_4800();
+		break;
+	case BAUD_9600:
+		uart_9600();
+		break;
+	case BAUD_14400:
+		uart_14400();
+		break;
+	case BAUD_19200:
 		uart_19200();
-	}
-	else if (b == 1) {
+		break;
+	case BAUD_38400:
 		uart_38400();
-	}
-	else if (b == 2) {
+		break;
+	case BAUD_57600:
 		uart_57600();
+		break;
+	case BAUD_76800:
+		uart_76800();
+		break;
+	case BAUD_115200:
+		uart_115200();
+		break;
 	}
-#if 0
-	uart_57600();
-#endif
+
 
 	// UCSR0A &= ~(1 << U2X0); // disable double speed operation
 	// set 8N1

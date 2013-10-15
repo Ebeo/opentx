@@ -269,7 +269,11 @@
 #define TR_VOLTSRC       "---""A1\0""A2\0""FAS""Cel"
 
 #define LEN_VARIOSRC     "\005"
-#define TR_VARIOSRC      "Alti\0""Alti+""Vario""A1\0  ""A2\0"
+#if defined(FRSKY_SPORT)
+  #define TR_VARIOSRC          "Vario""A1\0  ""A2\0"
+#else
+  #define TR_VARIOSRC          "Alti\0""Alti+""Vario""A1\0  ""A2\0"
+#endif
 
 #define LEN_VSCREEN      "\004"
 #define TR_VSCREEN       "Nums""Bars"
@@ -315,9 +319,9 @@
 #endif
 
 #if defined(PCBTARANIS)
-  #define TR_VSWITCHES         "SA\300""SA-""SA\301""SB\300""SB-""SB\301""SC\300""SC-""SC\301""SD\300""SD-""SD\301""SE\300""SE-""SE\301""SF\300""SF\301""SG\300""SG-""SG\301""SH\300""SH\301" TR_CUSTOMSW " ON"
+  #define TR_VSWITCHES         "SA\300""SA-""SA\301""SB\300""SB-""SB\301""SC\300""SC-""SC\301""SD\300""SD-""SD\301""SE\300""SE-""SE\301""SF\300""SF\301""SG\300""SG-""SG\301""SH\300""SH\301" TR_CUSTOMSW "1*\0"
 #else
-  #define TR_VSWITCHES         TR_9X_3POS_SWITCHES "THR""RUD""ELE""AIL""GEA""TRN" TR_CUSTOMSW " ON"
+  #define TR_VSWITCHES         TR_9X_3POS_SWITCHES "THR""RUD""ELE""AIL""GEA""TRN" TR_CUSTOMSW "1*\0"
 #endif
 
 #if defined(PCBSKY9X)
@@ -559,16 +563,16 @@
 #define TR_ALARMSWARN          "ALARMES"
 #define TR_SWITCHWARN          "CHAVES"
 #define TR_INVERT_THR          "Inverte Acel?"
-#define TR_SPEAKER_VOLUME      INDENT"Volume"
+#define TR_SPEAKER_VOLUME      INDENT "Volume"
 #define TR_LCD                 "LCD"
-#define TR_BRIGHTNESS          "Brilho"
+#define TR_BRIGHTNESS          INDENT "Brilho"
 #define TR_CPU_TEMP            "CPU Temp.\016>"
 #define TR_CPU_CURRENT         "Current\022>"
 #define TR_CPU_MAH             "Consumo."
 #define TR_COPROC              "CoProc."
 #define TR_COPROC_TEMP         "MB Temp. \016>"
-#define TR_CAPAWARNING         INDENT"Aviso Capacidade"
-#define TR_TEMPWARNING         INDENT"Temperat. ALTA"
+#define TR_CAPAWARNING         INDENT "Aviso Capacidade"
+#define TR_TEMPWARNING         INDENT "Temperat. ALTA"
 #define TR_FUNC                "Funcao"
 #define TR_V1                  "V1"
 #define TR_V2                  "V2"
@@ -618,6 +622,7 @@
 #define TR_INSERT_AFTER        "Insert After"
 #define TR_COPY                "Copy"
 #define TR_MOVE                "Move"
+#define TR_PASTE               "Paste"
 #define TR_DELETE              "Delete"
 #define TR_RESET_FLIGHT        "Reset Flight"
 #define TR_RESET_TIMER1        "Reset Timer1"
@@ -679,9 +684,15 @@
 #define TR_ABOUT_MARTIN_1      "Martin Hotar"
 #define TR_ABOUT_MARTIN_2      "Graphics designer"
 
-#define TR_ABOUT_HARDWARE_1    "FrSky"
-#define TR_ABOUT_HARDWARE_2    "Hardware designer/producer"
-#define TR_ABOUT_HARDWARE_3    ""
+#if defined(PCBTARANIS)
+  #define TR_ABOUT_HARDWARE_1  "FrSky"
+  #define TR_ABOUT_HARDWARE_2  "Hardware designer/producer"
+  #define TR_ABOUT_HARDWARE_3  "Firmware contributor"
+#else
+  #define TR_ABOUT_HARDWARE_1  "Brent Nelson"
+  #define TR_ABOUT_HARDWARE_2  "Sky9x designer/producer"
+  #define TR_ABOUT_HARDWARE_3  ""
+#endif
 
 #define TR_ABOUT_PARENTS_1     "Parent projects"
 #define TR_ABOUT_PARENTS_2     "ersky9x (Mike Blandford)"
@@ -692,3 +703,8 @@
 #define TR_CHR_LONG   'l'
 #define TR_CHR_TOGGLE 't'
 #define TR_CHR_HOUR   'h'
+
+#define TR_BEEP_VOLUME         "Beep Volume"
+#define TR_WAV_VOLUME          "Wav Volume"
+#define TR_VARIO_VOLUME        "Vario Volume"
+#define TR_BG_VOLUME           "Bg Volume"

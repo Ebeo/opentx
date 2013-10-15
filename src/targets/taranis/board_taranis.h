@@ -37,8 +37,6 @@
 #ifndef board_taranis_h
 #define board_taranis_h
 
-#include <stdio.h>
-
 #include "STM32F2xx_StdPeriph_Lib_V1.1.0/Libraries/STM32F2xx_StdPeriph_Driver/inc/stm32f2xx_rcc.h"
 #include "STM32F2xx_StdPeriph_Lib_V1.1.0/Libraries/STM32F2xx_StdPeriph_Driver/inc/stm32f2xx_gpio.h"
 #include "STM32F2xx_StdPeriph_Lib_V1.1.0/Libraries/STM32F2xx_StdPeriph_Driver/inc/stm32f2xx_spi.h"
@@ -161,10 +159,10 @@ void pwrOff();
 #define EXTERNAL_RF_OFF()     GPIO_ResetBits(GPIOPWR, PIN_EXT_RF_PWR)
 
 // Backlight driver
-#define setBacklight(xx)
-#define __BACKLIGHT_ON        GPIO_SetBits(GPIOB, GPIO_Pin_BL)
-#define __BACKLIGHT_OFF       GPIO_ResetBits(GPIOB, GPIO_Pin_BL)
-#define IS_BACKLIGHT_ON()     GPIO_ReadInputDataBit(GPIOB, GPIO_Pin_BL)
+#define setBacklight(xx)      TIM10->CCR1 = 100-xx
+#define __BACKLIGHT_ON        TIM10->CCR1 = 100-g_eeGeneral.backlightBright
+#define __BACKLIGHT_OFF       TIM10->CCR1 = 0
+#define IS_BACKLIGHT_ON()     (TIM10->CCR1 != 0)
 
 // USB driver
 #define BOOTLOADER_REQUEST()  (0)

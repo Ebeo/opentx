@@ -104,13 +104,18 @@ ModelData  g_model;
 uint8_t modelBitmap[MODEL_BITMAP_SIZE];
 void loadModelBitmap(char *name, uint8_t *bitmap)
 {
-  char lfn[] = BITMAPS_PATH "/xxxxxxxxxx.bmp";
-  strncpy(lfn+sizeof(BITMAPS_PATH), name, LEN_BITMAP_NAME);
-  lfn[sizeof(BITMAPS_PATH)+LEN_BITMAP_NAME] = '\0';
-  strcat(lfn+sizeof(BITMAPS_PATH), BITMAPS_EXT);
-  if (bmpLoad(bitmap, lfn, MODEL_BITMAP_WIDTH, MODEL_BITMAP_HEIGHT)) {
-    memcpy(bitmap, logo_taranis, MODEL_BITMAP_SIZE);
+  uint8_t len = zlen(name, LEN_BITMAP_NAME);
+  if (len > 0) {
+    char lfn[] = BITMAPS_PATH "/xxxxxxxxxx.bmp";
+    strncpy(lfn+sizeof(BITMAPS_PATH), name, len);
+    strcpy(lfn+sizeof(BITMAPS_PATH)+len, BITMAPS_EXT);
+    if (bmpLoad(bitmap, lfn, MODEL_BITMAP_WIDTH, MODEL_BITMAP_HEIGHT) == 0) {
+      return;
+    }
   }
+
+  // In all error cases, we set the default logo
+  memcpy(bitmap, logo_taranis, MODEL_BITMAP_SIZE);
 }
 #endif
 
@@ -185,6 +190,15 @@ char idx2char(int8_t idx)
 }
 
 #if defined(CPUARM)
+bool zexist(const char *str, uint8_t size)
+{
+  for (int i=0; i<size; i++) {
+    if (str[i] != 0)
+      return true;
+  }
+  return false;
+}
+
 uint8_t zlen(const char *str, uint8_t size)
 {
   while (size > 0) {
@@ -409,7 +423,7 @@ void generalDefault()
 #endif
 
 #if !defined(CPUM64)
-  g_eeGeneral.backlightMode = e_backlight_mode_both;
+  g_eeGeneral.backlightMode = e_backlight_mode_all;
   g_eeGeneral.lightAutoOff = 2;
   g_eeGeneral.inactivityTimer = 10;
 #endif
@@ -424,9 +438,10 @@ void generalDefault()
 
 uint16_t evalChkSum()
 {
-  uint16_t sum=0;
+  uint16_t sum = 0;
+  const int16_t *calibValues = &g_eeGeneral.calibMid[0];
   for (int i=0; i<NUM_STICKS+NUM_POTS+5; i++)
-    sum += g_eeGeneral.calibMid[i];
+    sum += calibValues[i];
   return sum;
 }
 
@@ -838,8 +853,6 @@ int16_t cyc_anas[3] = {0};
 
 // TODO same naming convention than the putsMixerSource
 
-bool __getSwitch(int8_t swtch);
-
 getvalue_t getValue(uint8_t i)
 {
   /*srcRaw is shifted +1!*/
@@ -865,13 +878,13 @@ getvalue_t getValue(uint8_t i)
   else if (i<MIXSRC_SF) return (switchState(SW_SF0) ? -1024 : 1024);
   else if (i<MIXSRC_SG) return (switchState(SW_SG0) ? -1024 : (switchState(SW_SG1) ? 0 : 1024));
   else if (i<MIXSRC_SH) return (switchState(SW_SH0) ? -1024 : 1024);
-  else if (i<MIXSRC_LAST_CSW) return __getSwitch(SWSRC_SW1+i-MIXSRC_SH) ? 1024 : -1024;
+  else if (i<MIXSRC_LAST_CSW) return getSwitch(SWSRC_SW1+i-MIXSRC_SH) ? 1024 : -1024;
 #else
   else if (i<MIXSRC_3POS) return (switchState(SW_ID0) ? -1024 : (switchState(SW_ID1) ? 0 : 1024));
 #if defined(EXTRA_3POS)
   else if (i<MIXSRC_3POS2) return (switchState(SW_ID3) ? -1024 : (switchState(SW_ID4) ? 0 : 1024));
 #endif
-  else if (i<MIXSRC_LAST_CSW) return __getSwitch(SWSRC_THR+i+1-MIXSRC_THR) ? 1024 : -1024;
+  else if (i<MIXSRC_LAST_CSW) return getSwitch(SWSRC_THR+i+1-MIXSRC_THR) ? 1024 : -1024;
 #endif
   else if (i<MIXSRC_LAST_PPM) { int16_t x = g_ppmIns[i+1-MIXSRC_PPM1]; if (i<MIXSRC_PPM1+NUM_CAL_PPM) { x-= g_eeGeneral.trainer.calib[i+1-MIXSRC_PPM1]; } return x*2; }
   else if (i<MIXSRC_LAST_CH) return ex_chans[i+1-MIXSRC_CH1];
@@ -916,14 +929,8 @@ getvalue_t getValue(uint8_t i)
   else return 0;
 }
 
-#if defined(CPUARM)
-  #define GETSWITCH_RECURSIVE_TYPE uint32_t
-#else
-  #define GETSWITCH_RECURSIVE_TYPE uint16_t
-#endif
-
-volatile GETSWITCH_RECURSIVE_TYPE s_last_switch_used;
-volatile GETSWITCH_RECURSIVE_TYPE s_last_switch_value;
+volatile GETSWITCH_RECURSIVE_TYPE s_last_switch_used = 0;
+volatile GETSWITCH_RECURSIVE_TYPE s_last_switch_value = 0;
 /* recursive function. stack as of today (16/03/2012) grows by 8bytes at each call, which is ok! */
 
 #if defined(CPUARM)
@@ -934,7 +941,7 @@ uint8_t  cswStates[NUM_CSW];
 
 int16_t csLastValue[NUM_CSW];
 #define CS_LAST_VALUE_INIT -32768
-bool __getSwitch(int8_t swtch)
+bool getSwitch(int8_t swtch)
 {
   bool result;
 
@@ -961,13 +968,13 @@ bool __getSwitch(int8_t swtch)
 
       CustomSwData * cs = cswAddress(cs_idx);
       uint8_t s = cs->andsw;
-      if (cs->func == CS_OFF || (s && !__getSwitch(s))) {
+      if (cs->func == CS_OFF || (s && !getSwitch(s))) {
         csLastValue[cs_idx] = CS_LAST_VALUE_INIT;
         result = false;
       }
       else if ((s=cswFamily(cs->func)) == CS_VBOOL) {
-        bool res1 = __getSwitch(cs->v1);
-        bool res2 = __getSwitch(cs->v2);
+        bool res1 = getSwitch(cs->v1);
+        bool res2 = getSwitch(cs->v2);
         switch (cs->func) {
           case CS_AND:
             result = (res1 && res2);
@@ -1006,7 +1013,7 @@ bool __getSwitch(int8_t swtch)
 #if defined(FRSKY)
           // Telemetry
           if (cs->v1 >= MIXSRC_FIRST_TELEM) {
-            if ((!TELEMETRY_STREAMING() && cs->v1 >= MIXSRC_FIRST_TELEM+TELEM_TM2) || IS_FAI_FORBIDDEN(cs->v1-1))
+            if ((!TELEMETRY_STREAMING() && cs->v1 >= MIXSRC_FIRST_TELEM+TELEM_FIRST_STREAMED_VALUE-1) || IS_FAI_FORBIDDEN(cs->v1-1))
               return swtch > 0 ? false : true;
               	
 #if defined (PCBTARANIS)
@@ -1034,7 +1041,7 @@ bool __getSwitch(int8_t swtch)
           }
 #else
           if (cs->v1 >= MIXSRC_FIRST_TELEM) {
-            y = (int16_t)3 * cs->v2; // it's a Timer
+            y = (int16_t)3 * (128+cs->v2); // it's a Timer
           }
           else if (cs->v1 >= MIXSRC_GVAR1) {
             y = cs->v2; // it's a GVAR
@@ -1106,18 +1113,13 @@ bool __getSwitch(int8_t swtch)
 #endif
 
       if (result)
-        s_last_switch_value |= ((GETSWITCH_RECURSIVE_TYPE)1<<cs_idx);
+        s_last_switch_value |= mask;
+      else
+        s_last_switch_value &= ~mask;
     }
   }
 
   return swtch > 0 ? result : !result;
-}
-
-bool getSwitch(int8_t swtch)
-{
-  s_last_switch_used = 0;
-  s_last_switch_value = 0;
-  return __getSwitch(swtch);
 }
 
 swstate_t switches_states = 0;
@@ -1154,7 +1156,7 @@ int8_t getMovedSwitch()
       mask = (1<<(i-2));
       prev = (switches_states & mask);
     }
-    bool next = __getSwitch(i);
+    bool next = getSwitch(i);
     if (prev != next) {
       if (i!=MAX_PSWITCH || next==true)
         result = next ? i : -i;
@@ -1406,7 +1408,7 @@ getvalue_t convertTelemValue(uint8_t channel, uint8_t value)
       break;
     case TELEM_ALT:
 #if defined(PCBTARANIS)
-      result = value * 80 - 5000;
+      result = value * 800 - 50000;
       break;
 #endif
     case TELEM_GPSALT:
@@ -1504,11 +1506,13 @@ FORCEINLINE void convertUnit(getvalue_t & val, uint8_t & unit)
 
 #define INAC_DEVISOR 512   // bypass splash screen with stick movement
 #define INAC_DEV_SHIFT 9   // shift right value for stick movement
-uint16_t stickMoveValue()
+uint8_t inputsMoveValue()
 {
-  uint16_t sum = 0;
+  uint8_t sum = 0;
   for (uint8_t i=0; i<NUM_STICKS; i++)
     sum += anaIn(i) >> INAC_DEV_SHIFT;
+  for (uint8_t i=0; i<NUM_SWITCHES; i++)
+    sum += getValue(MIXSRC_FIRST_SWITCH+i) >> 10;
   return sum;
 }
 
@@ -1523,7 +1527,7 @@ void checkBacklight()
   uint8_t x = g_blinkTmr10ms;
   if (tmr10ms != x) {
     tmr10ms = x;
-    uint16_t tsum = stickMoveValue();
+    uint8_t tsum = inputsMoveValue();
     if (tsum != inactivity.sum) {
       inactivity.sum = tsum;
       inactivity.counter = 0;
@@ -1566,6 +1570,7 @@ inline void Splash()
 
 void doSplash()
 {
+  //bool secondSplash ;
   if (SPLASH_NEEDED()) {
     Splash();
 
@@ -1576,7 +1581,7 @@ void doSplash()
 #if defined(PCBSTD)
     lcdSetContrast();
 #elif defined(PCBTARANIS)
-    bool secondSplash = false;
+bool secondSplash = false;
 #else
     tmr10ms_t curTime = get_tmr10ms() + 10;
     uint8_t contrast = 10;
@@ -1585,7 +1590,7 @@ void doSplash()
 
     getADC(); // init ADC array
 
-    uint16_t inacSum = stickMoveValue();
+    uint8_t inacSum = inputsMoveValue();
 
     tmr10ms_t tgtime = get_tmr10ms() + SPLASH_TIMEOUT;
     while (tgtime != get_tmr10ms()) {
@@ -1597,7 +1602,7 @@ void doSplash()
 
       getADC();
 
-      uint16_t tsum = stickMoveValue();
+      uint8_t tsum = inputsMoveValue();
 
 #if defined(FSPLASH) || defined(XSPLASH)
       if (!(g_eeGeneral.splashMode & 0x04))
@@ -1605,7 +1610,7 @@ void doSplash()
       if (keyDown() || tsum!=inacSum) return;  // wait for key release
 
       if (pwrCheck()==e_power_off) return;
-
+	  
 #if defined(PCBTARANIS)
       if (!secondSplash && get_tmr10ms() >= tgtime-200) {
         secondSplash = true;
@@ -1703,6 +1708,10 @@ void checkSwitches()
   swstate_t states = g_model.switchWarningStates;
 
   while (1) {
+
+#if defined(TELEMETRY_MOD_14051)
+    getADC();
+#endif
 
     getMovedSwitch();
 
@@ -2002,31 +2011,89 @@ void getADC()
   }
 }
 #else
-void getADC()
+
+/**
+ * Read ADC using 10 bits
+ */
+inline uint16_t read_adc10(uint8_t adc_input) 
 {
   uint16_t temp_ana;
-  for (uint8_t adc_input=0; adc_input<8; adc_input++) {
-/*
-    ADMUX = adc_input|ADC_VREF_TYPE;
-	// ADCSRA|=0x08; // enable ADC Interrupt Enable  should not be necessary? or is it
-	MCUCR|=0x28;  // enable Sleep (bit5) enable ADC Noise Reduction (bit3)
-	asm volatile(" sleep        \n\t");  // if _SLEEP() is not defined use this
-    while (ADCSRA & 0x40); // Wait for the AD conversion to complete
-    temp_ana = ADC;
-    
-	asm volatile(" sleep        \n\t");  // if _SLEEP() is not defined use this  
-    while (ADCSRA & 0x40); // Wait for the AD conversion to complete
-    s_anaFilt[adc_input] = temp_ana + ADC;    
-   	MCUCR&=0x08;  // disable sleep  
-    */
+  ADMUX = adc_input|ADC_VREF_TYPE;
+#if defined(TELEMETRY_MOD_14051)
+  ADCSRA &= 0x87;
+#endif
+  ADCSRA |= 1 << ADSC; // Start the AD conversion
+  while (ADCSRA & (1 << ADSC)); // Wait for the AD conversion to complete
+  temp_ana = ADC;
+  ADCSRA |= 1 << ADSC; // Start the second AD conversion
+  while (ADCSRA & (1 << ADSC)); // Wait for the AD conversion to complete
+  temp_ana += ADC;
+  return temp_ana;
+}
+
+#if defined(TELEMETRY_MOD_14051)
+enum MuxInput {
+  MUX_BATT,
+  MUX_THR,
+  MUX_AIL,
+  MUX_MAX = MUX_AIL
+};
+
+uint8_t pf7_digital[2];
+/**
+ * Update ADC PF7 using 14051 multiplexer
+ * X0 : Battery voltage
+ * X1 : THR SW
+ * X2 : AIL SW
+ */
+void readMultiplexAna()
+{
+  static uint8_t muxNum = MUX_BATT;
+  uint16_t temp_ana;
+  uint8_t nextMuxNum = muxNum-1;
+
+  DDRC |= 0xC1;
+  temp_ana = read_adc10(7);
+
+  switch (muxNum) {
+    case MUX_BATT:
+      s_anaFilt[TX_VOLTAGE] = temp_ana;
+      nextMuxNum = MUX_MAX;
+      break;
+    case MUX_THR:
+    case MUX_AIL:
+      // Digital switch depend from input voltage
+      // take half voltage to determine digital state
+      pf7_digital[muxNum-1] = (temp_ana >= (s_anaFilt[TX_VOLTAGE] / 2)) ? 1 : 0;
+      break;
+  }
+
+  // set the mux number for the next ADC convert,
+  // stabilize voltage before ADC read.
+  muxNum = nextMuxNum;
+  PORTC &= ~((1 << PC7) | (1 << PC6) | (1 << PC0)); // Clear CTRL ABC
+  switch (muxNum) {
+    case 1:
+      PORTC |= (1 << PC6); // Mux CTRL A : SW_THR
+      break;
+    case 2:
+      PORTC |= (1 << PC7); // Mux CTRL B : SW_AIL
+      break;
+  }
+}
+#endif
+
+void getADC()
+{
+#if defined(TELEMETRY_MOD_14051)
+  readMultiplexAna();
+  #define ADC_READ_COUNT 7
+#else
+  #define ADC_READ_COUNT 8
+#endif
   
-    ADMUX = adc_input|ADC_VREF_TYPE;
-    ADCSRA|=0x40; // Start the AD conversion
-    while (ADCSRA & 0x40); // Wait for the AD conversion to complete
-    temp_ana = ADC;
-    ADCSRA|=0x40; // Start the second AD conversion
-    while (ADCSRA & 0x40); // Wait for the AD conversion to complete
-    s_anaFilt[adc_input] = temp_ana + ADC;
+  for (uint8_t adc_input=0; adc_input<ADC_READ_COUNT; adc_input++) {
+    s_anaFilt[adc_input] = read_adc10(adc_input);
   }
 }
 #endif
@@ -2217,6 +2284,7 @@ BeepANACenter evalSticks(uint8_t mode)
 
     if (g_model.throttleReversed && ch==THR_STICK)
       v = -v;
+      
 
 #if defined(EXTRA_3POS)
     if (i == POT1+EXTRA_3POS-1) {
@@ -2313,6 +2381,11 @@ PLAY_FUNCTION(playValue, uint8_t idx)
       break;
 #if defined(FRSKY)
     case MIXSRC_FIRST_TELEM-1+TELEM_RSSI_TX-1:
+#if defined(PCBTARANIS)
+      // On Taranis RSSI_TX is used for SWR
+      PLAY_NUMBER(val, 0, 0);
+      break;
+#endif
     case MIXSRC_FIRST_TELEM-1+TELEM_RSSI_RX-1:
       PLAY_NUMBER(val, 1+UNIT_DBM, 0);
       break;
@@ -2370,7 +2443,7 @@ PLAY_FUNCTION(playValue, uint8_t idx)
 
     case MIXSRC_FIRST_TELEM-1+TELEM_ALT-1:
 #if defined(PCBTARANIS)
-      PLAY_NUMBER(val/100, 1+UNIT_METERS, 0);
+      PLAY_NUMBER(val/10, 1+UNIT_METERS, PREC1);
       break;
 #endif
     case MIXSRC_FIRST_TELEM-1+TELEM_MIN_ALT-1:
@@ -2838,11 +2911,11 @@ void perOut(uint8_t mode, uint8_t tick10ms)
 
   do {
 
-    // printf("[pass %d]\n", pass); fflush(stdout);
+    // TRACE("[pass %d]", pass);
 
     bitfield_channels_t passDirtyChannels = 0;
 
-    for (uint8_t i = 0; i < MAX_MIXERS; i++) {
+    for (uint8_t i=0; i<MAX_MIXERS; i++) {
 
 #if defined(BOLD_FONT)
       if (mode==e_perout_mode_normal && pass==0) swOn[i].activeMix = 0;
@@ -2855,6 +2928,11 @@ void perOut(uint8_t mode, uint8_t tick10ms)
       uint8_t k = md->srcRaw - 1;
 
       if (!(dirtyChannels & ((bitfield_channels_t)1 << md->destCh))) continue;
+
+      // if this is the first calculation for the destination channel, initialize it with 0 (otherwise would be random)
+      if (i == 0 || md->destCh != (md-1)->destCh) {
+        chans[md->destCh] = 0;
+      }
 
       //========== PHASE && SWITCH =====
       bool mixCondition = (md->phases != 0 || md->swtch);
@@ -2877,7 +2955,7 @@ void perOut(uint8_t mode, uint8_t tick10ms)
         else {
           v = getValue(k);
           if (k>=MIXSRC_CH1-1 && k<=MIXSRC_LAST_CH-1 && md->destCh != k-MIXSRC_CH1+1) {
-            if (dirtyChannels & ((bitfield_channels_t)1 << (k-MIXSRC_CH1+1)) & (passDirtyChannels|~(((bitfield_channels_t) 1 << md->destCh)-1)))
+            if (dirtyChannels & ((bitfield_channels_t)1 << (k-MIXSRC_CH1+1)))
               passDirtyChannels |= (bitfield_channels_t) 1 << md->destCh;
             if (k-MIXSRC_CH1+1 < md->destCh || pass > 0)
               v = chans[k-MIXSRC_CH1+1] >> 8;
@@ -2890,7 +2968,7 @@ void perOut(uint8_t mode, uint8_t tick10ms)
 
       bool apply_offset_and_curve = true;
 
-      // ========== DELAYS ===============
+      //========== DELAYS ===============
       delayval_t _swOn = swOn[i].now;
       delayval_t _swPrev = swOn[i].prev;
       bool swTog = (mixEnabled != _swOn);
@@ -2931,7 +3009,7 @@ void perOut(uint8_t mode, uint8_t tick10ms)
         int16_t offset = GET_GVAR(MD_OFFSET(md), GV_RANGELARGE_NEG, GV_RANGELARGE, s_perout_flight_phase);
         if (offset) v += calc100toRESX_16Bits(offset);
 
-      //========== TRIMS ===============
+      //========== TRIMS ================
         if (!(mode & e_perout_mode_notrims)) {
           int8_t mix_trim = md->carryTrim;
           if (mix_trim < TRIM_ON)
@@ -2980,13 +3058,13 @@ void perOut(uint8_t mode, uint8_t tick10ms)
                 int32_t newValue = tact-rate/((int16_t)(100/SLOW_STEP)*md->speedDown);
                 if (newValue>currentValue) currentValue = newValue; // Endposition; prevent toggling around the destination
               }            
-            } //endif diff>0
+            }
             act[i] = tact = currentValue;
             // open.20.fsguruh: this implementation would save about 50 bytes code
           } // endif tick10ms ; in case no time passed assign the old value, not the current value from source
           v = (tact >> DEL_MULT_SHIFT);
-        } //endif diff
-      } //endif speed
+        }
+      }
 
       //========== CURVES ===============
       if (apply_offset_and_curve && md->curveParam && md->curveMode == MODE_CURVE) {
@@ -3008,10 +3086,6 @@ void perOut(uint8_t mode, uint8_t tick10ms)
 
       int32_t *ptr = &chans[md->destCh]; // Save calculating address several times
       
-      if (i == 0 || md->destCh != (md - 1)->destCh)
-        *ptr = 0;
-      // if this is the first calculation for the destination channel, initialize it with 0 (otherwise would be random)
-
       switch (md->mltpx) {
         case MLTPX_REP:
           *ptr = dv;
@@ -3125,6 +3199,9 @@ void doMixerCalculations()
   static uint16_t delta = 0;
   static ACTIVE_PHASES_TYPE s_fade_flight_phases = 0;
   static uint8_t s_last_phase = 255; // TODO reinit everything here when the model changes, no???
+
+  s_last_switch_used = 0;
+
   uint8_t phase = getFlightPhase();
 
   if (s_last_phase != phase) {
@@ -3163,6 +3240,7 @@ void doMixerCalculations()
   if (s_fade_flight_phases) {
     memclear(sum_chans512, sizeof(sum_chans512));
     for (uint8_t p=0; p<MAX_PHASES; p++) {
+      s_last_switch_used = 0;
       if (s_fade_flight_phases & ((ACTIVE_PHASES_TYPE)1 << p)) {
         s_perout_flight_phase = p;
         perOut(p==phase?e_perout_mode_normal:e_perout_mode_inactive_phase, p==phase?tick10ms:0);
@@ -3170,6 +3248,7 @@ void doMixerCalculations()
           sum_chans512[i] += (chans[i] >> 4) * fp_act[p];
         weight += fp_act[p];
       }
+      s_last_switch_used = 0;
     }
     assert(weight);
     s_perout_flight_phase = phase;
@@ -3825,20 +3904,17 @@ void perMain()
   }
   if (counter-- == 0) {
     counter = 10;
-#if defined(PCBTARANIS)
     int32_t instant_vbat = anaIn(TX_VOLTAGE);
+#if defined(PCBTARANIS)
     instant_vbat = (instant_vbat + instant_vbat*(g_eeGeneral.vBatCalib)/128) * BATT_SCALE;
     instant_vbat >>= 11;
     instant_vbat += 2; // because of the diode
 #elif defined(PCBSKY9X)
-    int32_t instant_vbat = anaIn(TX_VOLTAGE);
     instant_vbat = (instant_vbat + instant_vbat*(g_eeGeneral.vBatCalib)/128) * 4191;
     instant_vbat /= 55296;
 #elif defined(PCBGRUVIN9X)
-    uint16_t instant_vbat = anaIn(TX_VOLTAGE);
-    instant_vbat = ((uint32_t)instant_vbat*1112 + (int32_t)instant_vbat*g_eeGeneral.vBatCalib + (BandGap<<2)) / (BandGap<<3);
+    instant_vbat = (instant_vbat*1112 + instant_vbat*g_eeGeneral.vBatCalib + (BandGap<<2)) / (BandGap<<3);
 #else
-    uint16_t instant_vbat = anaIn(TX_VOLTAGE);
     instant_vbat = (instant_vbat*16 + instant_vbat*g_eeGeneral.vBatCalib/8) / BandGap;
 #endif
 

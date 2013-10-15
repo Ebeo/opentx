@@ -49,6 +49,7 @@ extern LanguagePack deLanguagePack;
 extern LanguagePack itLanguagePack;
 extern LanguagePack ptLanguagePack;
 extern LanguagePack skLanguagePack;
+extern LanguagePack seLanguagePack;
 
 LanguagePack * languagePacks[] = {
   // alphabetical order
@@ -60,6 +61,7 @@ LanguagePack * languagePacks[] = {
   &itLanguagePack,
   &ptLanguagePack,
   &skLanguagePack,
+  &seLanguagePack,
   NULL
 };
 #endif
@@ -153,7 +155,6 @@ enum menuGeneralSetupItems {
   IF_HAPTIC(ITEM_SETUP_HAPTIC_MODE)
   IF_HAPTIC(ITEM_SETUP_HAPTIC_LENGTH)
   IF_HAPTIC(ITEM_SETUP_HAPTIC_STRENGTH)
-  IF_PCBSKY9X(ITEM_SETUP_BRIGHTNESS)
   ITEM_SETUP_CONTRAST,
   ITEM_SETUP_ALARMS_LABEL,
   ITEM_SETUP_BATTERY_WARNING,
@@ -166,6 +167,7 @@ enum menuGeneralSetupItems {
   ITEM_SETUP_BACKLIGHT_LABEL,
   ITEM_SETUP_BACKLIGHT_MODE,
   ITEM_SETUP_BACKLIGHT_DELAY,
+  IF_CPUARM(ITEM_SETUP_BRIGHTNESS)
   CASE_PWM_BACKLIGHT(ITEM_SETUP_BACKLIGHT_BRIGHTNESS_OFF)
   CASE_PWM_BACKLIGHT(ITEM_SETUP_BACKLIGHT_BRIGHTNESS_ON)
   ITEM_SETUP_FLASH_BEEP,
@@ -200,12 +202,13 @@ void menuGeneralSetup(uint8_t event)
 
 #if defined(FAI_CHOICE)
   if (s_warning_result) {
+    s_warning_result = 0;
     g_eeGeneral.fai = true;
     eeDirty(EE_GENERAL);
   }
 #endif
 
-  MENU(STR_MENURADIOSETUP, menuTabDiag, e_Setup, ITEM_SETUP_MAX+1, {0, IF_RTCLOCK(2) IF_RTCLOCK(2) IF_BATTGRAPH(1) LABEL(SOUND), IF_AUDIO(0) IF_BUZZER(0) IF_VOICE(0) IF_CPUARM(0) IF_CPUARM(0) IF_CPUARM(0) IF_CPUARM(0) 0, IF_AUDIO(0) IF_HAPTIC(LABEL(HAPTIC)) IF_HAPTIC(0) IF_HAPTIC(0) IF_HAPTIC(0) IF_PCBSKY9X(0) 0, LABEL(ALARMS), 0, IF_PCBSKY9X(0) IF_PCBSKY9X(0) 0, 0, 0, IF_ROTARY_ENCODERS(0) LABEL(BACKLIGHT), 0, 0, CASE_PWM_BACKLIGHT(0) CASE_PWM_BACKLIGHT(0) 0, IF_SPLASH(0) IF_GPS(0) IF_GPS(0) IF_PXX(0) IF_CPUARM(0) IF_CPUARM(0) IF_FAI_CHOICE(0) 0, LABEL(TX_MODE), CASE_PCBTARANIS(0) 1/*to force edit mode*/});
+  MENU(STR_MENURADIOSETUP, menuTabDiag, e_Setup, ITEM_SETUP_MAX+1, {0, IF_RTCLOCK(2) IF_RTCLOCK(2) IF_BATTGRAPH(1) LABEL(SOUND), IF_AUDIO(0) IF_BUZZER(0) IF_VOICE(0) IF_CPUARM(0) IF_CPUARM(0) IF_CPUARM(0) IF_CPUARM(0) 0, IF_AUDIO(0) IF_HAPTIC(LABEL(HAPTIC)) IF_HAPTIC(0) IF_HAPTIC(0) IF_HAPTIC(0) 0, LABEL(ALARMS), 0, IF_PCBSKY9X(0) IF_PCBSKY9X(0) 0, 0, 0, IF_ROTARY_ENCODERS(0) LABEL(BACKLIGHT), 0, 0, IF_CPUARM(0) CASE_PWM_BACKLIGHT(0) CASE_PWM_BACKLIGHT(0) 0, IF_SPLASH(0) IF_GPS(0) IF_GPS(0) IF_PXX(0) IF_CPUARM(0) IF_CPUARM(0) IF_FAI_CHOICE(0) 0, LABEL(TX_MODE), CASE_PCBTARANIS(0) 1/*to force edit mode*/});
 
   uint8_t sub = m_posVert - 1;
 
@@ -289,9 +292,9 @@ void menuGeneralSetup(uint8_t event)
 #endif
         if (attr && s_editMode>0) {
           if (m_posHorz==0)
-            CHECK_INCDEC_GENVAR(event, g_eeGeneral.vBatMin, -50, g_eeGeneral.vBatMax+20); // min=4.0V
+            CHECK_INCDEC_GENVAR(event, g_eeGeneral.vBatMin, -50, g_eeGeneral.vBatMax+29); // min=4.0V
           else
-            CHECK_INCDEC_GENVAR(event, g_eeGeneral.vBatMax, g_eeGeneral.vBatMin-20, +40); // max=16.0V
+            CHECK_INCDEC_GENVAR(event, g_eeGeneral.vBatMax, g_eeGeneral.vBatMin-29, +40); // max=16.0V
         }
         break;
 #endif
@@ -395,23 +398,15 @@ void menuGeneralSetup(uint8_t event)
         break;
 #endif
 
-#if defined(PCBSKY9X)
-      case ITEM_SETUP_BRIGHTNESS:
-        lcd_putsLeft(y, STR_BRIGHTNESS);
-        lcd_outdezAtt(RADIO_SETUP_2ND_COLUMN, y, 100-g_eeGeneral.backlightBright, attr|LEFT) ;
-        if(attr) {
-          uint8_t b = 100 - g_eeGeneral.backlightBright;
-          CHECK_INCDEC_GENVAR(event, b, 0, 100);
-          g_eeGeneral.backlightBright = 100 - b;
-        }
-        break;
-#endif
-
       case ITEM_SETUP_CONTRAST:
         lcd_putsLeft(y, STR_CONTRAST);
         lcd_outdezAtt(RADIO_SETUP_2ND_COLUMN, y, g_eeGeneral.contrast, attr|LEFT);
         if(attr) {
+#if defined(PCBTARANIS)
+          CHECK_INCDEC_GENVAR(event, g_eeGeneral.contrast, 0, 45);
+#else
           CHECK_INCDEC_GENVAR(event, g_eeGeneral.contrast, 10, 45);
+#endif          
           lcdSetContrast();
         }
         break;
@@ -490,6 +485,18 @@ void menuGeneralSetup(uint8_t event)
         lcd_putc(lcdLastPos, y, 's');
         if (attr) CHECK_INCDEC_GENVAR(event, g_eeGeneral.lightAutoOff, 0, 600/5);
         break;
+
+#if defined(CPUARM)
+      case ITEM_SETUP_BRIGHTNESS:
+        lcd_putsLeft(y, STR_BRIGHTNESS);
+        lcd_outdezAtt(RADIO_SETUP_2ND_COLUMN, y, 100-g_eeGeneral.backlightBright, attr|LEFT) ;
+        if(attr) {
+          uint8_t b = 100 - g_eeGeneral.backlightBright;
+          CHECK_INCDEC_GENVAR(event, b, 0, 100);
+          g_eeGeneral.backlightBright = 100 - b;
+        }
+        break;
+#endif
 
 #if defined(PWM_BACKLIGHT)
       case ITEM_SETUP_BACKLIGHT_BRIGHTNESS_OFF:
@@ -635,21 +642,7 @@ void onSdManagerMenu(const char *result)
     pushMenu(menuGeneralSdManagerInfo);
   }
   else if (result == STR_SD_FORMAT) {
-    displayPopup(STR_FORMATTING);
-    closeLogs();
-#if defined(PCBSKY9X)
-    Card_state = SD_ST_DATA;
-#endif
-#if defined(CPUARM)
-    audioQueue.stopSD();
-#endif
-    if (f_mkfs(0, 1, 0) == FR_OK) {
-      f_chdir("/");
-      reusableBuffer.sdmanager.offset = -1;
-    }
-    else {
-      POPUP_WARNING(STR_SDCARD_ERROR);
-    }
+    POPUP_CONFIRMATION(PSTR("Confirm Format?"));
   }
   else if (result == STR_DELETE_FILE) {
     f_getcwd(lfn, SD_SCREEN_FILE_LENGTH);
@@ -704,6 +697,27 @@ void menuGeneralSdManager(uint8_t event)
   char lfn[SD_SCREEN_FILE_LENGTH];
 #endif
 
+#if defined(SDCARD)
+  if (s_warning_result) {
+    s_warning_result = 0;
+    displayPopup(STR_FORMATTING);
+    closeLogs();
+#if defined(PCBSKY9X)
+    Card_state = SD_ST_DATA;
+#endif
+#if defined(CPUARM)
+    audioQueue.stopSD();
+#endif
+    if (f_mkfs(0, 1, 0) == FR_OK) {
+      f_chdir("/");
+      reusableBuffer.sdmanager.offset = -1;
+    }
+    else {
+      POPUP_WARNING(STR_SDCARD_ERROR);
+    }
+  }
+#endif
+
   SIMPLE_MENU(SD_IS_HC() ? STR_SDHC_CARD : STR_SD_CARD, menuTabDiag, e_Sd, 1+reusableBuffer.sdmanager.count);
 
   if (s_editMode > 0)
@@ -714,6 +728,15 @@ void menuGeneralSdManager(uint8_t event)
       f_chdir(ROOT_PATH);
       reusableBuffer.sdmanager.offset = 65535;
       break;
+
+#if defined(PCBTARANIS)
+    case EVT_KEY_LONG(KEY_MENU):
+      killEvents(event);
+//      MENU_ADD_ITEM(STR_SD_INFO);  TODO: Implement
+      MENU_ADD_ITEM(STR_SD_FORMAT);
+      menuHandler = onSdManagerMenu;
+      break;
+#endif
 
 #if defined(PCBTARANIS)
     case EVT_KEY_BREAK(KEY_ENTER):
@@ -740,11 +763,14 @@ void menuGeneralSdManager(uint8_t event)
 
     case EVT_KEY_LONG(KEY_ENTER):
       killEvents(event);
+#if !defined(PCBTARANIS)
       if (m_posVert == 0) {
         MENU_ADD_ITEM(STR_SD_INFO);
         MENU_ADD_ITEM(STR_SD_FORMAT);
       }
-      else {
+      else
+#endif
+      {
 #if defined(CPUARM)
         uint8_t index = m_posVert-1-s_pgOfs;
         // TODO duplicated code for finding extension
@@ -763,8 +789,8 @@ void menuGeneralSdManager(uint8_t event)
 #endif
 #endif
         MENU_ADD_ITEM(STR_DELETE_FILE);
-        MENU_ADD_ITEM(STR_RENAME_FILE);
-        MENU_ADD_ITEM(STR_COPY_FILE);
+//       MENU_ADD_ITEM(STR_RENAME_FILE);  TODO: Implement
+//       MENU_ADD_ITEM(STR_COPY_FILE);    TODO: Implement
       }
       menuHandler = onSdManagerMenu;
       break;
@@ -971,8 +997,8 @@ void menuGeneralVersion(uint8_t event)
   lcd_putsLeft(2*FH, stamp1);
   lcd_putsLeft(3*FH, stamp2);
   lcd_putsLeft(4*FH, stamp3);
-#if defined(PCBTARANIS)
-  lcd_putsLeft(5*FH, "VERS: opentx-x9d-v1.0.01");
+#if defined (PCBTARANIS)
+lcd_putsLeft(5*FH, "VERS: opentx-x9d-v1.1.00");
 #elif defined(PCBSKY9X) && !defined(REVA)
   if (Coproc_valid == 1) {
      lcd_putsLeft(5*FH, PSTR("CoPr:"));
@@ -1178,7 +1204,11 @@ void menuCommonCalib(uint8_t event)
     int16_t vt = anaIn(i);
     reusableBuffer.calib.loVals[i] = min(vt, reusableBuffer.calib.loVals[i]);
     reusableBuffer.calib.hiVals[i] = max(vt, reusableBuffer.calib.hiVals[i]);
+#if defined(PCBTARANIS)
+    if(i >= NUM_STICKS && i < NUM_STICKS+NUM_POTS-2) {
+#else
     if (i >= NUM_STICKS) {
+#endif
       reusableBuffer.calib.midVals[i] = (reusableBuffer.calib.hiVals[i] + reusableBuffer.calib.loVals[i]) / 2;
     }
   }
