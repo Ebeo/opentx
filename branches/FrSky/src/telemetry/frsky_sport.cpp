@@ -387,7 +387,7 @@ void processSportPacket(uint8_t *packet)
         frskyData.hub.vfas = SPORT_DATA_U32(packet)/10;   //TODO: remove /10 and display with PREC2 when using SPORT
       }
       else if (appId >= GPS_SPEED_FIRST_ID && appId <= GPS_SPEED_LAST_ID) {
-        frskyData.hub.gpsSpeed_bp = SPORT_DATA_U32(packet)/1000;
+        frskyData.hub.gpsSpeed_bp = SPORT_DATA_U32(packet);
         if (frskyData.hub.gpsSpeed_bp > frskyData.hub.maxGpsSpeed)
           frskyData.hub.maxGpsSpeed = frskyData.hub.gpsSpeed_bp;
       }
@@ -413,8 +413,7 @@ void processSportPacket(uint8_t *packet)
 	else if (appId>=GPS_ALT_FIRST_ID && appId<=GPS_ALT_LAST_ID) {
 		int32_t gps_altitude;
 		gps_altitude = SPORT_DATA_S32(packet);
-		frskyData.hub.gpsAltitude_bp = gps_altitude/100;//cm
-		frskyData.hub.gpsAltitude_ap = gps_altitude%100;
+		frskyData.hub.gpsAltitude_bp = gps_altitude;
 		
 		if (!frskyData.hub.gpsAltitudeOffset)
 			frskyData.hub.gpsAltitudeOffset = -frskyData.hub.gpsAltitude_bp;
@@ -422,11 +421,11 @@ void processSportPacket(uint8_t *packet)
       			frskyData.hub.gpsAltitude_bp += frskyData.hub.gpsAltitudeOffset;
 
 		if (!frskyData.hub.baroAltitudeOffset) {
-        	if (frskyData.hub.gpsAltitude_bp > frskyData.hub.maxAltitude)
-          		frskyData.hub.maxAltitude = frskyData.hub.gpsAltitude_bp;
+        	if (frskyData.hub.gpsAltitude_bp > frskyData.hub.maxAltitude*100)
+          		frskyData.hub.maxAltitude = frskyData.hub.gpsAltitude_bp/100;
 			
-        	if (frskyData.hub.gpsAltitude_bp < frskyData.hub.minAltitude)
-          		frskyData.hub.minAltitude = frskyData.hub.gpsAltitude_bp;
+        	if (frskyData.hub.gpsAltitude_bp < frskyData.hub.minAltitude*100)
+          		frskyData.hub.minAltitude = frskyData.hub.gpsAltitude_bp/100;
       		}
 		if (!frskyData.hub.pilotLatitude && !frskyData.hub.pilotLongitude) {
 			// First received GPS position => Pilot GPS position
