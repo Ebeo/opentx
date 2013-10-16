@@ -138,11 +138,11 @@ Pierwszy z ekranów głównych pokazuje stany fizycznych przełączników u doł
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/01_main_timer.png
 
-Drugi, pokazuje pozycje drążków i przełączników, jest wygodnie sprawdzić tutaj czy wszystkie elementy sterujące reagują jak powinny.
+Drugi, pokazuje pozycje drążków i przełączników, mozna tutaj wygodnie sprawdzić czy wszystkie elementy sterujące reagują tak jak powinny.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/02_main_g.png
 
-Drzeci, pokazuje, znowu, fizyczne przełączniki z lewej i stany 32 własnych (logicznych) przełączników z prawej.
+Trzeci, pokazuje, znowu, fizyczne przełączniki z lewej i stany 32 własnych (logicznych) przełączników z prawej.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/03_main_CS.png
 
@@ -252,7 +252,7 @@ KRÓTKIE nacisnięcie klawisza PAGE przywołuje stronę podstawowych ustawień m
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/12_model_setup.png
 
  * Model name (nazwa modelu): Zmiana litery - klawiszami +/-, przejście do następnej litery - KRÓTKIE naciśnięcie ENTER, naciśnij DŁUGO ENTER aby zmienić aktualną literę na wielką, przed przejściem do następnej.
- * Model image (rysunek modelu): Możesz tu wybrać, jako logo Twojego modelu, plik .bmp o rozdzielczości 64x32 i 16-stopniowej skali szarości, zlokalizowany w folderze BMP karty SD. Aby przeglądać dostępne obrazki użyj [http://code.google.com/p/opentx/wiki/OpenTx_FrSky_EN#SD_browser przeglądarka karty SD].
+ * Model image (rysunek modelu): Możesz tu wybrać, jako logo Twojego modelu, plik .bmp o rozdzielczości 64x32 i 16-stopniowej skali szarości, zlokalizowany w folderze BMP karty SD. Aby przeglądać dostępne obrazki użyj [http://code.google.com/p/opentx/wiki/OpenTx_FrSky_PL#SD_browser przeglądarka karty SD].
  * Timers (timery): W aparaturze są dwa w pełni programowalne timery, które liczą w górę lub w dół. Jeśli wartość w tym polu jest ustawiona na 0:00, timer będzie liczył w górę, jeśli nie, będzie odliczał w dół od zaprogramowanej wartości. Wyzwalacz timera jest ustalany w polu obok. ABS oznacza odliczanie cały czas, THs liczy gdy drążek gazu nie jest w pozycji zerowej. THt uruchamia timer gdy drążek gazu jest po raz pierwszy przesunięty w górę, TH% liczy proporcjonalnie do wychylenia drążka gazu. Jeśli pole "Persistent" jest zaznaczone, wartość timera zostanie zapisana do pamięci przed wyłączeniem radia bądź zmianą modelu i załadowana z pamięci gdy model będzie ponownie wybrany. "Minute call" sygnalizuje upływające minuty piknięciem lub głosem. Jeśli timer liczy w dół sygnalizowany będzie kilkakrotnie upływ ostatniej minuty. 
  * Extended limits (rozszerzone limity) pozwalają ustawić limity ruchu serwa aż do 125% zamiast 100%.
  * Extended trims (rozszerzone trymowanie) pozwala trymerom pokryć cały zakres ruchu drążka zamiast +/- 15%. Bądź ostrożny używając tej opcji gdyż przytrzymanie klawisza trymera zbyt długo, może ustawić trymowanie tak, że modelem nie da się latać. Opcja "Reset" wyzeruje wszystkie trymery (dla wszystkich trybów lotu).
@@ -317,7 +317,7 @@ Parametr "Side" ogranicza efekt działania linii tabeli, tylko do jednej strony 
 
 Podsumowanie wybranych trybów lotu dla każdej linii jest pokazywane na głównym ekranie.
 
-==== Mixer (mikser) ====
+==== Mikser ====
 
 Następna strona to miejsce gdzie działania elementów sterujących będą mapowane na serwa. openTx nie posiada żadnych predefiniowanych funkcji miksowania, które są związane z określonym typem modelu czy sytuacją, on raczej daje Ci podstawy na których możesz budować. Kluczem do konfiguracji modelu w openTx nie jest myślenie o "włączeniu miksera delty" jak w pewnych radiach, ale raczej myślenie jaki efekt sterowania w modelu chcesz uzyskać w odpowiedzi na działania elementów sterujących radia. Mikser to jest to miejsce gdzie cała ta logika jest wprowadzana.
 
@@ -374,7 +374,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/20_outputs.png
 Dla każdego kanału możemy zdefiniować:
  * nazwę, która będzie pokazana na ekranie miksera gdy kursor jest w linii należącej do tego kanału, na ekranie monitora kanałów i na stronie ustawień zachowania odbiornika po utracie sygnału (failsafe).
  * Przesunięcie pod-trymera".
- * Górny i dolny limit wychyleń. Są to "twarde" limity, tzn. nigdy nie będą one nadpisane, więc tak długo jak są one ustawione, tak aby twoje serwo nigdy nie "siłowało" się próbując przesunąć dźwignię poza zakres możliwości, ono naprawdę nie będzie tego nigdy robić. One także służą jako wzmocnienie lub "ustawienia punktów krańcowych", więc zmniejszenie limitu, zmniejszy zakres ruchu, a nie będzie go obcinać.
+ * Górny i dolny limit wychyleń. Są to "twarde" limity, tzn. nigdy nie będą one nadpisane, więc tak długo jak są one ustawione, tak aby Twoje serwo nigdy nie "siłowało" się próbując przesunąć dźwignię poza zakres możliwości, ono naprawdę nie będzie tego nigdy robić. One także służą jako wzmocnienie lub "ustawienia punktów krańcowych", więc zmniejszenie limitu, zmniejszy zakres ruchu, a nie będzie go obcinać.
  * Odwrócenie kierunku działania serwa.
  * Korekcja centrowania. To jet podobne do pod-trymowania, z taką różnicą, że korekcja zrobiona tutaj, przesunie cały zakres ruchu serwa (włączając limity), i nie będzie widoczna na monitorze kanałów.
  * Zachowanie pod-trymera: Kiedy ustawiona na wartość domyślną, korekcja pod-trymowania przesunie tylko punkt centralny ruchu serwa. Otrzymując z miksera polecenie od -100% do +100%, serwo będzie się poruszać dokładnie pomiędzy dolnym i górnym limitem bez obcinania zakresu ani strefy martwej. To wprowadza zróżnicowaną relację między drążkiem a ruchem serwa dla wychyleń drążka w każdą ze stron. Zależnie od sytuacji może to być wygodne albo problematyczne, więc ustawienie tego parametru na "=" zmienia efekt pod-trymowania na coś w rodzaju "symetrycznego" przesunięcia zakresu ruchu serwa. Polecenie pełnego ruchu z miksera, może teraz być obcięte przez limit, który jest po tej samej stronie co pod-trymer, gdy na przeciwnej stronie serwo nie osiągnie limitu. W ten sposób po obu stronach drążka, dany ruch tego drążka zawsze da w wyniku taki sam ruch serwa. Typowo użycie domyślnego trybu ("^") pozwala na szybsze ustawianie serw które są sterowane przez jeden element sterujący, zaś "=" jest wymagane dla utrzymania prawidłowej odpowiedzi powierzchni sterujących przy użyciu różnicowych i/lub miksowaniu wielu źródeł razem. Tryb "=" typowo wymaga zredukowania (D/R) tak aby pozostawić margines między pełnym zakresem sterowania wychyleniem i zdefiniowanymi limitami. 
@@ -442,12 +442,12 @@ Pierwsza kolumna tabeli wskazuje wyzwalacz funkcji. Może to być przełącznik 
 Przewijając listę wyzwalaczy, znajdziesz kilka dodatkowych opcji: "One" (włącza funkcję tylko raz w momencie włączenia nadajnika lub załadowania modelu), SHdownS (krótkie naciśnięcie przełącznika chwilowego) SHdownL (długie naciśniecie przełącznika chwilowego).
 
 Dostępne są następujące funkcje:
- * Safety CHx: Gdy funkcja jest aktywna, stan wyjścia kanału CHx jest wymuszany zgodnie z wybrana wartością. Jest tutaj checkbox włączający tę funkcję, co zwykle robi się po sprawdzeniu, że wartość jest prawidłowo ustawiona i przełącznik jest wyłączony gdy twój model jest zasilany. 
+ * Safety CHx: Gdy funkcja jest aktywna, stan wyjścia kanału CHx jest wymuszany zgodnie z wybrana wartością. Jest tutaj checkbox włączający tę funkcję, co zwykle robi się po sprawdzeniu, że wartość jest prawidłowo ustawiona, a przełącznik jest wyłączony. Dokładne sprawdzenie jest szczególnie ważne, gdy zasilanie Twojego modelu jest włączone. 
  * Trainer, TrainerXXX: Odblokowuje tryb uczeń-nauczyciel, globalnie lub dla poszczególnych drążków. Jeśli funkcja nie jest włączona dla indywidualnego drążka, włączenie tej globalnej, automatycznie uaktywnia ją dla wszystkich czterech drążków.
  * Instant trim: Funkcja szybkiego trymowania. Gdy funkcja zostanie aktywowana, aktualne pozycje drążków będą dodane do odpowiednich trymerów. Ta funkcja jest zwykle przypisywana do przełącznika chwilowego i używana przy oblocie gdy, jak można przewidywać, pozycje trymerów są dalekie od właściwych. Zamiast gorączkowo, klikać przyciski trymerów, można przytrzymać drążki w pozycji, w której model leci prosto i raz przycisnąć przycisk szybkiego trymowania. Najlepiej, usunąć tę funkcję po oblataniu modelu aby uniknąć omyłkowego jej włączenia co mogłoby spowodować katastrofalnie błędne trymowanie.
  * Play Sound: Gra prosty dźwięk, który można wybrać z listy. 
  * Reset: Kasuje wybraną wartość (Timer 1, Timer 2, jeden z parametrów telemetrii, lub wszystkie z nich) 
- * Vario: Włącza dźwięki wariometru (zobacz ["http://code.google.com/p/opentx/wiki/OpenTx_FrSky_EN#Telemetry Telemetry setup])
+ * Vario: Włącza dźwięki wariometru (zobacz ["http://code.google.com/p/opentx/wiki/OpenTx_FrSky_PL#Telemetry Telemetry setup])
  * Play track: Odtwarza plik dźwiękowy z karty SD, powtarzając co wskazany czas
  * Play value: Odczytuje aktualną wartość wybranego parametru, powtarzając co wskazany czas
  * SD Logs: Zapisuje wartości pomiarów telemetrii na karcie SD co wskazany czas
@@ -460,7 +460,7 @@ Dostępne są następujące funkcje:
    * Inna GVAR
    * +1/-1, dla zwiększenia/zmniejszenia GVAR przy każdej aktywacji. 
 
-DŁUGIE wciśnięcie klawisza ENTER na nazwie funkcji wywołuje menu, które pozwala skopiować/wstawić/usunąć wiersz tabeli aby łatwiej wprowadzać wiele podobnych ustawień.
+DŁUGIE wciśnięcie klawisza ENTER na nazwie funkcji wywołuje menu, które pozwala skopiować/wstawić/usunąć wiersz tabeli dla ułatwienia wprowadzania wielu podobnych ustawień.
 
 ==== Telemetria ====
 
@@ -508,7 +508,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/27_templates.png
 
 == Pierwsze kroki ==
 
-Teraz, kiedy znasz już podstawy a Twoja bateria jest naładowana, proponuję co powiesz na odrobinę praktyki? Pierwsza rzecz do zrobienia z Twoją aparaturą to kalibracja drążków i potencjometrów. Przy pierwszym włączeniu zasilania, ekran kalibracji powinien pojawić się automatycznie. Postępuj zgodnie z instrukcją, i zwróć uwagę, że istotne jest ustawienie drążka gazu w środkowej pozycji, gdy zostaniesz poproszony o ustawienie punktów środkowych drążków, ale nie jest to wymagane dla potencjometrów. Następny krok, to konfiguracja ustawień ogólnych. Przejdź do odpowiedniej strony przez DŁUGIE naciśnięcie klawisza MENU, ustaw datę, czas, głośność dźwięków taką jak lubisz (typowo, na dolnym końcu przesuwki głośności jeśli używasz słuchawek, górny koniec jest dobry gdy używasz wewnętrznego głośnika), pobaw się ustawieniami podświetlania, ustaw kod kraju dla modułu nadawczego, domyślną kolejność kanałów zgodnie z Twoimi preferencjami, i tryb drążków (Mode) tak aby pasował to twojego sposobu latania. Wskaźnik baterii i alarm jej niskiego poziomu są fabrycznie ustawione dla dostarczonej baterii.
+Teraz, kiedy znasz już podstawy a Twoja bateria jest naładowana, proponuję co powiesz na odrobinę praktyki? Pierwsza rzecz do zrobienia z Twoją aparaturą to kalibracja drążków i potencjometrów. Przy pierwszym włączeniu zasilania, ekran kalibracji powinien pojawić się automatycznie. Postępuj zgodnie z instrukcją, i zwróć uwagę, że istotne jest ustawienie drążka gazu w środkowej pozycji, gdy zostaniesz poproszony o ustawienie punktów środkowych drążków, ale nie jest to wymagane dla potencjometrów. Następny krok, to konfiguracja ustawień ogólnych. Przejdź do odpowiedniej strony przez DŁUGIE naciśnięcie klawisza MENU, ustaw datę, czas, głośność dźwięków taką jak lubisz (typowo, na dolnym końcu przesuwki głośności jeśli używasz słuchawek, górny koniec jest dobry gdy używasz wewnętrznego głośnika), pobaw się ustawieniami podświetlania, ustaw kod kraju dla modułu nadawczego, domyślną kolejność kanałów zgodnie z Twoimi preferencjami, i tryb drążków (Mode) tak aby pasował to Twojego sposobu latania. Wskaźnik baterii i alarm jej niskiego poziomu są fabrycznie ustawione dla dostarczonej baterii.
 
 Aparatura stworzy dla Ciebie "pusty" model, więc gdy powrócisz do głównego ekranu, będziesz w stanie przejść do ekranu ustawień modelu przez KRÓTKIE naciśnięcie klawisza MENU, następnie KRÓTKIE naciśnięcie PAGE. Tam będziesz chciał upewnić się że ustawiłeś tryb pracy modułu nadawczego zgodnie z parametrami odbiornika, którego chcesz używać. Gdy używasz wewnętrznego modułu nadawczego, wybierz pole "Bind" i naciśnij ENTER aby zbindować twój odbiornik. Moduł nadawczy będzie pikał co kilka sekund. Teraz postępuj zgodnie z instrukcją bindowania Twojego odbiornika (naciśnij i przytrzymaj przycisk F/S i podłącz zasilanie odbiornika serii D lub X, albo załóż zworkę na piny S kanału 1 i 2 i podłącz zasilanie odbiornika V8x-II). LED odbiornika będzie szybko migał aby potwierdzić bindowanie. Naciśnij EXIT na aparaturze, usuń zworkę z odbiornika (jeśli zakładałeś), wyłącz i ponownie włącz zasilanie odbiornika. Powinieneś móc sterować serwami dołączonymi do kanałów 1-4 przy pomocy drążków.
 
@@ -520,7 +520,7 @@ Teraz, kiedy wszystko działa, zatrzymajmy się na chwilę i poznajmy trochę te
 
 Jak pokrótce opisano powyżej, openTx odróżnia się od większości popularnych aparatur, filozofią programowania. Właściciele aparatur Multiplexa szybko poczują się jak w domu, gdyż zasady są bardzo podobne.
 
-W przeciwieństwie do zwykłych aparatur, które oferują wybór z ograniczonego zbioru predefiniowanych scenariuszy użycia (samolot, szybowiec helikopter)oraz pewnej liczby funkcji zwykle używanych z takimi modelami (sterowanie typu delta, klapolotki, uwypuklenie profilu, motylek...), i mają sztywno przypisane kanały (drążki *zawsze* sterują odpowiednimi dla nich kanałami), openTx oferuje czystą kartę, na której możesz wymalować twoje ustawienia: ekran mikserów. To podejście zapewnia maksymalna elastyczność, gdyż cokolwiek zrobisz, nie będziesz musiał obchodzić na około tego co oczekuje od Ciebie radio, co jest błogosławieństwem dla każdego, kto musi pracować z nowymi typami modeli, które ciągle "nie istnieją" dla producentów popularnych aparatur, i takich  dla których wbudowane funkcje są po prostu bezużyteczne. Możesz więc spojrzeć na to w ten sposób: Dla niektórych rodzajów modeli, zwykłe predefiniowane funkcje pozwalają skonfigurować model w ciągu sekund (po prostu włącz funkcję), ale dla innych spędzisz całe godziny starając się obejść ich ograniczenia. Z openTx-em, każdy jest mniej więcej na tym samym poziomie - na początku może zająć nieco dłużej ustawienie modelu, który wydaję się prosty, ale ten skomplikowany nie zajmie wiele więcej czasu. Jako że nie ma istniejącej funkcji, którą mógłbyś po prostu włączyć, jest wymagana podstawowa wiedza jak Twój model powinien działać, i co chciałbyś aby każda z powierzchni sterowych robiła. To oznacza, że możesz nawet nauczyć się czegoś o Twoim modelu w procesie jego konfiguracji!
+W przeciwieństwie do zwykłych aparatur, które oferują wybór z ograniczonego zbioru predefiniowanych scenariuszy użycia (samolot, szybowiec helikopter)oraz pewnej liczby funkcji zwykle używanych z takimi modelami (sterowanie typu delta, klapolotki, uwypuklenie profilu, motylek...), i mają sztywno przypisane kanały (drążki *zawsze* sterują odpowiednimi dla nich kanałami), openTx oferuje czystą kartę, na której możesz wymalować Twoje ustawienia: ekran mikserów. To podejście zapewnia maksymalna elastyczność, gdyż cokolwiek zrobisz, nie będziesz musiał obchodzić na około tego co oczekuje od Ciebie radio, co jest błogosławieństwem dla każdego, kto musi pracować z nowymi typami modeli, które ciągle "nie istnieją" dla producentów popularnych aparatur, i takich  dla których wbudowane funkcje są po prostu bezużyteczne. Możesz więc spojrzeć na to w ten sposób: Dla niektórych rodzajów modeli, zwykłe predefiniowane funkcje pozwalają skonfigurować model w ciągu sekund (po prostu włącz funkcję), ale dla innych spędzisz całe godziny starając się obejść ich ograniczenia. Z openTx-em, każdy jest mniej więcej na tym samym poziomie - na początku może zająć nieco dłużej ustawienie modelu, który wydaję się prosty, ale ten skomplikowany nie zajmie wiele więcej czasu. Jako że nie ma istniejącej funkcji, którą mógłbyś po prostu włączyć, jest wymagana podstawowa wiedza jak Twój model powinien działać, i co chciałbyś aby każda z powierzchni sterowych robiła. To oznacza, że możesz nawet nauczyć się czegoś o Twoim modelu w procesie jego konfiguracji!
 
 Długa droga sterowania, zaczyna się od sprzętowych elementów sterujących, przechodzi przez ekran drążków (STICKS) (tu będzie wszystko co dotyczy wyniku sterowania jak dual rates czy EXP), podąża dalej, do miksera i kończy się zaadaptowaniem do mechanicznych charakterystyk modelu na ekranie SERVOS.
 
@@ -620,10 +620,10 @@ Tryby lotu w openTx są relatywnie łatwe w porównaniu z większością aparatu
 
 === Telemetria ===
 
-Dalej zakładamy, że Twoje radio ma załadowana kartę microSD i praeidłowy pakiet głosów. Jeszcze raz - rekomendujemy użycie zdolności radia do odtwarzania głosu bo posiada ono zaawansowane możlowości ostrzegania głosem, zamienne piknięcia używane w przypadku braku pakietu głosowego mogą być trudne do zrozumienia w stresującej sytuacji.
+Dalej zakładamy, że Twoje radio ma załadowana kartę microSD i prawidłowy pakiet głosów. Jeszcze raz - rekomendujemy użycie zdolności radia do odtwarzania głosu bo posiada ono zaawansowane możlowości ostrzegania głosem, zamienne piknięcia używane w przypadku braku pakietu głosowego mogą być trudne do zrozumienia w stresującej sytuacji.
 
 Prawopodobnie najważniejszą wartością, której dostarcza telemetria jest RSSI, która wskazuje jak silny sygnał nadajnika dociera do odbiornika, i ostrzeże Cię z wyprzedzeniem gdy grozi Ci ryzyko utraty kontroli nad modelem. Może się to zdarzyc z powodu zewnętrznych zakłóceń, dużej odległości, źle ustawionych lub uszkodzonych anten itd.
-Strona [http://code.google.com/p/opentx/wiki/OpenTx_FrSky_EN#Telemetry ustawień telemetrii] oferuje Ci ustawienie dwóch poziomów alarmów sygnalizowanych głosem ("RF signal low" - niski poziom sygnału i "RF signal critical" - krytyczny poziom sygnału). Są one domyślnie ustawione na poziomach, które są uważane za odpowiednie i bezpieczne dla normalnych lotów w zasięgu wzroku (45 i 42), ale jeśli chcesz skorygowac własnoręcznie następujące wyjaśnienia będą użyteczne:
+Strona [http://code.google.com/p/opentx/wiki/OpenTx_FrSky_PL#Telemetry ustawień telemetrii] oferuje Ci ustawienie dwóch poziomów alarmów sygnalizowanych głosem ("RF signal low" - niski poziom sygnału i "RF signal critical" - krytyczny poziom sygnału). Są one domyślnie ustawione na poziomach, które są uważane za odpowiednie i bezpieczne dla normalnych lotów w zasięgu wzroku (45 i 42), ale jeśli chcesz skorygowac własnoręcznie następujące wyjaśnienia będą użyteczne:
 
 RSSI na urządzeniach FrSky jest przedstawiane w skali logarytmicznej (db), nie w procentach. To oznacza, że gdy RSSI jest wysokie, mała różnica w odległości pomiędzy nadajnikiem i odbiornikiem będzie prowadziła do dużej zmiany wartości RSSI. To jest zupełnie normalne aby widzieć wartość około 100 gdy jest się tuż obok modelu, która szybko spada do około 70 gdy tylko przespacerujesz się na drugi koniec pola lotów. Kiedy odczyt jest w okolicach 50, potrzeba dużego dodatkowego dystansu aby osiągnąć poziom alarmowy: 45. Podstawowa zasada jest taka, że podwojenie dystansu między pilotem i modelem powoduje spadek RSSI o 6dB co powinno wyjaśniać poprzednie wyjaśnienia: Jeśli jesteś w odległości 5m od modelu, potrzeba jedynie następnych 5m aby RSSI spadło o 6dB, ale jeśli jesteś w odległości 600m od modelu, potrzeba kolejnych 600m aby zredukować wartość RSSI o "te same" 6dB.
 
@@ -657,7 +657,7 @@ Operowanie dźwiękami jest stosunkowo łatwe, składa się tylko z 5 "i pół" 
  * Vario: Odtwarza dźwięk szybowcowego wariometru na podstawie wysokości lub prędkości pionowej przesłanej telemetrią.
  * Volume: Reguluje ogólną głośność dźwięku według wartości wejścia np. potencjometru.
 
-Następujący przykład pokazuje kilka funkcji własnych do ogłaszania jakie przełączniki są aktywowane kiedy to następuje a ponadto SHdown powoduje odtwarzanie wartości timera nr 2 a następnie zużycia prądu (liczba mAh uzyskana z pokładowego czujnika prądu !FrSky FAS-100). 
+Następujący przykład pokazuje kilka funkcji własnych do ogłaszania bieżących informacji o aktywowanych przelącznikach, a ponadto SHdown powoduje odtwarzanie wartości timera nr 2, a następnie zużycia prądu (liczba mAh uzyskana z pokładowego czujnika prądu !FrSky FAS-100). 
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/28_audioCFs.png  
 
@@ -665,7 +665,7 @@ Dodatkowo, oprócz dźwięków odtwarzanych przez funkcje własne, są pewne pre
 
 Aktualnie, są obsługiwane następujące zdarzenia:
 
- * Zmian trybu lotu:
+ * Zmiana trybu lotu:
   * Gdy tryb lotu jest aktywowany, plik /SOUNDS/(lang)/modelname/flightmodename-ON.wav jest odtwarzany, jeśli jest obecny.
   * Gdy tryb lotu jest dezaktywowany, plik /SOUNDS/(lang)/modelname/flightmodename-OFF.wav jest odtwarzany, jeśli jest obecny.
 
