@@ -304,6 +304,7 @@ void processSportPacket(uint8_t *packet)
   /* uint8_t  dataId = packet[0]; */
   uint8_t  prim   = packet[1];
   uint16_t appId  = *((uint16_t *)(packet+2));
+  static uint8_t t_coor;
 
   if (!checkSportPacket(packet))
     return;
@@ -427,9 +428,11 @@ void processSportPacket(uint8_t *packet)
         	if (frskyData.hub.gpsAltitude_bp < frskyData.hub.minAltitude*100)
           		frskyData.hub.minAltitude = frskyData.hub.gpsAltitude_bp/100;
       		}
+		
 		if (!frskyData.hub.pilotLatitude && !frskyData.hub.pilotLongitude) {
 			// First received GPS position => Pilot GPS position
-			getGpsPilotPosition();
+			if(t_coor)
+				getGpsPilotPosition();
 			}
       		else if (frskyData.hub.gpsDistNeeded || g_menuStack[g_menuStackPtr] == menuTelemetryFrsky) {
 	  	getGpsDistance();
@@ -438,7 +441,10 @@ void processSportPacket(uint8_t *packet)
 	else if(appId>=GPS_LONG_LATI_FIRST_ID && appId<=GPS_LONG_LATI_LAST_ID) {
 		uint32_t gps_long_lati_data = SPORT_DATA_U32(packet);
 		if (gps_long_lati_data)
-			frskyData.hub.gpsFix = 1;
+			{
+				frskyData.hub.gpsFix = 1;
+				t_coor = 1;
+			}
 		
 		uint32_t gps_long_lati_b1w,gps_long_lati_a1w;
 		gps_long_lati_b1w = (gps_long_lati_data&0x3fffffff)/10000;
