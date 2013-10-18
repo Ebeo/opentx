@@ -580,7 +580,7 @@ TODO: Clarify the chapter below and provide complete translation
 Now move the radio's controls carefully to exercise the servos but being aware of possible mechanical binding. Set servo reverse where needed. Adjust the linkages in order to have a little more throw than what you'll ever need in both directions. If there is a little binding on one side to reach the appropriate side on the other and/or the throws are not symmetrical it's not a problem.
 </wiki:comment>
 
-Teraz poruszaj ostrożnie drążkami aby poćwiczyć serwa, ale uważając na ograniczenia mechaniczne. Jeśli to konieczne, ustaw odwrócenie kierunku serw. Wyreguluj dźwignie i cięgna aby mieć w obu kierunkach nieco więcej wychyleń niż potrzebowałbyś. Jeśli coś się delikatnie blokuje po jednej stronie i/lub wychylenia nie są całkiem symetryczne - nie jest to problemem.
+Teraz poruszaj ostrożnie drążkami aby poćwiczyć serwa, ale uważając na ograniczenia mechaniczne. Jeśli to konieczne, ustaw odwrócenie kierunku serw. Wyreguluj dźwignie i cięgna aby mieć w obu kierunkach nieco więcej wychyleń niż potrzebowałbyś. Jeśli serwo napotyka opór po jednej stronie i/lub wychylenia nie są całkiem symetryczne - nie jest to problemem.
 
 Następnie wyreguluj limity (maksymalne i minimalne). Powinny być ustawione tak aby:
  * Mieć nieco większe wychylenia niż kiedykolwiek mógłbyś potrzebować
@@ -677,7 +677,7 @@ Aktualnie, są obsługiwane następujące zdarzenia:
 Nazwy folderów "modelname" (nazwa modelu) i "flightmodename" (nazwa trybu lotu) muszą być dokładnie takie same (z dokładnością do wielkości liter) jak, odpowiednio, nazwa Twojego modelu i nazwa trybu lotu. Spacje należy zastąpić przez znak podkreślenia (_). Oczywiście tylko pliki, które umieścisz na karcie będą odtwarzane. Jeśli informowanie, o którymś zdarzeniu Cię nie interesuje, po prostu nie wstawiaj pliku dla niego. 
     
 
-=== Zmienne globalne ===
+=== Korzystanie ze zmiennych globalnych ===
 
 Już wspominaliśmy, w jaki sposób zmienne globalne mogą być używane do grupowania wielu ustawień w jednym miejscu oraz do sprawienia aby ustawienia były uzależnione od trybów lotu. Było również powiedziane, że zmienne globalne mogą być korygowane w czasie lotu - jest to osiągalne za pośrednictwem własnych funkcji AdjustGVx. Za każdym razem gdy przełącznik funkcji jest włączany, wartość zmiennej globalnej podąża za wybranym wejściem. Dla przypomnienia, są 4 grupy wejść przełączane przez DŁUGIE naciśnięcie ENTER na polu wprowadzania wartości. Nie zapomnij zaznaczyć checkboxa zabezpieczającego gdy skończyłeś konfigurację i upewniłeś się, że przełącznik jest wyłączony, po to aby uniknąć nadpisania Twojej zmiennej przez pomyłkę podczas przewijania listy wejść.
 
@@ -734,13 +734,13 @@ Pierwszą rzeczą jest oczywiście pobranie i zainstalowanie odpowidniej, dle Tw
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/28_c9x_prefs.png
 
 Jest tam całkiem sporo opcji:
- * Język oprogramowania
+ * Wersja językowa oprogramowania
  * Wybór czy automatycznie sprawdzać, przy uruchomieniu programu czy istnieją nowe wersje openTx i companion9x
  * Wybór czy wyświetlać ekran powitalny przy uruchamianiu companion9x
  * Opcje symulatora: Czy pamiętać pozycje przełączników poniędzy sesjami (użyteczne gdy zamykasz symulator aby poprawić konfgurację i znowu uruchamiasz), kolor podświetlania, lokalizacja plików ze zrzutami ekranu symulowanego nadajnika
  * Ustawienia zamiany ekranu powitalnego nadajnika. Pobrane oprogramowanie openTx zawiera standardowy ekran powitalny - logo openTx, wielu użytkowników chciałoby go zmienić na swój. W tym celu możesz wskazać folder, w którym przechowujes swoje własne ekrany powitalne i wybrać domyślnie używany z pliku lub biblioteki companion9x (w bibliotece jeszcze nie ma pasujących do rozmiaru ekranu Taranisa). Ekran powitalny dla Taranisa musi mieć rozmiary 212x64 piksele oraz do 16 poziomów szarości. Będziesz mógł wybrac ekran powitalny przed flashowaniem ndajnika.
  * folder dla kopii zapasowych pamięci EEPROM - nie używany dla Taranisa.
- * Rodzaj oprogramowania, język i opcke: 
+ * Rodzaj oprogramowania, język i opcje: 
  * Firmware type, language and options: this is where you will choose which firmware and radio type you will be using with companion9x. It is important that these setting always match the firmware type and options currently on the radio. For Taranis the choice has been intentionally limited so that most of the functionality is available to everyone by default. A few "personal choice" options remain:
    * noheli: Usuwa strone menu: Heli CCPM mixer
    * notemplates: Usuwa menu Templates
@@ -775,22 +775,21 @@ As mentioned before, the program of your radio can be replaced, either to change
 
 The first thing to do is to power your radio off and connect it to your computer's USB port.
 
-==== Installing the driver (for Windows only) ====
+==== Instalacja drivera (tylko dla Windows) ====
 
-This is only required the first time you flash your radio on a given computer. If already done you can skip this section.
+Jest to wymagane tylko wtedy, gdy po raz pierwszy flashujesz Twoje radio na tym komputerze . Jeśli było to juz wcześniej zrobione, omiń ten rozdział.
 
- * Download the Zadig utility for your operating system: [https://companion9x.googlecode.com/files/zadig_xp.exe Windows XP] or [https://companion9x.googlecode.com/files/zadig.exe Windows Vista and later].
- * Run it as Administrator (Right-click and select the relevant entry).
- * In the big dropdown, you should find an entry named "STM32 BOOTLOADER". Select it, and click the "Install Driver" button.
+ * Pobierz program Zadig dla Twojego systemu operacyjnego: [https://companion9x.googlecode.com/files/zadig_xp.exe Windows XP] albo [https://companion9x.googlecode.com/files/zadig.exe Windows Vista i nowsze].
+ * Uruchom go jako administrator (kliknij prawym klawiszem i wybierz stosowną opcję).
+ * W "dużej" liście znajdź i wybierz: "STM32 BOOTLOADER". Kliknij przycisk "Install Driver".
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/zadig.png
 
- * If you do not have that entry, choose Options -> List All Devices, and it should now appear in the list. Select that entry, and click the "Replace Driver" button.
+ * Jeśli w liście nie ma takiej pozycji, wybierz Options -> List All Devices, i teraz poszukiwana pozycja powinna się pojawić na liście. Wybierz ją i kliknij przycisk "Replace Driver".
  
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/zadig_replace.png
   
-
-Zadig zainstaluje driver, i powinien poinformować o sukcesie. Kiedy to się stanie, potwierdź komunikat i zamknij program.
+Zadig zainstaluje driver i powinien poinformować o sukcesie. Kiedy to się stanie, potwierdź komunikat i zamknij program.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/zadig_success.png
 
@@ -808,13 +807,13 @@ Pobierz i zainstaluj pakiet [https://code.google.com/p/companion9x/downloads/det
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/flash.png
 
- * In companion9x's preferences window, make sure the proper firmware is selected (openTx for !FrSky Taranis), and the language / options match your preference, then click the top Download button and select a location for the file. This will automatically build and download the latest available version of openTx for Taranis.
- * Close the Preferences window, and select the Burn -> Write Flash memory command. Make sure your radio is powered off and connected.
- * Browse for the file you just downloaded. It will be recognised automatically and the version will be displayed.
- * If you wish to replace the radio's splash screen, you can either load one from a file or select it from the availble library, and click the "Substitute image in firmware" box.
+ * W oknie preferencji companion9x upewnij się, że właściwe oprogramowanie nadajnika jest wybrane (openTx fo !FrSky Taranis) oraz czy opcje i wersja językowa odpowiadają Twoim preferencjom. Następnie naciśnij górny przycisk "Download" i wybierz lokalizację pliku. Spowoduje to zbudowanie i pobranie najnowszej dostępnej wersji openTx dla Taranisa.
+ * Zamknij okno preferencji i wybierz komendę Burn -> Write Flash memory. Upewnij się, że zasilanie aparatury jest wyłączone i połączone z komputerem.
+ * Wybierz plik, który przed chwilą pobrałeś. Będzie automatycznie rozpoznany i zostanie wyświetlona jego wersja.
+ * Jeśli życzysz sobie aby zamienić ekran powitalny radia, możesz załadować nowy z pliku lub wybrać z dostępnej biblioteki. Następnie kilknij "Substitute image in firmware".
  * Kliknij "Burn to TX".
- * Once the progress bar is done and the success prompt is shown you can dismiss it and disconnect your radio :)
- * Jeśli zobaczysz komunikat o braku programy wykonywanlego dfu-util, otwórz narzędzie do flashowania przy pomocy Burn -> Configure menu item. Poszukaj dfu-util, które powinno być tu:
+ * Gdy pasek postępu przesunie się do końca i pokaże się informacja o poprawnym zakończeniu programowania, możesz zamknać okienko i odłączyć radio:)
+ * Jeśli zobaczysz komunikat o braku programu wykonywanlego dfu-util, otwórz narzędzie do flashowania przy pomocy Burn -> Configure menu item. Poszukaj dfu-util, które powinno być tu:
    * Na Windows: W folderze z instalacją companion9x (domyślnie C:\Program Files\companion9x\dfu-util.exe na systemach 32-bitowych, albo C:\Program Files (x86)\companion9x\dfu-util.exe na systemach 64-bitowych).
    * Na Mac OS: /opt/local/bin/dfu-util.
        
