@@ -6,7 +6,7 @@ TODO: Find nice Polish terms for: subtrim, D/R, EXP. Consider different translat
 
 = openTx dla !FrSky Taranis =
 
-Instrukcja napisana przez [http://www.andrebernet.ch Andre Bernet], oparta na openTx r2768. Tłumaczenie na język polski - Mariusz Dąbrowski
+Instrukcję napisał [http://www.andrebernet.ch Andre Bernet], jest ona oparta na openTx r2768. Tłumaczenie na język polski - Mariusz Dąbrowski.
 Komercyjne wykorzystanie jest zabronione bez wyraźnego upoważnienia autorów i tłumaczy. Nie gryziemy, ale chcemy wiedzieć co się dzieje, więc po prostu zapytaj :) 
 
 Poniższa wersja tłumaczenia jest wersją roboczą, nie wszystkie rozdziały zostały przetłumaczone, tekst wymaga jeszcze redakcji i korekt. W wypadku niejasności czy wątpliwości dotyczących zagadnień poruszanych w niniejszej instrukcji, prosze odwołać się do wersji oryginalnej. Używaj na własną odpowiedzialność!
@@ -549,21 +549,21 @@ Teraz coś bardziej "skomplikowanego", jeśli Twój model posiada chowane podwoz
 
 Jeśli nadążałeś za naszym tokiem rozumowania, dokładnie zrozumiesz, że moglibyśmy ustawić drugą linię aby używała przełącznika "SAup",a role obydwu linii zostałyby zamienione (druga aktywna gdy przełącznik w górze, pierwsza w dwóch pozostałych pozycjach). Ale wtedy nie miałbym okazji aby wyjaśnić "!", a także, osobiście wolę aby domyślna była górna pozycja przełączników, a pierwsza linia miksera w kanale była wartością domyślną.
 
-Następny prosty przykład: Masz dwie lotki, każda z osobnym serwem. Użycie kabla Y do ich połączenia nieco trąci myszką, więc użyjemy dwóch kanałów. Mamy już pierwszą lotkę na CH1, CH5 i 6 są wykorzystane dla podwozia i klap, więc wybierzmy CH7. Mamy drugą lotkę, która musi być poruszana drązkiem lotek, dokładnie tak jak pierwsza, więc po prostu skopiujmy mikser pierwszej lotki podświetlając go, naciskając DŁUGO ENTER i wybierając "copy" - skopiuj. Przesuńmy go do CH7 i potwierdźmy przy pomocy ENTER. Działałoby to świetnie, ale zgodnie z moimi osobistymi upodobaniami zmieńmy wagę linii miksera na -100%, ponieważ zgodnie z logiką druga lotka powinna wychylać się w odwrotną stronę niż pierwsza. Zobaczymy później, że ma to sens.
+Następny prosty przykład: Masz dwie lotki, każda z osobnym serwem. Użycie kabla Y do ich połączenia nieco trąci myszką, więc użyjemy dwóch kanałów. Mamy już pierwszą lotkę na CH1, CH5 i 6 są wykorzystane dla podwozia i klap, więc wybierzmy CH7. Mamy drugą lotkę, która musi być poruszana drążkiem lotek, dokładnie tak jak pierwsza, więc po prostu skopiujmy mikser pierwszej lotki podświetlając go, naciskając DŁUGO ENTER i wybierając "copy" - skopiuj. Przesuńmy go do CH7 i potwierdźmy przy pomocy ENTER. Działałoby to świetnie, ale zgodnie z moimi osobistymi upodobaniami zmieńmy wagę linii miksera na -100%, ponieważ zgodnie z logiką druga lotka powinna wychylać się w odwrotną stronę niż pierwsza. Zobaczymy później, że ma to sens.
 
 A teraz czas na nieskomplikowany mikser. Będę leniwy i powiem Ci abyś cofnął się do [http://code.google.com/p/opentx/wiki/OpenTx_FrSky_PL#Mikser opisu ekranu miksera] i poczytał jeszcze raz o kompensacji gaz -> wysokość. Jestem pewien, że teraz wyda Ci się to dużo prostsze!
 
 Zróbmy teraz mikser delta. Znowu, jaki mamy rodzaj powierzchni sterowych i co chcielibyśmy z nimi zrobić?
 
-Mamy 2 sterolotki. Muszą poruszać się w tę sama stronę gdy poruszamy drążkiem wysokości, ale muszą poruszać sie w przeciwne strony gdy poruszany jest drążek lotek.
+Mamy 2 sterolotki. Muszą poruszać się w tę sama stronę gdy poruszamy drążkiem wysokości, ale muszą poruszać się w przeciwne strony gdy poruszany jest drążek lotek.
 
-Wybierzmy dwa kanały dla podłączenia naszych serw. CH3 i 7 - bo tak. Próbuję spowodować, że zapomnisz o starych przywyczajeniach do przypisanych na sztywno kanałów;)
+Wybierzmy dwa kanały dla podłączenia naszych serw. CH3 i 7 - bo tak. Próbuję sprawić, że zapomnisz o starych przyzwyczajeniach do przypisanych na sztywno kanałów;)
 
-CH3 musi się poruszać zgodnie z drążkiem wysokości, więc stwórzmy linię miksera z "Ele" jako źródłem. CH3 musi się poruszac zgodnie z drążkiem lotek, więc stworzymy drugą linie miksera z "Ail" jako źródłem. "Mutplx" ustawiamy na "Add" gdyż jest to dokładnie to co chcemy zrobić - dwa wejścia muszą być do siebie dodane.
+CH3 musi się poruszać zgodnie z drążkiem wysokości, więc stwórzmy linię miksera z "Ele" jako źródłem. CH3 musi się poruszać zgodnie z drążkiem lotek, więc stworzymy drugą linie miksera z "Ail" jako źródłem. "Mutplx" ustawiamy na "Add" gdyż jest to dokładnie to co chcemy zrobić - dwa wejścia muszą być do siebie dodane.
 
-Podyskutujmy troche o wagach. Sa one teraz ustawione na 100%. Oznacza to,że pełne wychylenie drążka lotek, wymusi pełne wychylenie CH3, tak samo dla drążka wysokości. Ale teraz, jeśli je dodamy i przesumiemy drążek w prawy górny róg (zakłądając Mode 2) mamy 100% + 100% = 200% sygnału wyjściowego na CH3. Limity ustawione na ekranie SERVOS to 100% - co oznacza, że sygnał wyjściowy zostanie obcięty. Gdy wyjście miksera dla kanału wychodzi poza 100%, serwo nie może się dalej poruszać. Nie róźni się to od innych aparatur - predefiniowane miksery delta zwykle dają możliwość ustawienia wpółczynników dla wychyleń wysokości i lotek - co jest dokładnie tym samym. Jeśli wprowadzisz zbyt duże współczynniki, ruchy drązka będą nieefektywne.
+Podyskutujmy trochę o wagach. Są one teraz ustawione na 100%. Oznacza to,że pełne wychylenie drążka lotek, wymusi pełne wychylenie CH3, tak samo dla drążka wysokości. Ale teraz, jeśli je dodamy i przesuniemy drążek w prawy górny róg (zakładając Mode 2) mamy 100% + 100% = 200% sygnału wyjściowego na CH3. Limity ustawione na ekranie SERVOS to 100% - co oznacza, że sygnał wyjściowy zostanie obcięty. Gdy wyjście miksera dla kanału wychodzi poza 100%, serwo nie może się dalej poruszać. Nie różni się to od innych aparatur - predefiniowane miksery delty zwykle dają możliwość ustawienia współczynników dla wychyleń wysokości i lotek - co jest dokładnie tym samym. Jeśli wprowadzisz zbyt duże współczynniki, ruchy drążka będą nieefektywne.
 
-Dyskusja o ustawianiu wspołczynników może się ciągnąć bez końca - niektórzy są szcześliwi z powodu 100% i obcinania, niektórzy lubią 50% bez obcinania, a niektórzy jak ja, lubią coś po środku - ja używam 70%.
+Dyskusja o ustawianiu współczynników może się ciągnąć bez końca - niektórzy są szczęśliwi z powodu 100% i obcinania, niektórzy lubią 50% bez obcinania, a niektórzy jak ja, lubią coś po środku - ja używam 70%.
 
 Powiedzmy, że mamy teraz dwie linie na CH3, 70% Ail i 70% Ele. Jak mówiliśmy, CH7 musi odpowiadać w ten sam sposób na wysokość, więc dodajemy linię 70% Ele. Musi odpowiadać na drążek lotek tym samym ruchem, ale w przeciwna stronę, więc ustawmy... -70%.
 
@@ -571,9 +571,9 @@ To jest powód, dla którego ustawiłem -100% w poprzednim przykładzie programo
 
 === Ekran serw ===
 
-Mikser jest już skonfigurowany, zachowanie elementów sterujących zdefiniowane, następny krok to określenie sposobu w jaki rozkazy są wykonywane przez serwa. W tym momencie będziesz chciał podłączyć serwa do odbiornika, usuń dźwignie z serw, śmigła z silników (bezpieczeństwo przede wszystkim) i podłącz zasilanie odbiornika. Jeśli nie zrobiłeś tego wcześniej, zbinduj odbrionik.
+Mikser jest już skonfigurowany, zachowanie elementów sterujących zdefiniowane, następny krok to określenie sposobu w jaki rozkazy są wykonywane przez serwa. W tym momencie będziesz chciał podłączyć serwa do odbiornika, usuń dźwignie z serw, śmigła z silników (bezpieczeństwo przede wszystkim) i podłącz zasilanie odbiornika. Jeśli nie zrobiłeś tego wcześniej, zbinduj odbiornik.
 
-Wycentruj wszystkie dźwignie (możesz patrzeć na monitor i celowac w zero), zamontuj dźwignie serwa tak aby były jak najbardziej prostopadłe do popyhaczy, którymi będą poruszać. Prawo Murphy-ego zapewnia, że jest to zawsze pomiędzy wypustami na osi serwa, więc skoryguj położenie dźwigni używając "PPM center adjustment" aby uzyskać perfekcyjną prostopadłość. Użycie tego parametru zamiast pod-trymera pozwala uniknąć utraty zakresu ruchu, i zapewnia, że wychylenia widoczne w monitorze kanałów wynikają ze sterowania. Połącz dźwignie, popyhacze i cięgna tak, aby powierzchnie sterujące były w położeniu neutralnym (albo po środku oczekiwanych wychyleń np. dla klap).
+Wycentruj wszystkie dźwignie (możesz patrzeć na monitor i celować w zero), zamontuj dźwignie serwa tak aby były jak najbardziej prostopadłe do popychaczy, którymi będą poruszać. Prawo Murphy-ego zapewnia, że jest to zawsze pomiędzy wypustami na osi serwa, więc skoryguj położenie dźwigni używając "PPM center adjustment" aby uzyskać perfekcyjną prostopadłość. Użycie tego parametru zamiast pod-trymera pozwala uniknąć utraty zakresu ruchu, i zapewnia, że wychylenia widoczne w monitorze kanałów wynikają ze sterowania. Połącz dźwignie, popychacze i cięgna tak, aby powierzchnie sterujące były w położeniu neutralnym (albo po środku oczekiwanych wychyleń np. dla klap).
 
 <wiki:comment>
 TODO: Clarify the chapter below and provide complete translation
@@ -613,7 +613,7 @@ Pamiętaj, że istnieją własne przełączniki, które mogą być wykorzystane 
 
 Dobrą praktyką jest zrobienie użytku z funkcji "Safety CHx" do zdefiniowania przełącznika bezpieczeństwa dla kanału gazu dla modeli elektrycznych. Wybierz przycisk zabezpieczający dla gazu, wybierz właściwą funkcję dla kanału gazu, ustaw wartość na -100, następnie zaznacz checkbox. Powinieneś zawsze konfigurować model gdy jest pozbawiony zasilania albo co najmniej bez zamontowanego śmigła, ale zabezpieczający checkbox jest tutaj po to aby uniknąć wymuszenia w kanale domyślnej wartości 0 (średni gaz) podczas przeglądania listy funkcji jeśli Twój przełącznik jest włączony.
 
-Funkcja "Instant trim" - szybkie trymowanie pozwala dodać aktualne pozycje drążków do ich odpowiednich trymów. Jest to użyteczne, na przykład w nowym modelu który może być bardzo źle wytrymowany. Zamiast być zmuszonym do naciskania i przytrzymywania trymerów aż do uzyskania właściwego efektu, po prostu przytrzymaj drążki tak aby uzyskać prosty lot i trzaśnij przełącznik funkcji "Instatnt trim" (powinien to być ten chwilowy). Ta własna funkcja powinna być zablokowana jak tylko mode jest wytrymowany gdyż włączenie jej przez pomyłkę może mieć efekt odwrotny do zamierzonego.
+Funkcja "Instant trim" - szybkie trymowanie pozwala dodać aktualne pozycje drążków do ich odpowiednich trymów. Jest to użyteczne, na przykład w nowym modelu który może być bardzo źle wytrymowany. Zamiast być zmuszonym do naciskania i przytrzymywania trymerów aż do uzyskania właściwego efektu, po prostu przytrzymaj drążki tak aby uzyskać prosty lot i trzaśnij przełącznik funkcji "Instant trim" (powinien to być ten chwilowy). Ta własna funkcja powinna być zablokowana jak tylko model zostanie wytrymowany gdyż włączenie jej przez pomyłkę może mieć efekt odwrotny do zamierzonego.
 
 Jak tylko skończysz latać, możesz użyć opcji "Trims -> Offsets", na dole strony SERVOS, do przeniesienia zawartości trymerów do ustawień pod-trymerów. Bądź jednak świadomy, że jeśli tryb pracy serwa nie jest ustawiony na "=", zbyt duża wartość pod-trymera może prowadzić do niesymetrycznych wychyleń i wpływać na ustawienia takie jak różnicowość.
 
@@ -628,7 +628,7 @@ Tryby lotu w openTx są relatywnie łatwe w porównaniu z większością aparatu
 Dalej zakładamy, że Twoje radio ma załadowana kartę microSD i prawidłowy pakiet głosów. Jeszcze raz - rekomendujemy użycie zdolności radia do odtwarzania głosu bo posiada ono zaawansowane możliwości ostrzegania głosem, zamienne piknięcia używane w przypadku braku pakietu głosowego mogą być trudne do zrozumienia w stresującej sytuacji.
 
 Prawdopodobnie najważniejszą wartością, której dostarcza telemetria jest RSSI, która wskazuje jak silny sygnał nadajnika dociera do odbiornika, i ostrzeże Cię z wyprzedzeniem gdy grozi Ci ryzyko utraty kontroli nad modelem. Może się to zdarzyć z powodu zewnętrznych zakłóceń, dużej odległości, źle ustawionych lub uszkodzonych anten itd.
-Strona [http://code.google.com/p/opentx/wiki/OpenTx_FrSky_PL#Telemetria ustawień telemetrii] oferuje Ci ustawienie dwóch poziomów alarmów sygnalizowanych głosem ("RF signal low" - niski poziom sygnału i "RF signal critical" - krytyczny poziom sygnału). Są one domyślnie ustawione na poziomach, które są uważane za odpowiednie i bezpieczne dla normalnych lotów w zasięgu wzroku (45 i 42), ale jeśli chcesz skorygowac własnoręcznie następujące wyjaśnienia będą użyteczne:
+Strona [http://code.google.com/p/opentx/wiki/OpenTx_FrSky_PL#Telemetria ustawień telemetrii] oferuje Ci ustawienie dwóch poziomów alarmów sygnalizowanych głosem ("RF signal low" - niski poziom sygnału i "RF signal critical" - krytyczny poziom sygnału). Są one domyślnie ustawione na poziomach, które są uważane za odpowiednie i bezpieczne dla normalnych lotów w zasięgu wzroku (45 i 42), ale jeśli chcesz je własnoręcznie skorygować, mogą Ci się przydać następujące wyjaśnienia:
 
 RSSI na urządzeniach FrSky jest przedstawiane w skali logarytmicznej (db), nie w procentach. To oznacza, że gdy RSSI jest wysokie, mała różnica w odległości pomiędzy nadajnikiem i odbiornikiem będzie prowadziła do dużej zmiany wartości RSSI. To jest zupełnie normalne aby widzieć wartość około 100 gdy jest się tuż obok modelu, która szybko spada do około 70 gdy tylko przespacerujesz się na drugi koniec pola lotów. Kiedy odczyt jest w okolicach 50, potrzeba dużego dodatkowego dystansu aby osiągnąć poziom alarmowy: 45. Podstawowa zasada jest taka, że podwojenie dystansu między pilotem i modelem powoduje spadek RSSI o 6dB co powinno wyjaśniać poprzednie wyjaśnienia: Jeśli jesteś w odległości 5m od modelu, potrzeba jedynie następnych 5m aby RSSI spadło o 6dB, ale jeśli jesteś w odległości 600m od modelu, potrzeba kolejnych 600m aby zredukować wartość RSSI o "te same" 6dB.
 
@@ -720,16 +720,16 @@ Operacje na pamięci radia są obsługiwane przez różne opcje menu "Burn" - wy
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/read_write.png
 
- * Read EEPROM from TX - odczyta zawartość pamięci EEPROM z radia i otworzy ją jako nowy dokument w companion9x. DOkument jest otwierany w celu edycji, ale nie jest automatycznie zapisywany na dysk.
+ * Read EEPROM from TX - odczyta zawartość pamięci EEPROM z radia i otworzy ją jako nowy dokument w companion9x. Dokument jest otwierany w celu edycji, ale nie jest automatycznie zapisywany na dysk.
  * Write EEPROM to TX - wysyła obecnie otwarty i wybrany dokument (jeśli masz otwarty więcej niż jedn, kliknij najpierw na tym, który chcesz przesłać aby go wybrać) do radia.
- * Read EEPROM memory to File - odczyta zawartość pamięcie EEPROM z radia i zapisze w pliku. Jest to preferowany sposób tworzenia kopii zapasowej ustawień radia gdyż ustawienia są zapisywane dokłądnie takie jak są, bez żadnej ingerencji companion9x. Wybierz opcję, wybierz lokalizację oraz nazwę pliki i zapisz.
+ * Read EEPROM memory to File - odczyta zawartość pamięci EEPROM z radia i zapisze w pliku. Jest to preferowany sposób tworzenia kopii zapasowej ustawień radia gdyż ustawienia są zapisywane dokładnie takie jak są, bez żadnej ingerencji companion9x. Wybierz opcję, wybierz lokalizację oraz nazwę pliki i zapisz.
  * Write EEPROM memory from File - pozwala wybrać plik i prześle jego zawartość do radia. Jest to preferowany sposób do odtworzenia zapisanego stanu radia, bez przetwarzania przez comapnion9x.
  * Write Flash memory - zamieni oprogramowanie systemowe radia korzystając z oprogramowania z wybranego pliku. Gdy tylko wybierzesz plik, masz możliwość zastąpienia ekranu powitalnego przez obrazek, który wybierzesz lub przez domyślny obrazek wskazany w preferencjach companion9x.
- * Read Flash memory - zapisze kopię oprogramowania systemowego załądowanego do radia we wskazanym pliku.
+ * Read Flash memory - zapisze kopię oprogramowania systemowego załadowanego do radia we wskazanym pliku.
 
 === Konfiguracja companion9x dla Taranisa ===
 
-Pierwszą rzeczą jest oczywiście pobranie i zainstalowanie odpowidniej, dle Twojego systemu operacyjnego,  wersji companion9x z [http://code.google.com/p/companion9x/downloads/list tej strony]. Gdy program zostanie uruchomiony, sobaczysz główne okno. Otwórz okienko dialogowe preferencji przy pomocy File->Preferences.
+Pierwszą rzeczą jest oczywiście pobranie i zainstalowanie odpowiedniej, dla Twojego systemu operacyjnego,  wersji companion9x z [http://code.google.com/p/companion9x/downloads/list tej strony]. Gdy program zostanie uruchomiony, sobaczysz główne okno. Otwórz okienko dialogowe preferencji przy pomocy File->Preferences.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/28_c9x_prefs.png
 
@@ -737,34 +737,34 @@ Jest tam całkiem sporo opcji:
  * Wersja językowa oprogramowania
  * Wybór czy automatycznie sprawdzać, przy uruchomieniu programu czy istnieją nowe wersje openTx i companion9x
  * Wybór czy wyświetlać ekran powitalny przy uruchamianiu companion9x
- * Opcje symulatora: Czy pamiętać pozycje przełączników poniędzy sesjami (użyteczne gdy zamykasz symulator aby poprawić konfgurację i znowu uruchamiasz), kolor podświetlania, lokalizacja plików ze zrzutami ekranu symulowanego nadajnika
- * Ustawienia zamiany ekranu powitalnego nadajnika. Pobrane oprogramowanie openTx zawiera standardowy ekran powitalny - logo openTx, wielu użytkowników chciałoby go zmienić na swój. W tym celu możesz wskazać folder, w którym przechowujes swoje własne ekrany powitalne i wybrać domyślnie używany z pliku lub biblioteki companion9x (w bibliotece jeszcze nie ma pasujących do rozmiaru ekranu Taranisa). Ekran powitalny dla Taranisa musi mieć rozmiary 212x64 piksele oraz do 16 poziomów szarości. Będziesz mógł wybrac ekran powitalny przed flashowaniem ndajnika.
+ * Opcje symulatora: Czy pamiętać pozycje przełączników pomiędzy sesjami (użyteczne gdy zamykasz symulator aby poprawić konfigurację i znowu uruchamiasz), kolor podświetlania, lokalizacja plików ze zrzutami ekranu symulowanego nadajnika
+ * Ustawienia zamiany ekranu powitalnego nadajnika. Pobrane oprogramowanie openTx zawiera standardowy ekran powitalny - logo openTx, wielu użytkowników chciałoby go zmienić na swój. W tym celu możesz wskazać folder, w którym przechowujesz swoje własne ekrany powitalne i wybrać domyślnie używany z pliku lub biblioteki companion9x (w bibliotece jeszcze nie ma pasujących do rozmiaru ekranu Taranisa). Ekran powitalny dla Taranisa musi mieć rozmiary 212x64 piksele oraz do 16 poziomów szarości. Będziesz mógł wybrać ekran powitalny przed flashowaniem nadajnika.
  * folder dla kopii zapasowych pamięci EEPROM - nie używany dla Taranisa.
- * Rodzaj oprogramowania, język i opcje: tutaj możesz wybrać jakie oprogramowanie i radio będziesz uzywał z companion9x. Jest ważne aby te ustawienia zawsze zgadzały się z rodzajem oprogramowania oraz opcjami, które aktualnie są zainstalowane w aparaturze. Dla Taranisa wybór został celowo ograniczony więc większośc funkcjonalności jest domyślnie dostępna. Kilka opcji do osobistego wyboru pozostało:
-   * noheli: Usuwa strone menu: Heli CCPM mixer
+ * Rodzaj oprogramowania, język i opcje: tutaj możesz wybrać jakie oprogramowanie i radio będziesz używał z companion9x. Jest ważne aby te ustawienia zawsze zgadzały się z rodzajem oprogramowania oraz opcjami, które aktualnie są zainstalowane w aparaturze. Dla Taranisa wybór został celowo ograniczony więc większość funkcjonalności jest domyślnie dostępna. Kilka opcji do osobistego wyboru pozostało:
+   * noheli: Usuwa stronę menu: Heli CCPM mixer
    * notemplates: Usuwa menu Templates
-   * nogvars: Usuwa funkcjonalnośc zmiennych globalnych i powiązane menu.
+   * nogvars: Usuwa funkcjonalność zmiennych globalnych i powiązane menu.
    * ppmus: Włącza wyświetlanie wartości kanałów w mikrosekundach zamiast %.
- * SD structure path: opcja dla Taranisa i płyty sky9x, pozwala wybrać folder na Twoim dysku gdzie utworzyłeś kopie tego co znajduje sie na karcie SD w radiu. companion9x może użyć, przy wybieraniu obrazów lub dźwięków dokładnie tych samych plików, które są widoczne dla aparatury. 
+ * SD structure path: opcja dla Taranisa i płyty sky9x, pozwala wybrać folder na Twoim dysku gdzie utworzyłeś kopie tego co znajduje się na karcie SD w radiu. companion9x może użyć, przy wybieraniu obrazów lub dźwięków dokładnie tych samych plików, które są widoczne dla aparatury. 
  * Automatically add version number to firmware files: Kiedy pobierany jest plik z oprogramowaniem, jego nazwa zawiera wybrane opcje. Jeśli zaznaczysz ten checkbox, numer wersji także zostanie dodany do nazwy. Ułatwia to przechowywanie plików z różnymi wersjami.
- * Default Stick mode and channel order: Domyślny tryb drażków i kolejnośc kanałów. Są wykorzystywane gdy w companion9x jest tworzony nowy dokument (EEPROM).
- * Profiles: Pozwala na pamiętanie różnych zestawów ustawień i łatw przełączanie się między nimi. Na przykład, jeśli masz dwie różne aparatury z różnym oprogramowaniem, to konieczność ponownego wpisywania wszystkich ustawień (wybór oprogramowania, zaznacznie opcji,...) za każdym razem, kiedy chcesz wykonywac operacje na innym radiu byłoby bardzo niewygodne. Możesz skonfigurować wszystkie ustawienia, wybrać pusty profil, nadać mu nazwę identyfikująca konkretne radio i kilinj "save". Zrób to samo dla drugiego radia. Bedziesz teraz mógł wybrać odpowiedni profil dla radia z którym chesz pracować przy pomocy klawisza wyboru profili oraz opcji głównego menu companion9x. Pamiętaj, że profile mogą także pamiętać i odtwarzać kalibracje drażków i ustawienia sprzętu (napięcia, alarmy, tryby dżwięku,...) ze strony ustawień ogólnych otwartego dokumentu. Pozwala to kopiować dokument z jednego do drugiego radia bez potrzeby rekalibracji lub ponowanego wprowadzenia ustawień sprzętu.
+ * Default Stick mode and channel order: Domyślny tryb drążków i kolejność kanałów. Są wykorzystywane gdy w companion9x jest tworzony nowy dokument (EEPROM).
+ * Profiles: Pozwala na pamiętanie różnych zestawów ustawień i łatwe przełączanie się między nimi. Na przykład, jeśli masz dwie różne aparatury z różnym oprogramowaniem, to konieczność ponownego wpisywania wszystkich ustawień (wybór oprogramowania, zaznaczanie opcji,...) za każdym razem, kiedy chcesz wykonywać operacje na innym radiu byłoby bardzo niewygodne. Możesz skonfigurować wszystkie ustawienia, wybrać pusty profil, nadać mu nazwę identyfikująca konkretne radio i kliknij "save". Zrób to samo dla drugiego radia. Będziesz teraz mógł wybrać odpowiedni profil dla radia z którym chcesz pracować przy pomocy klawisza wyboru profili oraz opcji głównego menu companion9x. Pamiętaj, że profile mogą także pamiętać i odtwarzać kalibracje drążków i ustawienia sprzętu (napięcia, alarmy, tryby dźwięku,...) ze strony ustawień ogólnych otwartego dokumentu. Pozwala to kopiować dokument z jednego do drugiego radia bez potrzeby rekalibracji lub ponownego wprowadzenia ustawień sprzętu.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/profile_chooser.png
   
  * Joystick: Ta opcja pozwala na skonfigurowanie joysticka dla symulacji drążków radia w symulatorze.
-   
-Dla aparatury Taranis, pierwszą rzeczą do zrobienia jest wybranie "openTx for !FrSky taranis" w liście wyboru oprogramowania. Wybierz wersję językową i język głosu. Górny przycisk "Download" otworzy przeglądarkę i załaduje ostatnią dostepną wersję oprogramowania (zgodnie z wybranym językiem i opcjami). Dolny przycisk "Download" otworzy przeglądarke internetową na stronie pokazującą wybów pakitów głosowych dostępnych dla wybranego języka.
 
-Ustaw Mode i preferowaną kolejność kanałów w listach poniżej, kilnij OK w okienku dialogowym preferencji.
+Dla aparatury Taranis, pierwszą rzeczą do zrobienia jest wybranie "openTx for !FrSky taranis" w liście wyboru oprogramowania. Wybierz wersję językową i język głosu. Górny przycisk "Download" otworzy przeglądarkę i załaduje ostatnią dostępną wersję oprogramowania (zgodnie z wybranym językiem i opcjami). Dolny przycisk "Download" otworzy przeglądarkę internetową na stronie pokazującą wybór pakietów głosowych dostępnych dla wybranego języka.
+
+Ustaw Mode i preferowaną kolejność kanałów w listach poniżej, kliknij OK w okienku dialogowym preferencji.
 
 === Symulator radia ===
 
-Możesz teraz stworzyć nowy dokument. Pojawi się okno, jego pierwsza linia daje dostęp do ustawień ogólnych radia, nastepne odpwoeadają kolejnym modelom. Możesz zajrzeć do ustawień, a klikając na pustej linii utworzysz nowy model.
+Możesz teraz stworzyć nowy dokument. Pojawi się okno, jego pierwsza linia daje dostęp do ustawień ogólnych radia, następne odpowiadają kolejnym modelom. Możesz zajrzeć do ustawień, a klikając na pustej linii utworzysz nowy model.
 
 Są dwa sposoby symulacji modelu albo całego radia.
- * W edytorze modeli, dolny przycisk "Simulate" otworzy symulator modelu z aktualnymi ustawieniami. Pamiętaj, jeśli zosatnaie zrobiona zmiana w modelu w czasie gdy symylator jest otwarty, musi on zostać zamknięty i otwarty ponownie.
- * U dołu okna "document" znajduje sie przycisk "Simulate Tx", który otwiera podobny symulator, ale z dodatkową zakładką pokazującą ekran LCD i przyciski radia. Wirtualne radio zawiera te same dane jak dokument w monencie uruchomienia symulatora. Pamiętaj, że zmiany dokonane poprzez interfejs radia nie przenoszą się do dokumentu.
+ * W edytorze modeli, dolny przycisk "Simulate" otworzy symulator modelu z aktualnymi ustawieniami. Pamiętaj, jeśli zostanie zrobiona zmiana w modelu w czasie gdy symulator jest otwarty, musi on zostać zamknięty i otwarty ponownie.
+ * U dołu okna "document" znajduje się przycisk "Simulate Tx", który otwiera podobny symulator, ale z dodatkową zakładką pokazującą ekran LCD i przyciski radia. Wirtualne radio zawiera te same dane jak dokument w momencie uruchomienia symulatora. Pamiętaj, że zmiany dokonane poprzez interfejs radia nie przenoszą się do dokumentu.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/29_c9x_sim.png
 
@@ -776,7 +776,7 @@ Pierwsza rzecz, którą trzeba zrobić jest wyłączenie radia i podłączenie d
 
 ==== Instalacja drivera (tylko dla Windows) ====
 
-Jest to wymagane tylko wtedy, gdy po raz pierwszy flashujesz Twoje radio na tym komputerze . Jeśli było to juz wcześniej zrobione, omiń ten rozdział.
+Jest to wymagane tylko wtedy, gdy po raz pierwszy flashujesz Twoje radio na tym komputerze . Jeśli było to już wcześniej zrobione, omiń ten rozdział.
 
  * Pobierz program Zadig dla Twojego systemu operacyjnego: [https://companion9x.googlecode.com/files/zadig_xp.exe Windows XP] albo [https://companion9x.googlecode.com/files/zadig.exe Windows Vista i nowsze].
  * Uruchom go jako administrator (kliknij prawym klawiszem i wybierz stosowną opcję).
@@ -787,7 +787,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/zadig.png
  * Jeśli w liście nie ma takiej pozycji, wybierz Options -> List All Devices, i teraz poszukiwana pozycja powinna się pojawić na liście. Wybierz ją i kliknij przycisk "Replace Driver".
  
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/zadig_replace.png
-  
+
 Zadig zainstaluje driver i powinien poinformować o sukcesie. Kiedy to się stanie, potwierdź komunikat i zamknij program.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/zadig_success.png
@@ -809,10 +809,10 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/flash.png
  * W oknie preferencji companion9x upewnij się, że właściwe oprogramowanie nadajnika jest wybrane (openTx fo !FrSky Taranis) oraz czy opcje i wersja językowa odpowiadają Twoim preferencjom. Następnie naciśnij górny przycisk "Download" i wybierz lokalizację pliku. Spowoduje to zbudowanie i pobranie najnowszej dostępnej wersji openTx dla Taranisa.
  * Zamknij okno preferencji i wybierz komendę Burn -> Write Flash memory. Upewnij się, że aparatura jest wyłączona i jest połączona z komputerem.
  * Wybierz plik, który przed chwilą pobrałeś. Będzie automatycznie rozpoznany i zostanie wyświetlona jego wersja.
- * Jeśli życzysz sobie aby zamienić ekran powitalny radia, możesz załadować nowy z pliku lub wybrać z dostępnej biblioteki. Następnie kilknij "Substitute image in firmware".
+ * Jeśli życzysz sobie aby zamienić ekran powitalny radia, możesz załadować nowy z pliku lub wybrać z dostępnej biblioteki. Następnie kliknij "Substitute image in firmware".
  * Kliknij "Burn to TX".
  * Gdy pasek postępu przesunie się do końca i pokaże się informacja o poprawnym zakończeniu programowania, możesz zamknać okienko i odłączyć radio:)
- * Jeśli zobaczysz komunikat o braku programu wykonywanlego dfu-util, otwórz narzędzie do flashowania przy pomocy Burn -> Configure menu item. Poszukaj dfu-util, które powinno być tu:
+ * Jeśli zobaczysz komunikat o braku programu wykonywalnego dfu-util, otwórz narzędzie do flashowania przy pomocy Burn -> Configure menu item. Poszukaj dfu-util, które powinno być tu:
    * Na Windows: W folderze z instalacją companion9x (domyślnie C:\Program Files\companion9x\dfu-util.exe na systemach 32-bitowych, albo C:\Program Files (x86)\companion9x\dfu-util.exe na systemach 64-bitowych).
    * Na Mac OS: /opt/local/bin/dfu-util.
        
