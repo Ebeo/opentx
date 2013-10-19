@@ -740,40 +740,39 @@ Jest tam całkiem sporo opcji:
  * Opcje symulatora: Czy pamiętać pozycje przełączników poniędzy sesjami (użyteczne gdy zamykasz symulator aby poprawić konfgurację i znowu uruchamiasz), kolor podświetlania, lokalizacja plików ze zrzutami ekranu symulowanego nadajnika
  * Ustawienia zamiany ekranu powitalnego nadajnika. Pobrane oprogramowanie openTx zawiera standardowy ekran powitalny - logo openTx, wielu użytkowników chciałoby go zmienić na swój. W tym celu możesz wskazać folder, w którym przechowujes swoje własne ekrany powitalne i wybrać domyślnie używany z pliku lub biblioteki companion9x (w bibliotece jeszcze nie ma pasujących do rozmiaru ekranu Taranisa). Ekran powitalny dla Taranisa musi mieć rozmiary 212x64 piksele oraz do 16 poziomów szarości. Będziesz mógł wybrac ekran powitalny przed flashowaniem ndajnika.
  * folder dla kopii zapasowych pamięci EEPROM - nie używany dla Taranisa.
- * Rodzaj oprogramowania, język i opcje: 
- * Firmware type, language and options: this is where you will choose which firmware and radio type you will be using with companion9x. It is important that these setting always match the firmware type and options currently on the radio. For Taranis the choice has been intentionally limited so that most of the functionality is available to everyone by default. A few "personal choice" options remain:
+ * Rodzaj oprogramowania, język i opcje: tutaj możesz wybrać jakie oprogramowanie i radio będziesz uzywał z companion9x. Jest ważne aby te ustawienia zawsze zgadzały się z rodzajem oprogramowania oraz opcjami, które aktualnie są zainstalowane w aparaturze. Dla Taranisa wybór został celowo ograniczony więc większośc funkcjonalności jest domyślnie dostępna. Kilka opcji do osobistego wyboru pozostało:
    * noheli: Usuwa strone menu: Heli CCPM mixer
    * notemplates: Usuwa menu Templates
    * nogvars: Usuwa funkcjonalnośc zmiennych globalnych i powiązane menu.
    * ppmus: Włącza wyświetlanie wartości kanałów w mikrosekundach zamiast %.
- * SD structure path: For the Taranis and sky9x board, this lets you choose a folder on your hard drive where you have made a copy of what is on the SD card of the radio. This allows companion9x to populate the model image selector with the images that are on the card, and do the same for audio files.
- * Automatically add version number to firmware files: When downloading a firmware file, its name includes the selected options. If this box is checked, the revision number will be appended to the filename to make it more convenient to maintain files of different versions.  
- * Default Stick mode and channel order: These will be applied when creating a new EEPROM document in companion9x.
- * Profiles: Allows storing different setting sets and easily switching between them. For example, if you have 2 different radios with different firmwares or board types it is not convenient to have to redo all settings (firmware selection, ticking options,...) every time you want to do operations on the other radio. So you can configure all settings, choose an empty profile with the number box, type a name to identify the particular radio, and click save. Do the same for the second radio. You will now be able to select the correct profile for the radio you are about to work on with the profile selector button and menu entry on companion9x's main window. Note that the profiles can also store and retrieve each radio's stick calibration and hardware settings (voltage alarms, audio modes,...) from the General Settings page of an open document. This allows copying a document from one radio to the other without needing recalibration or reentering the hardware settings.
+ * SD structure path: opcja dla Taranisa i płyty sky9x, pozwala wybrać folder na Twoim dysku gdzie utworzyłeś kopie tego co znajduje sie na karcie SD w radiu. companion9x może użyć, przy wybieraniu obrazów lub dźwięków dokładnie tych samych plików, które są widoczne dla aparatury. 
+ * Automatically add version number to firmware files: Kiedy pobierany jest plik z oprogramowaniem, jego nazwa zawiera wybrane opcje. Jeśli zaznaczysz ten checkbox, numer wersji także zostanie dodany do nazwy. Ułatwia to przechowywanie plików z różnymi wersjami.
+ * Default Stick mode and channel order: Domyślny tryb drażków i kolejnośc kanałów. Są wykorzystywane gdy w companion9x jest tworzony nowy dokument (EEPROM).
+ * Profiles: Pozwala na pamiętanie różnych zestawów ustawień i łatw przełączanie się między nimi. Na przykład, jeśli masz dwie różne aparatury z różnym oprogramowaniem, to konieczność ponownego wpisywania wszystkich ustawień (wybór oprogramowania, zaznacznie opcji,...) za każdym razem, kiedy chcesz wykonywac operacje na innym radiu byłoby bardzo niewygodne. Możesz skonfigurować wszystkie ustawienia, wybrać pusty profil, nadać mu nazwę identyfikująca konkretne radio i kilinj "save". Zrób to samo dla drugiego radia. Bedziesz teraz mógł wybrać odpowiedni profil dla radia z którym chesz pracować przy pomocy klawisza wyboru profili oraz opcji głównego menu companion9x. Pamiętaj, że profile mogą także pamiętać i odtwarzać kalibracje drażków i ustawienia sprzętu (napięcia, alarmy, tryby dżwięku,...) ze strony ustawień ogólnych otwartego dokumentu. Pozwala to kopiować dokument z jednego do drugiego radia bez potrzeby rekalibracji lub ponowanego wprowadzenia ustawień sprzętu.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/profile_chooser.png
   
- * Joystick: This lets you configure a joystick to simulate the sticks in the radio simulator.
+ * Joystick: Ta opcja pozwala na skonfigurowanie joysticka dla symulacji drążków radia w symulatorze.
    
-For a Taranis radio, the first thing you would do is select "openTx for !FrSky Taranis" in the firmware dropdown. Select your firmware language, and the voice language. The top Download button will compile and download the latest available firmware version with the selected language and options. The bottom Download button will open your web browser on a page showing you a selection of voice packs available for the selected language.
+Dla aparatury Taranis, pierwszą rzeczą do zrobienia jest wybranie "openTx for !FrSky taranis" w liście wyboru oprogramowania. Wybierz wersję językową i język głosu. Górny przycisk "Download" otworzy przeglądarkę i załaduje ostatnią dostepną wersję oprogramowania (zgodnie z wybranym językiem i opcjami). Dolny przycisk "Download" otworzy przeglądarke internetową na stronie pokazującą wybów pakitów głosowych dostępnych dla wybranego języka.
 
-Set your flight mode and preferred channel order in the dropdowns below, and dismiss the Preferences dialog with OK for now.
+Ustaw Mode i preferowaną kolejność kanałów w listach poniżej, kilnij OK w okienku dialogowym preferencji.
 
 === Symulator radia ===
 
-You can now create a new document. A window will appear, with the first line being the radio's general settings, and the next being the model slots. You can have a look in the general settings and create a model by double-clicking in an empty slot.
+Możesz teraz stworzyć nowy dokument. Pojawi się okno, jego pierwsza linia daje dostęp do ustawień ogólnych radia, nastepne odpwoeadają kolejnym modelom. Możesz zajrzeć do ustawień, a klikając na pustej linii utworzysz nowy model.
 
-There are 2 ways to simulate either a model or the whole radio.
- * In the model editor, the bottom Simulate button will open the model simulator with the current settings. Note that if a change is made in the model while the simulator is open, it needs to be closed and reopened.
- * At the bottom of the "document" window is a "Simulate Tx" button that will open a similar simulator, however this time with an extra tab showing the radio's LCD screen and UI buttons. The virtual radio will have the same data as the document when the simulator is started. Note that changes on the radio interface are not carried over back to the document.
+Są dwa sposoby symulacji modelu albo całego radia.
+ * W edytorze modeli, dolny przycisk "Simulate" otworzy symulator modelu z aktualnymi ustawieniami. Pamiętaj, jeśli zosatnaie zrobiona zmiana w modelu w czasie gdy symylator jest otwarty, musi on zostać zamknięty i otwarty ponownie.
+ * U dołu okna "document" znajduje sie przycisk "Simulate Tx", który otwiera podobny symulator, ale z dodatkową zakładką pokazującą ekran LCD i przyciski radia. Wirtualne radio zawiera te same dane jak dokument w monencie uruchomienia symulatora. Pamiętaj, że zmiany dokonane poprzez interfejs radia nie przenoszą się do dokumentu.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/29_c9x_sim.png
 
 === Flashowanie Twojego Taranisa ===
 
-As mentioned before, the program of your radio can be replaced, either to change the display language or to take advantage of new functions or corrections.
+Jak wspomniano wcześniej, oprogramowanie Twojego radia może być zmieniane, czy to z powodu zmiany wersji językowej czy w celu korzystania z nowych funkcji i poprawek.
 
-The first thing to do is to power your radio off and connect it to your computer's USB port.
+Pierwsza rzecz, którą trzeba zrobić jest wyłączenie radia i podłączenie do portu USB komputera.
 
 ==== Instalacja drivera (tylko dla Windows) ====
 
@@ -808,7 +807,7 @@ Pobierz i zainstaluj pakiet [https://code.google.com/p/companion9x/downloads/det
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/flash.png
 
  * W oknie preferencji companion9x upewnij się, że właściwe oprogramowanie nadajnika jest wybrane (openTx fo !FrSky Taranis) oraz czy opcje i wersja językowa odpowiadają Twoim preferencjom. Następnie naciśnij górny przycisk "Download" i wybierz lokalizację pliku. Spowoduje to zbudowanie i pobranie najnowszej dostępnej wersji openTx dla Taranisa.
- * Zamknij okno preferencji i wybierz komendę Burn -> Write Flash memory. Upewnij się, że zasilanie aparatury jest wyłączone i połączone z komputerem.
+ * Zamknij okno preferencji i wybierz komendę Burn -> Write Flash memory. Upewnij się, że aparatura jest wyłączona i jest połączona z komputerem.
  * Wybierz plik, który przed chwilą pobrałeś. Będzie automatycznie rozpoznany i zostanie wyświetlona jego wersja.
  * Jeśli życzysz sobie aby zamienić ekran powitalny radia, możesz załadować nowy z pliku lub wybrać z dostępnej biblioteki. Następnie kilknij "Substitute image in firmware".
  * Kliknij "Burn to TX".
