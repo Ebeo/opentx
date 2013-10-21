@@ -1498,8 +1498,8 @@ FORCEINLINE void convertUnit(getvalue_t & val, uint8_t & unit)
     if (unit == UNIT_KTS) {
       // kts to km/h
       unit = UNIT_KMH;
-      val = (val * 46) / 25;
-	val= val/1000;
+      //val = (val * 46) / 25;
+	//val= val/1000;
     }
   }
 }

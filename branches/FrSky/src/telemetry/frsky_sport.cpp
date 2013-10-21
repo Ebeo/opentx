@@ -189,7 +189,8 @@ void processHubPacket(uint8_t id, uint16_t value)
       if (frskyData.hub.rpm > frskyData.hub.maxRpm)
         frskyData.hub.maxRpm = frskyData.hub.rpm;
       break;
-
+//case GPS_COURS_BP_ID:
+	//frskyData.hub.gpsCourse_bp = value;
     case TEMP1_ID:
       if (frskyData.hub.temperature1 > frskyData.hub.maxTemperature1)
         frskyData.hub.maxTemperature1 = frskyData.hub.temperature1;
@@ -224,14 +225,15 @@ void processHubPacket(uint8_t id, uint16_t value)
       break;
 
     case GPS_ALT_AP_ID:
+	 frskyData.hub.gpsAltitude_bp =  frskyData.hub.gpsAltitude_bp*100;
       if (!frskyData.hub.gpsAltitudeOffset)
         frskyData.hub.gpsAltitudeOffset = -frskyData.hub.gpsAltitude_bp;
       frskyData.hub.gpsAltitude_bp += frskyData.hub.gpsAltitudeOffset;
       if (!frskyData.hub.baroAltitudeOffset) {
-        if (frskyData.hub.gpsAltitude_bp > frskyData.hub.maxAltitude)
-          frskyData.hub.maxAltitude = frskyData.hub.gpsAltitude_bp;
-        if (frskyData.hub.gpsAltitude_bp < frskyData.hub.minAltitude)
-          frskyData.hub.minAltitude = frskyData.hub.gpsAltitude_bp;
+        if (frskyData.hub.gpsAltitude_bp > frskyData.hub.maxAltitude*100)
+          frskyData.hub.maxAltitude = frskyData.hub.gpsAltitude_bp/100;
+        if (frskyData.hub.gpsAltitude_bp < frskyData.hub.minAltitude*100)
+          frskyData.hub.minAltitude = frskyData.hub.gpsAltitude_bp/100;
       }
 
       if (!frskyData.hub.pilotLatitude && !frskyData.hub.pilotLongitude) {
@@ -245,6 +247,7 @@ void processHubPacket(uint8_t id, uint16_t value)
 
     case GPS_SPEED_BP_ID:
       // Speed => Max speed
+      frskyData.hub.gpsSpeed_bp = (frskyData.hub.gpsSpeed_bp * 46) / 25;
       if (frskyData.hub.gpsSpeed_bp > frskyData.hub.maxGpsSpeed)
         frskyData.hub.maxGpsSpeed = frskyData.hub.gpsSpeed_bp;
       break;
@@ -389,6 +392,7 @@ void processSportPacket(uint8_t *packet)
       }
       else if (appId >= GPS_SPEED_FIRST_ID && appId <= GPS_SPEED_LAST_ID) {
         frskyData.hub.gpsSpeed_bp = SPORT_DATA_U32(packet);
+	 frskyData.hub.gpsSpeed_bp = (frskyData.hub.gpsSpeed_bp * 46) / 25/1000;	 
         if (frskyData.hub.gpsSpeed_bp > frskyData.hub.maxGpsSpeed)
           frskyData.hub.maxGpsSpeed = frskyData.hub.gpsSpeed_bp;
       }
