@@ -145,7 +145,7 @@
 
 *[http://opentx.googlecode.com/files/openTx%20Manual.pdf English User Guide Download]*
 
-*[http://opentx.googlecode.com/files/openTx%20Manual%20CZ.pdf Czech User Guide Download]*
+*[https://opentx.googlecode.com/files/OpenTX%20Manual%20CZ.pdf Czech User Guide Download]*
 
 *[http://opentx.googlecode.com/files/openTx%20Manual%20DE.pdf German User Guide Download]*
 
