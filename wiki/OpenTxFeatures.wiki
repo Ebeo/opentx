@@ -143,11 +143,11 @@
 
 *[http://9xforums.com/wiki/index.php/openTx_user_guide 9xforums Wiki User Guide]*
 
-*[http://opentx.googlecode.com/files/openTx%20Manual.pdf English User Guide Download]*
+*[http://open9x.googlecode.com/files/Open9x%20Manual.pdf English User Guide Download]*
 
 *[https://opentx.googlecode.com/files/OpenTX%20Manual%20CZ.pdf Czech User Guide Download]*
 
-*[http://opentx.googlecode.com/files/openTx%20Manual%20DE.pdf German User Guide Download]*
+*[http://opentx.googlecode.com/files/OpenTx%20Manual%20DE.pdf German User Guide Download]*
 
 || *MAIN SCREEN* views || || ||
 || _*Two timers*_ and _*THRt*_|| _*Statistics*_ with custom Timers 1 and 2 <br>by press LONG UP on previous screen|| _*Delays*_ <br> press UP on previous screen||
