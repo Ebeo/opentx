@@ -285,6 +285,12 @@ make OPTION1=VALUE1 OPTION2=VALUE2...
 		<td>POT1, POT2, POT3</td>
 		<td>Enable another 3 position switch to replace a pot</td>
 	</tr>
+	<tr>
+		<td>FONT</td>
+		<td><b>STD</b></td>
+		<td>STD, SQT5</td>
+		<td>Select font. The SQT5 font is heavier and looks good on the low contrast display of the Taranis</td>
+	</tr>
 <wiki:comment>
     <tr>
 		<td>DECIMALS</td>
