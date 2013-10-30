@@ -1,4 +1,4 @@
-#Build OpenTX on Linux
+#Summary Build OpenTX on Linux
 
 = Building OpenTX on a Linux PC =
 The following instructions describe how to set up the build environment, retrieve the source code and lastly build OpenTX on a Linux machine. A completely blank machine running Linux Mint 15 (Olivia) has been used to verify the instructions. Almost any other Linux distribution should be usable, but it may be necessary to make slight adjustments due to other packages being installed as default.
