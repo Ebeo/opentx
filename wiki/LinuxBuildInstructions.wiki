@@ -28,7 +28,7 @@ Play around with the different build options. You find them listed in the [Compi
 Taranis has another processor than the 9x. To compile Taranis binaries you need to install both the 9x tool chain from above  and and an ARM tool chain. You do not need the ARM tool chain if you do not intend to build Taranis binaries. The ARM libraries are not available in the normal repository. The easiest way to install them is to fetch them directly from this location:
 [https://launchpad.net/gcc-arm-embedded]. Look for and download a file called something like _gcc-arm-none-eabi-4_7-2013q3-20130916-linux.tar.bz2_
 
-Now change to the download director. Then unpack the file and move it to the proper location. The last thing to do is to add it to the environment variable. Here are the commands that are needed:
+Now change to the download directory. Then unpack the file and move it to the proper location. The last thing to do is to add it to the environment variable. Here are the commands that are needed:
 
 *tar xjvf gcc-arm-none-eabi-4_7-2013q3-20130916-linux.tar.bz2*
 
