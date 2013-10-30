@@ -240,7 +240,7 @@ make OPTION1=VALUE1 OPTION2=VALUE2...
 	<tr>
 		<td>TTS</td>
 		<td>same as <br>TRANSLATIONS</br></td>
-		<td>EN, FR, IT, CZ, DE, PT</td>
+		<td>EN, FR, IT, CZ, DE, PT, SE</td>
 		<td>Speech language for voice modification</td>
 	</tr>
 	<tr>
