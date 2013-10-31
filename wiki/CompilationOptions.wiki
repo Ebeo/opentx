@@ -36,6 +36,12 @@ make OPTION1=VALUE1 OPTION2=VALUE2...
 		<td>Better Audio feedback (needs audio TX modification)</td>
 	</tr>
 	<tr>
+		<td>AUTOSOURCE</td>
+		<td><b>NO</b></td>
+		<td>YES</td>
+		<td>Sources automatic selection</td>
+	</tr>
+	<tr>
 		<td>AUTOSWITCH</td>
 		<td><b>NO</b></td>
 		<td>YES</td>
@@ -78,6 +84,18 @@ make OPTION1=VALUE1 OPTION2=VALUE2...
 		<td>Double key press [+/-] invert, [+/UP] max, <br> [-/DOWN] min, [UP/DOWN] reset to default)</br></td>
 	</tr>
 	<tr>
+		<td>DEBUG</td>
+		<td><b>NO</b></td>
+		<td>YES</td>
+		<td>Activates debug mode</td>
+	</tr>
+	<tr>
+		<td>DEFAULT_MODE</td>
+		<td><b>NO</b></td>
+		<td>1, 2, 3, 4</td>
+		<td>Default TX mode</td>
+	</tr>
+	<tr>
 		<td>DSM2</td>
 		<td><b>NO</b></td>
 		<td>SERIAL, PPM</td>
@@ -96,10 +114,16 @@ make OPTION1=VALUE1 OPTION2=VALUE2...
 		<td>Telemetry extension (needs TX modification)</td>
 	</tr>
 	<tr>
-		<td>FLIGHT_PHASES</td>
+		<td>FAI</td>
+		<td><b>NO</b></td>
+		<td>YES, CHOICE</td>
+		<td>Enables FAI rules restrictions</td>
+	</tr>
+	<tr>
+		<td>FLIGHT_MODES</td>
 		<td><b>YES</b></td>
 		<td>NO</td>
-		<td>Flight phases support </td>
+		<td>Flight modes support </td>
 	</tr>
 	<tr>
 		<td>FONT</td>
@@ -158,7 +182,7 @@ make OPTION1=VALUE1 OPTION2=VALUE2...
 	<tr>
 		<td>PCB</td>
 		<td><b>9X</b></td>
-		<td>9X128, 9XR, 9XR128, <br>GRUVIN9X, SKY9X, TARANIS</br></td>
+		<td>9X128, 9XR, 9XR128, <br>9XR2561, GRUVIN9X, MEGA2560,</br> SKY9X, TARANIS</td>
 		<td>Stock 9X/9XR or with Atmega 128, <br>gruvin9x, ersky9x, X9D boards</br></td>
 	</tr>
     <tr>
@@ -222,12 +246,6 @@ make OPTION1=VALUE1 OPTION2=VALUE2...
 		<td>Templates screen enabled </td>
 	</tr>
 	<tr>
-		<td>THR_TRACE</td>
-		<td><b>YES</b></td>
-		<td>NO</td>
-		<td>THR trace in STATS screen</td>
-	</tr>
-	<tr>
 		<td>TRANSLATIONS</td>
 		<td><b>EN</b></td>
 		<td>CZ, DE, ES, FR, IT, PT, SE</td>
@@ -268,11 +286,5 @@ make OPTION1=VALUE1 OPTION2=VALUE2...
 		<td><b>YES</b></td>
 		<td>NO</td>
 		<td>Winged Shadow How High supported (when EXT=FRSKY) </td>
-	</tr>
-	<tr>
-		<td>XCURVES</td>
-		<td><b>YES</b></td>
-		<td>NO</td>
-		<td> Customize able curves on non stock boards</td>
 	</tr>
 </table>
