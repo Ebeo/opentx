@@ -74,6 +74,9 @@
 #define LEN_VTRIMINC           "\007"
 #define TR_VTRIMINC            "Expo\0  ""ExJemn\212""Jemn\212\0 ""St\206edn\204""Hrub\212\0 "
 
+#define LEN_VBEEPCOUNTDOWN     "\006"
+#define TR_VBEEPCOUNTDOWN      "SilentBeeps\0Voice\0"
+
 #define LEN_RETA123            "\001"
 
 #if defined(PCBGRUVIN9X)
@@ -633,6 +636,7 @@
 #define TR_MOVE                "P\206esunout"
 #define TR_PASTE               "Vlo\217it"
 #define TR_DELETE              "Odstranit"
+#define TR_INSERT              "Vlo\217it"
 #define TR_RESET_FLIGHT        "Vynulovat let"
 #define TR_RESET_TIMER1        "Vynulovat Timer1"
 #define TR_RESET_TIMER2        "Vynulovat Timer2"
@@ -646,7 +650,7 @@
 #define TR_BYTES               "[B]"
 #define TR_MODULE_BIND         "[Bind]"
 #define TR_MODULE_RANGE        "[Range]"
-#define TR_RESET               "[Reset]"
+#define TR_RESET_BTN           "[Reset]"
 #define TR_SET                 "[Volby]"
 #define TR_TRAINER             "Tren\202r"
 #define TR_ANTENNAPROBLEM      CENTER "Probl\202m s TX ant\202nou!"

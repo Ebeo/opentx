@@ -74,6 +74,9 @@
 #define LEN_VTRIMINC           TR("\006", "\013")
 #define TR_VTRIMINC            TR("Expo  ""ExFino""Fino  ""Medio ""Grueso", "Exponencial""Extra Fino ""Fino       ""Medio      ""Grueso     ")
 
+#define LEN_VBEEPCOUNTDOWN     "\006"
+#define TR_VBEEPCOUNTDOWN      "SilentBeeps\0Voice\0"
+
 #define LEN_RETA123            "\001"
 
 #if defined(PCBGRUVIN9X)
@@ -633,6 +636,7 @@
 #define TR_MOVE                "Mover"
 #define TR_PASTE               "Pegar"
 #define TR_DELETE              "Borrar"
+#define TR_INSERT              "Insertar"
 #define TR_RESET_FLIGHT        "Reset Vuelo"
 #define TR_RESET_TIMER1        "Reset Reloj1"
 #define TR_RESET_TIMER2        "Reset Reloj2"
