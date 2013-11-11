@@ -182,7 +182,7 @@ make OPTION1=VALUE1 OPTION2=VALUE2...
 	<tr>
 		<td>PCB</td>
 		<td><b>9X</b></td>
-		<td>9X128, 9XR, 9XR128, <br>9XR2561, GRUVIN9X, MEGA2560,</br> SKY9X, TARANIS</td>
+		<td>9X128, 9XR, 9XR128, <br>9XR2561, GRUVIN9X, </br>MEGA2560, SKY9X,<br>TARANIS</br></td>
 		<td>Stock 9X/9XR or with Atmega 128, <br>gruvin9x, ersky9x, X9D boards</br></td>
 	</tr>
     <tr>
@@ -248,13 +248,13 @@ make OPTION1=VALUE1 OPTION2=VALUE2...
 	<tr>
 		<td>TRANSLATIONS</td>
 		<td><b>EN</b></td>
-		<td>CZ, DE, ES, FR, IT, PL, PT, SE</td>
+		<td>CZ, DE, ES, FR, IT, PL,<br>PT, SE</br></td>
 		<td>User interface language</td>
 	</tr>
 	<tr>
 		<td>TTS</td>
 		<td>same as <br>TRANSLATIONS</br></td>
-		<td>CZ, DE, ES, EN, FR, IT, PL, PT, SE, SK</td>
+		<td>CZ, DE, ES, EN, FR, IT,<br>PL, PT, SE, SK</br></td>
 		<td>Voice language</td>
 	</tr>
 	<tr>
