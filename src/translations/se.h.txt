@@ -75,7 +75,7 @@
 #define TR_VTRIMINC            TR("Expo\0 ""xFin\0 ""Fin\0  ""Medium""Grov\0 ","Exponentiell""Extra Fin\0  ""Fin\0        ""Medium\0     ""Grov\0       ")
 
 #define LEN_VBEEPCOUNTDOWN     "\006"
-#define TR_VBEEPCOUNTDOWN      "SilentBeeps\0Voice\0"
+#define TR_VBEEPCOUNTDOWN      "Tyst\0 Pip\0  Röst\0 "
 
 #define LEN_RETA123            "\001"
 
