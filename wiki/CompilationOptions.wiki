@@ -248,14 +248,14 @@ make OPTION1=VALUE1 OPTION2=VALUE2...
 	<tr>
 		<td>TRANSLATIONS</td>
 		<td><b>EN</b></td>
-		<td>CZ, DE, ES, FR, IT, PT, SE</td>
-		<td>String translations</td>
+		<td>CZ, DE, ES, FR, IT, PL, PT, SE</td>
+		<td>User interface language</td>
 	</tr>
 	<tr>
 		<td>TTS</td>
 		<td>same as <br>TRANSLATIONS</br></td>
-		<td>CZ, DE, EN, FR, IT, PT, SE</td>
-		<td>Speech language for voice modification</td>
+		<td>CZ, DE, ES, EN, FR, IT, PL, PT, SE, SK</td>
+		<td>Voice language</td>
 	</tr>
 	<tr>
 		<td>TX_CADDY</td>
