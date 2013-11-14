@@ -41,7 +41,7 @@ Jest ona ponadto przyszłościowa, bo oba zespoły są gotowe odpowiadać na pyt
 
  * Duży, podświetlany ekran LCD 212*64
  * Drążki zawieszone na czterech łożyskach kulkowych, wyposażone w potencjometry wysokiej jakości
- * Liczne elementy sterujące (4 drążki, 4 trymery, 2 przesuwki, 2 potencjometry, 8 przełączników), wszystkie można dowolnie wykorzystywać.
+ * Liczne elementy sterujące (4 drążki, 4 trymery, 2 suwaki, 2 potencjometry, 8 przełączników), wszystkie można dowolnie wykorzystywać.
  * 60 pamięci dla konfiguracji modeli
  * 32 kanały logiczne
  * Wewnętrzny moduł nadawczy z telemetrią, będący w stanie transmitować do 16 kanałów z prędkością odświeżania 9ms. Obsługuje on istniejący protokół D8 (można go używać ze wszystkimi odbiornikami serii D i VxR-II) jak również nowe tryby D16 i LR12
@@ -70,7 +70,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/Taranis.jpg
 Aparatura ma względnie typowy wygląd oraz ułożenie elementów sterujących, i tak:
  * 2 drążki i związane z nimi trymery, opisane w oprogramowaniu jako Thr, Rud, Ele, Ail, odpowiednio, TrmT, TrmR, TrmE, TrmA. Przyporządkowanie drążków do nazw jest zgodne z wybranym trybem pracy drążków (Mode). Trymery można przypisywać dowolnie (np. dla cross-trimming), mogą być także użyte niezależnie od drążków.
  * 2 potencjometry S1 i S2
- * 2 boczne przesuwki LS i RS
+ * 2 boczne suwaki LS i RS
  * 6 przełączników 3-pozycyjnych (SA-SE, SG)
  * 1 przełącznik 2-pozycyjny (SF)
  * 1 przełącznik chwilowy (SH)
@@ -235,7 +235,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/09e_anadiag.png
 
 ==== Kalibracja ====
 
-To jest miejsce gdzie możesz skalibrować drążki i potencjometry. Postępuj zgodnie z instrukcją na ekranie, tylko zauważ, że gdy jesteś proszony o wycentrowanie drążków, dotyczy to także drążka gazu i obu przesuwek bocznych. Potencjometry S1 i S2 nie muszą być centrowane, tylko położenia krańcowe są kalibrowane.
+To jest miejsce gdzie możesz skalibrować drążki i potencjometry. Postępuj zgodnie z instrukcją na ekranie, tylko zauważ, że gdy jesteś proszony o wycentrowanie drążków, dotyczy to także drążka gazu i obu bocznych suwaków. Potencjometry S1 i S2 nie muszą być centrowane, tylko położenia krańcowe są kalibrowane.
 
 https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/10_calib.png
 
@@ -327,7 +327,7 @@ Poszczególne kanały są wyjściami, na przykład CH1 jest wtyczką serwa numer
 
 Każda linia miksera łączy jedno wejście z kanałem, w którym jest wstawiona. Wejścia mogą być takie:
  * 4 osie wychylenia drążków
- * 4 potencjometry i przesuwki
+ * 4 potencjometry i suwaki 
  * Wyjścia miksera helikoptera (CYC1-3)
  * Stała wartość (MAX)
  * 8 przełączników fizycznych
@@ -508,7 +508,7 @@ https://opentx.googlecode.com/svn/wiki/images_openTx_FrSky_EN/27_templates.png
 
 == Pierwsze kroki ==
 
-Teraz, kiedy znasz już podstawy a Twoja bateria jest naładowana, co powiesz na odrobinę praktyki? Pierwsza rzecz do zrobienia z Twoją aparaturą to kalibracja drążków i potencjometrów. Przy pierwszym włączeniu zasilania, ekran kalibracji powinien pojawić się automatycznie. Postępuj zgodnie z instrukcją i zwróć uwagę, że istotne jest ustawienie drążka gazu w środkowej pozycji, gdy zostaniesz poproszony o ustawienie punktów środkowych drążków, ale nie jest to wymagane dla potencjometrów. Następny krok, to konfiguracja ustawień ogólnych. Przejdź do odpowiedniej strony przez DŁUGIE naciśnięcie klawisza MENU, ustaw datę, czas i taką jak lubisz głośność dźwięków (typowo, na dolnym końcu przesuwki głośności jeśli używasz słuchawek, górny koniec jest dobry gdy używasz wewnętrznego głośnika), pobaw się ustawieniami podświetlania, ustaw kod kraju dla modułu nadawczego, domyślną kolejność kanałów zgodnie z Twoimi preferencjami, i tryb drążków (Mode) tak aby pasował to Twojego sposobu latania. Wskaźnik baterii i alarm jej niskiego poziomu są fabrycznie ustawione dla dostarczonej baterii.
+Teraz, kiedy znasz już podstawy a Twoja bateria jest naładowana, co powiesz na odrobinę praktyki? Pierwsza rzecz do zrobienia z Twoją aparaturą to kalibracja drążków i potencjometrów. Przy pierwszym włączeniu zasilania, ekran kalibracji powinien pojawić się automatycznie. Postępuj zgodnie z instrukcją i zwróć uwagę, że istotne jest ustawienie drążka gazu w środkowej pozycji, gdy zostaniesz poproszony o ustawienie punktów środkowych drążków, ale nie jest to wymagane dla potencjometrów. Następny krok, to konfiguracja ustawień ogólnych. Przejdź do odpowiedniej strony przez DŁUGIE naciśnięcie klawisza MENU, ustaw datę, czas i taką jak lubisz głośność dźwięków (typowo, na dolnym końcu suwaka głośności jeśli używasz słuchawek, górny koniec jest dobry gdy używasz wewnętrznego głośnika), pobaw się ustawieniami podświetlania, ustaw kod kraju dla modułu nadawczego, domyślną kolejność kanałów zgodnie z Twoimi preferencjami, i tryb drążków (Mode) tak aby pasował to Twojego sposobu latania. Wskaźnik baterii i alarm jej niskiego poziomu są fabrycznie ustawione dla dostarczonej baterii.
 
 Aparatura stworzy dla Ciebie "pusty" model, więc gdy powrócisz do głównego ekranu, będziesz w stanie przejść do ekranu ustawień modelu przez KRÓTKIE naciśnięcie klawisza MENU, następnie KRÓTKIE naciśnięcie PAGE. Tam będziesz chciał upewnić się, że ustawiłeś tryb pracy modułu nadawczego zgodnie z parametrami odbiornika, którego chcesz używać. Gdy używasz wewnętrznego modułu nadawczego, wybierz pole "Bind" i naciśnij ENTER aby zbindować twój odbiornik. Moduł nadawczy będzie pikał co kilka sekund. Teraz postępuj zgodnie z instrukcją bindowania Twojego odbiornika (naciśnij i przytrzymaj przycisk F/S i podłącz zasilanie odbiornika serii D lub X, albo załóż zworkę na piny S kanału 1 i 2 i podłącz zasilanie odbiornika V8x-II). LED odbiornika będzie szybko migał aby potwierdzić bindowanie. Naciśnij EXIT na aparaturze, usuń zworkę z odbiornika (jeśli zakładałeś), wyłącz i ponownie włącz zasilanie odbiornika. Powinieneś móc sterować serwami dołączonymi do kanałów 1-4 przy pomocy drążków.
 
