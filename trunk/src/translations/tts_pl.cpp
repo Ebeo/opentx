@@ -224,7 +224,7 @@ I18N_PLAY_FUNCTION(pl, playNumber, getvalue_t number, uint8_t unit, uint8_t att)
     ten=(number - (number % 10))/10;
     if (att == ZENSKI && test_2==2 && ten >= 2 ) {
       
-      PUSH_NUMBER_PROMPT(PL_PROMPT_DZIESIATKI_ZENSKIE+dziesiatka);
+      PUSH_NUMBER_PROMPT(PL_PROMPT_DZIESIATKI_ZENSKIE+ten);
     }else 
        PUSH_NUMBER_PROMPT(PL_PROMPT_ZERO+number);
   }
