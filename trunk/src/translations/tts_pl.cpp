@@ -24,20 +24,21 @@
 
 enum PolishPrompts {
   PL_PROMPT_NUMBERS_BASE = 0,
-  PL_PROMPT_NULA = PL_PROMPT_NUMBERS_BASE+0,    //0-99
+  PL_PROMPT_ZERO = PL_PROMPT_NUMBERS_BASE+0,    //0-99
   PL_PROMPT_STO = PL_PROMPT_NUMBERS_BASE+100,   //100,200 .. 900
-  PL_PROMPT_TISIC = PL_PROMPT_NUMBERS_BASE+109, //1000
-  PL_PROMPT_TISICE = PL_PROMPT_NUMBERS_BASE+110,
-  PL_PROMPT_JEDEN = PL_PROMPT_NUMBERS_BASE+111,
+  PL_PROMPT_TISIAC = PL_PROMPT_NUMBERS_BASE+109, //1000
+  PL_PROMPT_TISIACE = PL_PROMPT_NUMBERS_BASE+110,
+  PL_PROMPT_JEDNA = PL_PROMPT_NUMBERS_BASE+111,
   PL_PROMPT_JEDNO = PL_PROMPT_NUMBERS_BASE+112,
-  PL_PROMPT_DVE = PL_PROMPT_NUMBERS_BASE+113,
-  PL_PROMPT_CELA = PL_PROMPT_NUMBERS_BASE+114,
-  PL_PROMPT_CELE = PL_PROMPT_NUMBERS_BASE+115,
-  PL_PROMPT_CELYCH = PL_PROMPT_NUMBERS_BASE+116,
+  PL_PROMPT_DWIE = PL_PROMPT_NUMBERS_BASE+113,
+  PL_PROMPT_CALA = PL_PROMPT_NUMBERS_BASE+114,
+  PL_PROMPT_CALE = PL_PROMPT_NUMBERS_BASE+115,
+  PL_PROMPT_CALYCH = PL_PROMPT_NUMBERS_BASE+116,
   PL_PROMPT_MINUS = PL_PROMPT_NUMBERS_BASE+117,
+  PL_PROMPT_DZIESIATKI_ZENSKIE=PL_PROMPT_NUMBERS_BASE+120, // 22(0122.wav),32(123.wav),42,52,62,72,82,92(129.wav) - this are special female numbers when the unit is female
 
-  PL_PROMPT_UNITS_BASE = 118,
-  PL_PROMPT_VOLTS = PL_PROMPT_UNITS_BASE+UNIT_VOLTS, //(jeden)volt,(dva)volty,(pet)voltu,(desetina)voltu
+  PL_PROMPT_UNITS_BASE = 160,
+  PL_PROMPT_VOLTS = PL_PROMPT_UNITS_BASE+UNIT_VOLTS, //(jeden)wolt,(dwa)wolty,(piec+)woltów i tak dla wszytkich unitów
   PL_PROMPT_AMPS = PL_PROMPT_UNITS_BASE+(UNIT_AMPS*4),
   PL_PROMPT_METERS_PER_SECOND = PL_PROMPT_UNITS_BASE+(UNIT_METERS_PER_SECOND*4),
   PL_PROMPT_SPARE1 = PL_PROMPT_UNITS_BASE+(UNIT_RAW*4),
@@ -57,7 +58,7 @@ enum PolishPrompts {
   PL_PROMPT_RPMS = PL_PROMPT_UNITS_BASE+(UNIT_RPMS*4),
   PL_PROMPT_G = PL_PROMPT_UNITS_BASE+(UNIT_G*4),
  
-  PL_PROMPT_LABELS_BASE = 194,
+  PL_PROMPT_LABELS_BASE = 250,
   PL_PROMPT_TIMER1 = PL_PROMPT_LABELS_BASE+TELEM_TM1,
   PL_PROMPT_TIMER2 = PL_PROMPT_LABELS_BASE+TELEM_TM2,
   PL_PROMPT_RSSI_TX = PL_PROMPT_LABELS_BASE+TELEM_RSSI_TX,
@@ -94,18 +95,29 @@ enum PolishPrompts {
   #define PL_PUSH_UNIT_PROMPT(p, u) pushUnitPrompt((p), (u))
 #endif
 
-#define MUZSKY 0x80
-#define ZENSKY 0x81
-#define STREDNI 0x82
+#define MESKI 0x80
+#define ZENSKI 0x81
+#define NIJAKI 0x82
 
 I18N_PLAY_FUNCTION(pl, pushUnitPrompt, int16_t number, uint8_t unitprompt)
 {
+#if defined(SIMU)
+  printf("numer do powiedzenia %d",number); 
+#endif
   if (number == 1)
     PUSH_NUMBER_PROMPT(unitprompt);
   else if (number > 1 && number < 5)
     PUSH_NUMBER_PROMPT(unitprompt+1);
-  else
-    PUSH_NUMBER_PROMPT(unitprompt+2);
+  else {
+    int test_2 =0;
+    test_2 =number % 10;
+    int dziesiatka=0;
+    dziesiatka=(number - (number % 10))/10;
+    if ((test_2 > 1 && test_2 < 5) && dziesiatka >2)
+	PUSH_NUMBER_PROMPT(unitprompt+1);
+    else
+	PUSH_NUMBER_PROMPT(unitprompt+2);
+    }
 }
 
 I18N_PLAY_FUNCTION(pl, playNumber, getvalue_t number, uint8_t unit, uint8_t att)
@@ -138,12 +150,12 @@ I18N_PLAY_FUNCTION(pl, playNumber, getvalue_t number, uint8_t unit, uint8_t att)
     // we assume that we are PREC1
     div_t qr = div(number, 10);   
       if (qr.rem) {
-        PLAY_NUMBER(qr.quot, 0, ZENSKY);
+        PLAY_NUMBER(qr.quot, 0, ZENSKI);
         if (qr.quot == 0)
-          PUSH_NUMBER_PROMPT(PL_PROMPT_CELA);
+          PUSH_NUMBER_PROMPT(PL_PROMPT_CALA);
         else
-          PL_PUSH_UNIT_PROMPT(qr.quot, PL_PROMPT_CELA);
-        PLAY_NUMBER(qr.rem, 0, ZENSKY);
+          PL_PUSH_UNIT_PROMPT(qr.quot, PL_PROMPT_CALA);
+        PLAY_NUMBER(qr.rem, 0, ZENSKI);
         PUSH_NUMBER_PROMPT(PL_PROMPT_UNITS_BASE+((unit-1)*4)+3);
         return;
       }
@@ -156,46 +168,47 @@ I18N_PLAY_FUNCTION(pl, playNumber, getvalue_t number, uint8_t unit, uint8_t att)
   switch(unit) {
     case 0:
       break;
-    case 4:
     case 10:
     case 13:
     case 15:
     case 16:
     case 17:
-    case 18:
-      att = ZENSKY;
+      att = ZENSKI;
       break;
-    case 8:
-    case 19:
-      att = STREDNI;
+    case 100:
+      att = NIJAKI;
       break;
     default:
-      att = MUZSKY;
+      att = MESKI;
       break;
   }
 
-  if ((number == 1) && (att == MUZSKY)) {
-    PUSH_NUMBER_PROMPT(PL_PROMPT_JEDEN);
+  if ((number == 1) && (att == ZENSKI)) {
+    PUSH_NUMBER_PROMPT(PL_PROMPT_JEDNA);
     number = -1;
   }
   
-  if ((number == 1) && (att == STREDNI)) {
+  if ((number == 1) && (att == NIJAKI)) {
     PUSH_NUMBER_PROMPT(PL_PROMPT_JEDNO);
     number = -1;
   }
   
-  if ((number == 2) && ((att == ZENSKY) || (att == STREDNI))) {
-    PUSH_NUMBER_PROMPT(PL_PROMPT_DVE);
+  if ((number == 2) && (att == ZENSKI)) {
+    PUSH_NUMBER_PROMPT(PL_PROMPT_DWIE);
     number = -1;
   }
   
+
+
+
+
   if (number >= 1000) {
     if (number >= 2000) 
       PLAY_NUMBER(number / 1000, 0, 0);
     if (number >= 2000 && number < 5000)
-      PUSH_NUMBER_PROMPT(PL_PROMPT_TISICE);
+      PUSH_NUMBER_PROMPT(PL_PROMPT_TISIACE);
     else
-      PUSH_NUMBER_PROMPT(PL_PROMPT_TISIC);
+      PUSH_NUMBER_PROMPT(PL_PROMPT_TISIAC);
     number %= 1000;
     if (number == 0)
       number = -1;
@@ -208,7 +221,18 @@ I18N_PLAY_FUNCTION(pl, playNumber, getvalue_t number, uint8_t unit, uint8_t att)
   }
   
   if (number >= 0) {
-    PUSH_NUMBER_PROMPT(PL_PROMPT_NULA+number);
+    int test_2 =0;
+    test_2 =number % 10;
+    int dziesiatka=0;
+    dziesiatka=(number - (number % 10))/10;
+#if defined(SIMU)
+    printf("dziesiatki %d - %d ==== ",dziesiatka,test_2);
+#endif
+    if (att == ZENSKI && test_2==2 && dziesiatka >= 2 ) {
+      
+      PUSH_NUMBER_PROMPT(PL_PROMPT_DZIESIATKI_ZENSKIE+dziesiatka);
+    }else 
+       PUSH_NUMBER_PROMPT(PL_PROMPT_ZERO+number);
   }
 
   if (unit) {
@@ -216,6 +240,8 @@ I18N_PLAY_FUNCTION(pl, playNumber, getvalue_t number, uint8_t unit, uint8_t att)
   }
 }
 
+
+// The whole funtion has to be changed
 I18N_PLAY_FUNCTION(pl, playDuration, int16_t seconds)
 {
   if (seconds < 0) {
@@ -226,17 +252,17 @@ I18N_PLAY_FUNCTION(pl, playDuration, int16_t seconds)
   uint8_t tmp = seconds / 3600;
   seconds %= 3600;
   if (tmp > 0) {
-    PLAY_NUMBER(tmp, UNIT_HOURS+1, ZENSKY);
+    PLAY_NUMBER(tmp, UNIT_HOURS+1, ZENSKI);
   }
 
   tmp = seconds / 60;
   seconds %= 60;
   if (tmp > 0) {
-    PLAY_NUMBER(tmp, UNIT_MINUTES+1, ZENSKY);
+    PLAY_NUMBER(tmp, UNIT_MINUTES+1, ZENSKI);
   }
 
   if (seconds > 0) {
-    PLAY_NUMBER(seconds, UNIT_SECONDS+1, ZENSKY);
+    PLAY_NUMBER(seconds, UNIT_SECONDS+1, ZENSKI);
   }
 }
 
