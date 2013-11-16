@@ -101,9 +101,6 @@ enum PolishPrompts {
 
 I18N_PLAY_FUNCTION(pl, pushUnitPrompt, int16_t number, uint8_t unitprompt)
 {
-#if defined(SIMU)
-  printf("numer do powiedzenia %d",number); 
-#endif
   if (number == 1)
     PUSH_NUMBER_PROMPT(unitprompt);
   else if (number > 1 && number < 5)
@@ -111,9 +108,9 @@ I18N_PLAY_FUNCTION(pl, pushUnitPrompt, int16_t number, uint8_t unitprompt)
   else {
     int test_2 =0;
     test_2 =number % 10;
-    int dziesiatka=0;
-    dziesiatka=(number - (number % 10))/10;
-    if ((test_2 > 1 && test_2 < 5) && dziesiatka >2)
+    int ten=0;
+    ten=(number - (number % 10))/10;
+    if ((test_2 > 1 && test_2 < 5) && ten >2)
 	PUSH_NUMBER_PROMPT(unitprompt+1);
     else
 	PUSH_NUMBER_PROMPT(unitprompt+2);
@@ -223,12 +220,9 @@ I18N_PLAY_FUNCTION(pl, playNumber, getvalue_t number, uint8_t unit, uint8_t att)
   if (number >= 0) {
     int test_2 =0;
     test_2 =number % 10;
-    int dziesiatka=0;
-    dziesiatka=(number - (number % 10))/10;
-#if defined(SIMU)
-    printf("dziesiatki %d - %d ==== ",dziesiatka,test_2);
-#endif
-    if (att == ZENSKI && test_2==2 && dziesiatka >= 2 ) {
+    int ten=0;
+    ten=(number - (number % 10))/10;
+    if (att == ZENSKI && test_2==2 && ten >= 2 ) {
       
       PUSH_NUMBER_PROMPT(PL_PROMPT_DZIESIATKI_ZENSKIE+dziesiatka);
     }else 
