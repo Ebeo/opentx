@@ -50,7 +50,7 @@ void menuStatisticsView(uint8_t event)
 #if defined(PCBTARANIS)
     case EVT_KEY_LONG(KEY_MENU):
       g_eeGeneral.globalTimer = 0;
-    	break;
+      break;
 #endif
     case EVT_KEY_FIRST(KEY_EXIT):
       chainMenu(menuMainView);
