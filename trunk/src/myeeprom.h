@@ -1441,6 +1441,7 @@ PACK(typedef struct t_ModelData {
   uint8_t   thrTraceSrc;
   
   swstate_t switchWarningStates;
+  uint8_t   nSwToWarn;
 
   MODEL_GVARS_DATA
 
