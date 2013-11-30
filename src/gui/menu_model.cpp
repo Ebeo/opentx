@@ -1141,24 +1141,27 @@ void menuModelSetup(uint8_t event)
         char c;
         if (attr) {
           s_editMode = 0;
-          switch(event) {
-            CASE_EVT_ROTARY_BREAK
-            case EVT_KEY_BREAK(KEY_ENTER):
-              if (!READ_ONLY()) {
-                killEvents(event);
-                if (m_posHorz == NUM_SWITCHES-1) { 
+          if (!READ_ONLY()) {
+            switch(event) {
+              CASE_EVT_ROTARY_BREAK
+              case EVT_KEY_BREAK(KEY_ENTER):
+                  killEvents(event);
+                  if (m_posHorz < NUM_SWITCHES-1) {
+                    g_model.nSwToWarn ^= (1 << m_posHorz);
+                    eeDirty(EE_MODEL);
+                  }
+                break;
+              case EVT_KEY_LONG(KEY_ENTER):
+                if (m_posHorz == NUM_SWITCHES-1) {
                   getMovedSwitch();
                   g_model.switchWarningStates = switches_states;
+                  eeDirty(EE_MODEL);
                 }
-                else {
-                  g_model.nSwToWarn ^= (1 << m_posHorz);
-                }
-                eeDirty(EE_MODEL);
-              }
               break; 
+            }
           }
         }
-        uint8_t line = attr;
+        LcdFlags line = attr;
         
         for (uint8_t i=0; i<NUM_SWITCHES-1; i++) {
           uint8_t swactive = !(g_model.nSwToWarn & 1 << i);
