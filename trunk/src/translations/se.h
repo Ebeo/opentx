@@ -662,7 +662,7 @@
 #define TR_CHANNELRANGE        INDENT "Kanalomr\200de"
 #define TR_LOWALARM            INDENT "L\200g-alarm"
 #define TR_CRITICALALARM       INDENT "Kritiskt alarm"
-#define TR_PERSISTENT_MAH      INDENT "Store mAh"
+#define TR_PERSISTENT_MAH      INDENT "Spara mAh"
 #define TR_FAS_OFFSET          TR(INDENT "FAS Ofs", INDENT "FAS Offset")
 
 #if defined(MAVLINK)
