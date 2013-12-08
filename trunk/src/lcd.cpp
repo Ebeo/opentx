@@ -236,7 +236,7 @@ void lcd_putcAtt(xcoord_t x, uint8_t y, const unsigned char c, LcdFlags flags)
     uint8_t condense=0;
 
     if (flags & CONDENSED) {
-      *p = inv ? ~0 : 0;
+      p++;
       condense=1;
     }
 
@@ -247,8 +247,8 @@ void lcd_putcAtt(xcoord_t x, uint8_t y, const unsigned char c, LcdFlags flags)
       if (b == 0xff) continue;
       if (inv) b = ~b;
 
-      if (condense && i==3) {
-        /*condense the letter by skipping column 4 */
+      if (condense && i==2) {
+        /*condense the letter by skipping column 3 */
         continue;
       }
 
