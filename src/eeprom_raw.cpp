@@ -332,7 +332,7 @@ bool eeLoadGeneral()
   }
 
   if (g_eeGeneral.version != EEPROM_VER) {
-    TRACE("EEPROM version %d instead of %d", g_eeGeneral.version, EEPROM_VER);
+    TRACE_DEBUG("EEPROM version %d (%d) instead of %d (%d)\n", g_eeGeneral.version, g_eeGeneral.variant, EEPROM_VER, EEPROM_VARIANT);
     if (!eeConvert())
       return false;
   }
@@ -387,9 +387,6 @@ void eeLoadModel(uint8_t id)
     activeFnSwitches = 0;
     activeFunctions = 0;
     memclear(lastFunctionTime, sizeof(lastFunctionTime));
-#if defined(CPUARM)
-    evalFunctionsFirstTime = true;
-#endif
 
     for (uint8_t i=0; i<MAX_TIMERS; i++) {
       if (g_model.timers[i].persistent) {
@@ -461,6 +458,11 @@ void eeReadAll()
     modelDefault(0);
 
     ALERT(STR_EEPROMWARN, STR_BADEEPROMDATA, AU_BAD_EEPROM);
+
+    if (pwrCheck() == e_power_off) {
+      // the radio has been powered off during the ALERT
+      pwrOff(); // turn power off now
+    }
 
     MESSAGE(STR_EEPROMWARN, STR_EEPROMFORMATTING, NULL, AU_EEPROM_FORMATTING);
 

@@ -191,10 +191,6 @@ void processHubPacket(uint8_t id, uint16_t value)
       break;
 
     case CURRENT_ID:
-      if(((int16_t)frskyData.hub.current + g_model.frsky.fasOffset)>0)
-        frskyData.hub.current += g_model.frsky.fasOffset;
-      else
-        frskyData.hub.current = 0;
       if (frskyData.hub.current > frskyData.hub.maxCurrent)
         frskyData.hub.maxCurrent = frskyData.hub.current;
       break;
@@ -374,10 +370,6 @@ void processSportPacket(uint8_t *packet)
       }
       else if (appId >= CURR_FIRST_ID && appId <= CURR_LAST_ID) {
         frskyData.hub.current = SPORT_DATA_U32(packet);
-        if(((int16_t)frskyData.hub.current + g_model.frsky.fasOffset)>0)
-          frskyData.hub.current += g_model.frsky.fasOffset;
-        else
-          frskyData.hub.current = 0;
         if (frskyData.hub.current > frskyData.hub.maxCurrent)
           frskyData.hub.maxCurrent = frskyData.hub.current;
       }
@@ -568,7 +560,7 @@ void telemetryWakeup()
     if (alarmsCheckStep == 0) {
       if (frskyData.rssi[1].value > 0x33) {
         AUDIO_SWR_RED();
-        s_global_warning = STR_ANTENNAPROBLEM;
+        s_global_warning = PSTR(CENTER "Antenna problem!");
         alarmsCheckTime = get_tmr10ms() + 300; /* next check in 3seconds */
       }
     }
@@ -654,7 +646,7 @@ void resetTelemetry()
   frskyData.hub.gpsFix = -1;
 #endif
 
-#if defined(SIMU)
+#ifdef SIMU
   frskyData.analog[0].set(120);
   frskyData.analog[1].set(240);
   frskyData.rssi[0].value = 75;
@@ -677,8 +669,12 @@ void resetTelemetry()
 
   frskyData.hub.cellsCount = 6;
 
-  frskyData.hub.baroAltitudeOffset = 500 * 100;
+#if 0 // defined(FRSKY_SPORT)
   frskyData.hub.baroAltitude = 50 * 100;
+#else
+  frskyData.hub.baroAltitude_bp = 50;
+#endif
+
   frskyData.hub.gpsAltitude_bp = 50;
 
   frskyData.hub.minAltitude = 10;

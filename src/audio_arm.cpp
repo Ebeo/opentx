@@ -82,24 +82,10 @@ const char * audioFilenames[] = {
   "warning3",
   "midtrim",
   "endtrim",
-  "midstck1",
-  "midstck2",
-  "midstck3",
-  "midstck4",
-#if defined(PCBTARANIS)
-  "midpot1",
-  "midpot2",
-  "midslid1",
-  "midslid2",
-#else
-  "midpot1",
-  "midpot2",
-  "midpot3",
-#endif
+  "midpot",
   "mixwarn1",
   "mixwarn2",
   "mixwarn3",
-  "timer00",
   "timer10",
   "timer20",
   "timer30",
@@ -166,9 +152,11 @@ inline uint8_t getAvailableFiles(char *prefix, FILINFO &info, char *filename)
 void refreshModelAudioFiles()
 {
   FILINFO info;
+#if _USE_LFN
   TCHAR lfn[_MAX_LFN + 1];
   info.lfname = lfn;
   info.lfsize = sizeof(lfn);
+#endif
 
   char filename[AUDIO_FILENAME_MAXLEN+1] = SOUNDS_PATH "/";
   strncpy(filename+SOUNDS_PATH_LNG_OFS, currentLanguagePack->id, 2);
@@ -834,18 +822,7 @@ void audioEvent(uint8_t e, uint16_t f)
           audioQueue.play(BEEP_DEFAULT_FREQ, 200, 20, PLAY_NOW);
           break;
         // pot/stick center
-        case AU_STICK1_MIDDLE:
-        case AU_STICK2_MIDDLE:
-        case AU_STICK3_MIDDLE:
-        case AU_STICK4_MIDDLE:
-        case AU_POT1_MIDDLE:
-        case AU_POT2_MIDDLE:
-#if defined(PCBTARANIS)
-        case AU_SLIDER1_MIDDLE:
-        case AU_SLIDER2_MIDDLE:
-#else
-        case AU_POT3_MIDDLE:
-#endif
+        case AU_POT_STICK_MIDDLE:
           audioQueue.play(BEEP_DEFAULT_FREQ+1500, 80, 20, PLAY_NOW);
           break;
         // mix warning 1
@@ -860,21 +837,17 @@ void audioEvent(uint8_t e, uint16_t f)
         case AU_MIX_WARNING_3:
           audioQueue.play(BEEP_DEFAULT_FREQ+1680, 48, 32, PLAY_REPEAT(2));
           break;
-        // timer == 0
-        case AU_TIMER_00:
-          audioQueue.play(BEEP_DEFAULT_FREQ+150, 240, 20, PLAY_NOW);
-          break;
-        // timer <= 10 seconds left
+        // time <= 10 seconds left
         case AU_TIMER_LT10:
           audioQueue.play(BEEP_DEFAULT_FREQ+150, 120, 20, PLAY_NOW);
           break;
-        // timer 20 seconds left
+        // time 20 seconds left
         case AU_TIMER_20:
-          audioQueue.play(BEEP_DEFAULT_FREQ+150, 120, 20, PLAY_REPEAT(1)|PLAY_NOW);
+          audioQueue.play(BEEP_DEFAULT_FREQ, 120, 20, PLAY_REPEAT(1)|PLAY_NOW);
           break;
-        // timer 30 seconds left
+        // time 30 seconds left
         case AU_TIMER_30:
-          audioQueue.play(BEEP_DEFAULT_FREQ+150, 120, 20, PLAY_REPEAT(2)|PLAY_NOW);
+          audioQueue.play(BEEP_DEFAULT_FREQ, 120, 20, PLAY_REPEAT(2)|PLAY_NOW);
           break;
 #if defined(PCBTARANIS)
         case AU_A1_ORANGE:
