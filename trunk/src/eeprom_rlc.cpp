@@ -881,17 +881,12 @@ bool eeLoadGeneral()
     }
   }
 
-#if defined(CPUARM)
-  if (g_eeGeneral.version != EEPROM_VER) {
-    TRACE("EEPROM version %d instead of %d", g_eeGeneral.version, EEPROM_VER);
-    if (!eeConvert())
-      return false;
-  }
-  return true;
-#else
-  TRACE("EEPROM version %d (%d) instead of %d (%d)", g_eeGeneral.version, g_eeGeneral.variant, EEPROM_VER, EEPROM_VARIANT);
-  return false;
+#ifdef SIMU
+  printf("EEPROM version %d (%d) instead of %d (%d)\n", g_eeGeneral.version, g_eeGeneral.variant, EEPROM_VER, EEPROM_VARIANT);
+  fflush(stdout);
 #endif
+
+  return false;
 }
 
 void eeLoadModelName(uint8_t id, char *name)
@@ -952,9 +947,6 @@ void eeLoadModel(uint8_t id)
     activeFnSwitches = 0;
     activeFunctions = 0;
     memclear(lastFunctionTime, sizeof(lastFunctionTime));
-#if defined(CPUARM)
-    evalFunctionsFirstTime = true;
-#endif
 
 #if !defined(PCBSTD)
     for (uint8_t i=0; i<MAX_TIMERS; i++) {
@@ -963,13 +955,6 @@ void eeLoadModel(uint8_t id)
       }
     }
 #endif
-
-#if defined(CPUARM)
-  if(g_model.frsky.mAhPersistent) 
-    frskyData.hub.currentConsumption = g_model.frsky.storedMah;
-#endif
-
-    LOAD_MODEL_CURVES();
 
     resumeMixerCalculations();
     // TODO pulses should be started after mixer calculations ...
@@ -983,7 +968,7 @@ void eeLoadModel(uint8_t id)
 #endif
 
     LOAD_MODEL_BITMAP();
-    LUA_LOAD_MODEL_SCRIPTS();
+
     SEND_FAILSAFE_1S();
   }
 }
@@ -998,6 +983,11 @@ void eeReadAll()
     generalDefault();
 
     ALERT(STR_EEPROMWARN, STR_BADEEPROMDATA, AU_BAD_EEPROM);
+
+    if (pwrCheck() == e_power_off) {
+      // the radio has been powered off during the ALERT
+      pwrOff();
+    }
 
     MESSAGE(STR_EEPROMWARN, STR_EEPROMFORMATTING, NULL, AU_EEPROM_FORMATTING);
 

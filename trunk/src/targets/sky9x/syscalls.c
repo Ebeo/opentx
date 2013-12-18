@@ -45,18 +45,14 @@
 #include <stdarg.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <errno.h>
 
 /*----------------------------------------------------------------------------
  *        Exported variables
  *----------------------------------------------------------------------------*/
 
 #undef errno
-extern int errno;
-extern int  _end;
-extern int _estack;
-
-#define RAM_END (unsigned char *)&_estack
+extern int errno ;
+extern int  _end ;
 
 /*----------------------------------------------------------------------------
  *        Exported functions
@@ -65,36 +61,23 @@ extern void _exit( int status ) ;
 extern void _kill( int pid, int sig ) ;
 extern int _getpid ( void ) ;
 
-unsigned char *heap = (unsigned char *)&_end;
-extern caddr_t _sbrk(int nbytes)
+extern caddr_t _sbrk ( int incr )
 {
-  if (heap + nbytes < RAM_END-4096) {
-    unsigned char *prev_heap = heap;
-    heap += nbytes;
-    return (caddr_t) prev_heap;
-  }
-  else {
-    errno = ENOMEM;
-    return ((void*)-1);
-  }
+    static unsigned char *heap = NULL ;
+    unsigned char *prev_heap ;
+
+    if ( heap == NULL )
+    {
+        heap = (unsigned char *)&_end ;
+    }
+    prev_heap = heap;
+
+    heap += incr ;
+
+    return (caddr_t) prev_heap ;
 }
 
-extern int _gettimeofday(void *p1, void *p2)
-{
-   return 0 ;
-}
-
-extern int _link( char *old, char *nw )
-{
-    return -1 ;
-}
-
-extern int _unlink (const char *path)
-{
-    return -1 ;
-}
-
-extern int _open(const char *name, int flags, int mode)
+extern int link( char *old, char *nw )
 {
     return -1 ;
 }

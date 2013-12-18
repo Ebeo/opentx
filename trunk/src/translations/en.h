@@ -74,9 +74,6 @@
 #define LEN_VTRIMINC           TR("\006","\013")
 #define TR_VTRIMINC            TR("Expo  ""ExFine""Fine  ""Medium""Coarse","Exponential""Extra Fine ""Fine       ""Medium     ""Coarse     ")
 
-#define LEN_VBEEPCOUNTDOWN     "\006"
-#define TR_VBEEPCOUNTDOWN      "SilentBeeps\0Voice\0"
-
 #define LEN_RETA123            "\001"
 
 #if defined(PCBGRUVIN9X)
@@ -387,11 +384,7 @@
 #define TR_MODELNAME           "Model Name"
 #define TR_PHASENAME           "Mode Name"
 #define TR_MIXNAME             "Mix Name"
-#if defined(PCBTARANIS)
-  #define TR_EXPONAME          "Line Name"
-#else
-  #define TR_EXPONAME          "Expo Name"
-#endif
+#define TR_EXPONAME            "Expo Name"
 #define TR_BITMAP              "Model Image"
 #define TR_TIMER               TR("Timer","Timer ")
 #define TR_ELIMITS             TR("E.Limits","Extended Limits")
@@ -497,13 +490,13 @@
 #define TR_TMR1JITTERUS        "Tmr1 Jitter\006us"
 
 #if defined(CPUARM)
-  #define TR_TMIXMAXMS         "Tmix max"
-  #define TR_FREESTACKMINB     "Free Stack"
+  #define TR_TMIXMAXMS         "Tmix max\012ms"
 #else
   #define TR_TMIXMAXMS         "Tmix max\014ms"
-  #define TR_FREESTACKMINB     "Free Stack\010b"
 #endif
 
+#define TR_T10MSUS             "T10ms\016us"
+#define TR_FREESTACKMINB       "Free Stack\010b"
 #define TR_MENUTORESET         CENTER TR_ENTER " to reset"
 #define TR_PPM                 "PPM"
 #define TR_CH                  "CH"
@@ -533,14 +526,11 @@
 #define TR_MENUFLIGHTPHASES    "FLIGHT MODES"
 #define TR_MENUHELISETUP       "HELI SETUP"
 
-#if defined(PCBTARANIS)
-  #define TR_MENUINPUTS        "INPUTS"
-  #define TR_MENULIMITS        "SERVOS"
-#elif defined(PPM_CENTER_ADJUSTABLE) || defined(PPM_LIMITS_SYMETRICAL) // The right menu titles for the gurus ...
-  #define TR_MENUINPUTS        "STICKS"
+#if defined(PPM_CENTER_ADJUSTABLE) || defined(PPM_LIMITS_SYMETRICAL) // The right menu titles for the gurus ...
+  #define TR_MENUDREXPO        "STICKS"
   #define TR_MENULIMITS        "SERVOS"
 #else
-  #define TR_MENUINPUTS        "DR/EXPO"
+  #define TR_MENUDREXPO        "DR/EXPO"
   #define TR_MENULIMITS        "LIMITS"
 #endif
 
@@ -643,7 +633,6 @@
 #define TR_MOVE                "Move"
 #define TR_PASTE               "Paste"
 #define TR_DELETE              "Delete"
-#define TR_INSERT              "Insert"
 #define TR_RESET_FLIGHT        "Reset Flight"
 #define TR_RESET_TIMER1        "Reset Timer1"
 #define TR_RESET_TIMER2        "Reset Timer2"
@@ -657,7 +646,7 @@
 #define TR_BYTES               "bytes"
 #define TR_MODULE_BIND         "[Bind]"
 #define TR_MODULE_RANGE        "[Range]"
-#define TR_RESET_BTN           "[Reset]"
+#define TR_RESET               "[Reset]"
 #define TR_SET                 "[Set]"
 #define TR_TRAINER             "Trainer"
 #define TR_ANTENNAPROBLEM      CENTER "TX Antenna problem!"
@@ -666,8 +655,6 @@
 #define TR_CHANNELRANGE        INDENT "Channel Range"
 #define TR_LOWALARM            INDENT "Low Alarm"
 #define TR_CRITICALALARM       INDENT "Critical Alarm"
-#define TR_PERSISTENT_MAH      INDENT "Store mAh"
-#define TR_FAS_OFFSET          TR(INDENT "FAS Ofs", INDENT "FAS Offset")
 
 #if defined(MAVLINK)
   #define TR_MAVLINK_RC_RSSI_SCALE_LABEL	"Max RSSI"
@@ -699,7 +686,7 @@
 
 // Taranis column headers
 #define TR_PHASES_HEADERS      { " Name ", " Switch ", " Trims ", " Fade In ", " Fade Out " }
-#define TR_LIMITS_HEADERS      { " Name ", " Subtrim ", " Min ", " Max ", " Direction ", " Curve ", " PPM Center ", " Subtrim mode " }
+#define TR_LIMITS_HEADERS      { " Name ", " Subtrim ", " Min ", " Max ", " Direction ", " PPM Center ", " Subtrim mode " }
 #define TR_CSW_HEADERS         { " Function ", " V1 ", " V2 ", " AND Switch ", " Duration ", " Delay " }
 
 // About screen
@@ -758,9 +745,3 @@
 #define TR_WAV_VOLUME          "Wav Volume"
 #define TR_VARIO_VOLUME        "Vario Volume"
 #define TR_BG_VOLUME           "Bg Volume"
-
-#define TR_TOP_BAR             "Top Bar"
-#define TR_ALTITUDE            INDENT "Altitude"
-#define TR_MODS_FORBIDDEN      "Modifications forbidden!"
-#define TR_UNLOCKED            "Unlocked"
-

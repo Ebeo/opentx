@@ -68,13 +68,10 @@
 #define STK_P3   7
 
 #define CV(x) (CURVE_BASE+(x)-1)
-#define CC(x) (MIXSRC_Rud - 1 + channel_order(x)) // need to invert this to work with dest
+#define CC(x) (channel_order(x)) //need to invert this to work with dest
 
-#if defined(PCBTARANIS)
-  #define mixSetCurve(mix, idx) mix->curve.type=CURVE_REF_CUSTOM; mix->curve.value=idx
-#else
-  #define mixSetCurve(mix, idx) mix->curveMode=MODE_CURVE; mix->curveParam=CURVE_BASE+idx
-#endif
+#define CURVE5(x) ((x)-1)
+#define CURVE9(x) (MAX_CURVE5+(x)-1)
 
 enum Templates {
   TMPL_CLEAR_MIXES,
@@ -91,6 +88,13 @@ enum Templates {
 void clearMixes();
 void clearCurves();
 void applyTemplate(uint8_t idx);
+
+#ifdef TEMPLATES
+inline void applyDefaultTemplate()
+{
+  applyTemplate(TMPL_SIMPLE_4CH);
+}
+#endif
 
 #endif //TEMPLATES_H
 
