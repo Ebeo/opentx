@@ -447,7 +447,7 @@ The available functions are:
  * Volume: Adjusts sound volume using the selected source
  * Backlight: Turns backlight on
  * !BgMusic, !BgMusic || (pause): Plays a selected soundtrack from the SD card. The !BgMusic Pause item pauses the track when activated and resumes it once inactive again, while switching !BgMusic off stops the track completely.
- * Adjust GVx: When active, sets the relevant global variable to the value of the specified source. The adjustment source can be one of 4 groups cycled through using a LONG press of the MENU key:
+ * Adjust GVx: When active, sets the relevant global variable to the value of the specified source. The adjustment source can be one of 4 groups cycled through using a LONG press of the ENTER key:
    * A fixed value
    * A proportional control, or a channel with for example specified curve/weight/offset to limit the adjustment range
    * Another GVAR
