@@ -204,7 +204,7 @@ TX_CADDY = NO
 IRPROTOS = NO
 
 # TRANSLATIONS
-# Values = cz, de, en, fr, it, se, es, pt
+# Values = cz, de, en, fr, it, se, es, pt, pl
 TRANSLATIONS = EN
 
 # TTS
@@ -682,7 +682,7 @@ TARGET = opentx
 
 # List C++ source files here. (C dependencies are automatically generated.)
 ifeq ($(PCB), $(filter $(PCB), SKY9X TARANIS))
-  TTS_SRC = translations/tts_cz.cpp translations/tts_de.cpp translations/tts_en.cpp translations/tts_es.cpp translations/tts_fr.cpp translations/tts_it.cpp translations/tts_pt.cpp translations/tts_sk.cpp translations/tts_se.cpp
+  TTS_SRC = translations/tts_cz.cpp translations/tts_de.cpp translations/tts_en.cpp translations/tts_es.cpp translations/tts_fr.cpp translations/tts_it.cpp translations/tts_pl.cpp translations/tts_pt.cpp translations/tts_sk.cpp translations/tts_se.cpp
 else
   STD_TTS_SRC = translations/tts_$(shell sh -c "echo $(TTS) | tr '[:upper:]' '[:lower:]'").cpp
   TTS_SRC = $(shell sh -c "if test -f $(STD_TTS_SRC); then echo $(STD_TTS_SRC); else echo translations/tts_en.cpp; fi")
@@ -1108,7 +1108,7 @@ taranis-stamp:
 	@echo "#define SVN_VERS \"opentx-r$(SVNREV)\"" >> stamp-opentx-taranis.txt
 	@cat stamp-opentx-taranis.txt
 
-translations/se.h: translations/cz.h.txt translations/de.h.txt translations/es.h.txt translations/fr.h.txt translations/it.h.txt translations/pt.h.txt translations/se.h.txt 
+translations/se.h: translations/cz.h.txt translations/de.h.txt translations/es.h.txt translations/fr.h.txt translations/it.h.txt translations/pt.h.txt translations/pl.h.txt translations/se.h.txt 
 	@echo
 	@echo "Create language specific header files"
 	@echo "Czech"
@@ -1121,6 +1121,8 @@ translations/se.h: translations/cz.h.txt translations/de.h.txt translations/es.h
 	$(TRANSLATE) translations/fr.h.txt translations/fr.h fr
 	@echo "Italian"
 	$(TRANSLATE) translations/it.h.txt translations/it.h it
+	@echo "Polish"
+	$(TRANSLATE) translations/pl.h.txt translations/pl.h pl
 	@echo "Portugese"
 	$(TRANSLATE) translations/pt.h.txt translations/pt.h pt
 	@echo "Swedish"
