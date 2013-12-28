@@ -104,20 +104,26 @@ I18N_PLAY_FUNCTION(pl, pushUnitPrompt, int16_t number, uint8_t unitprompt)
 #if defined(SIMU)
   printf("numer do powiedzenia %d",number); 
 #endif
-  if (number == 1)
+  if (number == 1) {
     PUSH_NUMBER_PROMPT(unitprompt);
-  else if (number > 1 && number < 5)
+
+  }
+else if (number > 1 && number < 5){
     PUSH_NUMBER_PROMPT(unitprompt+1);
+  }
   else {
     int test_2 =0;
     test_2 =number % 10;
     int dziesiatka=0;
-    dziesiatka=(number - (number % 10))/10;
-    if ((test_2 > 1 && test_2 < 5) && dziesiatka >2)
+    int dzies_tmp=0;
+    dzies_tmp=number % 100;
+    dziesiatka=(dzies_tmp - (dzies_tmp % 10))/10;
+    if ((test_2 > 1 && test_2 < 5) && dziesiatka !=1){
 	PUSH_NUMBER_PROMPT(unitprompt+1);
-    else
-	PUSH_NUMBER_PROMPT(unitprompt+2);
     }
+    else{
+	PUSH_NUMBER_PROMPT(unitprompt+2);
+    }}
 }
 
 I18N_PLAY_FUNCTION(pl, playNumber, getvalue_t number, uint8_t unit, uint8_t att)
@@ -164,9 +170,10 @@ I18N_PLAY_FUNCTION(pl, playNumber, getvalue_t number, uint8_t unit, uint8_t att)
   }
 
   int16_t tmp = number;
-  
+
   switch(unit) {
     case 0:
+      att = MESKI;
       break;
     case 10:
     case 13:
@@ -182,6 +189,7 @@ I18N_PLAY_FUNCTION(pl, playNumber, getvalue_t number, uint8_t unit, uint8_t att)
       att = MESKI;
       break;
   }
+
 
   if ((number == 1) && (att == ZENSKI)) {
     PUSH_NUMBER_PROMPT(PL_PROMPT_JEDNA);
