@@ -2502,16 +2502,14 @@ void evalFunctions()
   static rotenc_t rePreviousValues[ROTARY_ENCODERS];
 #endif
 
-  for (uint8_t i=0; i<NUM_CHNOUT; i++)
+  for (uint8_t i=0; i<NUM_CHNOUT; i++) {
     safetyCh[i] = -128; // not defined
+  }
 
 #if defined(GVARS)
-  for (uint8_t i=0; i<4; i++)
+  for (uint8_t i=0; i<NUM_STICKS; i++) {
     trimGvar[i] = -1;
-#endif
-
-#if !defined(PCBSTD)
-  uint8_t mSwitchDurationIncremented = 0;
+  }
 #endif
 
   for (uint8_t i=0; i<NUM_CFN; i++) {
@@ -2531,15 +2529,11 @@ void evalFunctions()
       uint8_t short_long = 0;
       uint8_t mswitch = 0;
 
-      if (swtch == SWSRC_TRAINER_LONG) {
-        short_long = 2;
-        swtch = SWSRC_TRAINER;
-        mswitch = 0;
-      }
-      else if (swtch == SWSRC_TRAINER_SHORT) {
-        short_long = 1;
-        swtch = SWSRC_TRAINER;
-        mswitch = 0;
+      if (swtch >= SWSRC_TRAINER_SHORT) {
+        swtch -= SWSRC_TRAINER_SHORT;
+        mswitch = (swtch >> 1);
+        short_long = 1 + (swtch & 1);
+        swtch = SWSRC_TRAINER + mswitch;
       }
       else
 
@@ -2562,10 +2556,6 @@ void evalFunctions()
       bool active = getSwitch(swtch);
       if (active) newActiveSwitches |= switch_mask;
       if (momentary || short_long) {
-
-#if !defined(PCBSTD)
-        bool swState = active;
-#endif
 
         if (MOMENTARY_START_TEST()) {
 
@@ -2594,18 +2584,6 @@ void evalFunctions()
           active = (activeFnSwitches & switch_mask);
           momentary = false;
         }
-#if !defined(PCBSTD)
-        if (short_long && !(mSwitchDurationIncremented & (1<<mswitch))) {
-          mSwitchDurationIncremented |= (1<<mswitch);
-          if (swState) {
-            if (mSwitchDuration[mswitch] < 255)
-              mSwitchDuration[mswitch]++;
-          }
-          else {
-            mSwitchDuration[mswitch] = 0;
-          }
-        }
-#endif
       }
 #if !defined(CPUARM)
       else if (CFN_FUNC(sd) == FUNC_PLAY_BOTH) {
@@ -2722,7 +2700,7 @@ void evalFunctions()
               if (CFN_FUNC(sd) == FUNC_PLAY_TRACK && param > 250)
                 param = GVAR_VALUE(param-251, getGVarFlightPhase(s_perout_flight_phase, param-251));
 #endif
-              PUSH_CUSTOM_PROMPT(active ? param : param+1, i+1);
+              PUSH_CUSTOM_PROMPT((active||short_long) ? param : param+1, i+1);
             }
           }
         }
@@ -2801,9 +2779,22 @@ void evalFunctions()
   activeFnSwitches = newActiveFnSwitches;
   activeFunctions  = newActiveFunctions;
 
+#if !defined(PCBSTD)
+  for (int i=0; i<1+NUM_ROTARY_ENCODERS; i++) {
+    if (getSwitch(SWSRC_TRAINER+i)) {
+      if (mSwitchDuration[i] < 255)
+        mSwitchDuration[i]++;
+    }
+    else {
+      mSwitchDuration[i] = 0;
+    }
+  }
+#endif
+
 #if defined(ROTARY_ENCODERS) && defined(GVARS)
-  for (uint8_t i=0; i<ROTARY_ENCODERS; i++)
+  for (uint8_t i=0; i<ROTARY_ENCODERS; i++) {
     rePreviousValues[i] = (g_rotenc[i] / ROTARY_ENCODER_GRANULARITY);
+  }
 #endif
 }
 
@@ -2891,8 +2882,6 @@ void perOut(uint8_t mode, uint8_t tick10ms)
   bitfield_channels_t dirtyChannels = (bitfield_channels_t)-1; // all dirty when mixer starts
 
   do {
-
-    // TRACE("[pass %d]", pass);
 
     bitfield_channels_t passDirtyChannels = 0;
 
