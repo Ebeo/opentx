@@ -27,14 +27,15 @@ enum PolishPrompts {
   PL_PROMPT_ZERO = PL_PROMPT_NUMBERS_BASE+0,    //0-99
   PL_PROMPT_STO = PL_PROMPT_NUMBERS_BASE+100,   //100,200 .. 900
   PL_PROMPT_TISIAC = PL_PROMPT_NUMBERS_BASE+109, //1000
-  PL_PROMPT_TISIACE = PL_PROMPT_NUMBERS_BASE+110,
-  PL_PROMPT_JEDNA = PL_PROMPT_NUMBERS_BASE+111,
-  PL_PROMPT_JEDNO = PL_PROMPT_NUMBERS_BASE+112,
-  PL_PROMPT_DWIE = PL_PROMPT_NUMBERS_BASE+113,
-  PL_PROMPT_CALA = PL_PROMPT_NUMBERS_BASE+114,
-  PL_PROMPT_CALE = PL_PROMPT_NUMBERS_BASE+115,
-  PL_PROMPT_CALYCH = PL_PROMPT_NUMBERS_BASE+116,
-  PL_PROMPT_MINUS = PL_PROMPT_NUMBERS_BASE+117,
+  PL_PROMPT_TISIACE = PL_PROMPT_NUMBERS_BASE+110, //2,3,4 1000
+  PL_PROMPT_TISIECY = PL_PROMPT_NUMBERS_BASE+111,//reszta tysiecy 
+  PL_PROMPT_JEDNA = PL_PROMPT_NUMBERS_BASE+112,
+  PL_PROMPT_JEDNO = PL_PROMPT_NUMBERS_BASE+113,
+  PL_PROMPT_DWIE = PL_PROMPT_NUMBERS_BASE+114,
+  PL_PROMPT_CALA = PL_PROMPT_NUMBERS_BASE+115,
+  PL_PROMPT_CALE = PL_PROMPT_NUMBERS_BASE+116,
+  PL_PROMPT_CALYCH = PL_PROMPT_NUMBERS_BASE+117,
+  PL_PROMPT_MINUS = PL_PROMPT_NUMBERS_BASE+118,
   PL_PROMPT_DZIESIATKI_ZENSKIE=PL_PROMPT_NUMBERS_BASE+120, // 22(0122.wav),32(123.wav),42,52,62,72,82,92(129.wav) - this are special female numbers when the unit is female
 
   PL_PROMPT_UNITS_BASE = 160,
@@ -102,8 +103,10 @@ enum PolishPrompts {
 I18N_PLAY_FUNCTION(pl, pushUnitPrompt, int16_t number, uint8_t unitprompt)
 {
 #if defined(SIMU)
-  printf("numer do powiedzenia %d",number); 
+  printf("numer do powiedzenia %d ======== \n\n",number); 
+  printf("UNITPROMPT %d ======== \n\n",unitprompt); 
 #endif
+
   if (number == 1) {
     PUSH_NUMBER_PROMPT(unitprompt);
 
@@ -123,11 +126,19 @@ else if (number > 1 && number < 5){
     }
     else{
 	PUSH_NUMBER_PROMPT(unitprompt+2);
-    }}
+      }
+   }
 }
 
 I18N_PLAY_FUNCTION(pl, playNumber, getvalue_t number, uint8_t unit, uint8_t att)
 {
+
+
+#if defined(SIMU)
+  printf("numer do powiedzenia2 %d ======== \n\n",number); 
+  printf("UNIT2 %d ======== \n\n",unit); 
+  printf("ATT %d ======== \n\n",att); 
+#endif
 
   if (number < 0) {
     PUSH_NUMBER_PROMPT(PL_PROMPT_MINUS);
