@@ -223,11 +223,11 @@ void processHubPacket(uint8_t id, uint16_t value)
 
     case GPS_ALT_AP_ID:
     {
-      int gpsAltitude = TELEMETRY_ABSOLUTE_GPS_ALT;
+      frskyData.hub.gpsAltitude = (frskyData.hub.gpsAltitude_bp * 100) + frskyData.hub.gpsAltitude_ap;
       if (!frskyData.hub.gpsAltitudeOffset)
-        frskyData.hub.gpsAltitudeOffset = -gpsAltitude;
+        frskyData.hub.gpsAltitudeOffset = -frskyData.hub.gpsAltitude;
       if (!frskyData.hub.baroAltitudeOffset) {
-        int altitude = (gpsAltitude + frskyData.hub.gpsAltitudeOffset) / 100;
+        int altitude = TELEMETRY_RELATIVE_GPS_ALT_BP;
         if (altitude > frskyData.hub.maxAltitude)
           frskyData.hub.maxAltitude = altitude;
         if (altitude < frskyData.hub.minAltitude)
@@ -413,18 +413,13 @@ void processSportPacket(uint8_t *packet)
         frskyData.hub.gpsCourse_ap = course % 100;
       }
       else if (appId >= GPS_ALT_FIRST_ID && appId <= GPS_ALT_LAST_ID) {
-        int gpsAltitude = SPORT_DATA_S32(packet);
+        frskyData.hub.gpsAltitude = SPORT_DATA_S32(packet);
         
         if (!frskyData.hub.gpsAltitudeOffset)
-          frskyData.hub.gpsAltitudeOffset = -gpsAltitude;
-          
-        gpsAltitude += frskyData.hub.gpsAltitudeOffset;
-        
-        frskyData.hub.gpsAltitude_bp = gpsAltitude / 100;
-        frskyData.hub.gpsAltitude_ap = gpsAltitude % 100;
+          frskyData.hub.gpsAltitudeOffset = -frskyData.hub.gpsAltitude;
 
         if (!frskyData.hub.baroAltitudeOffset) {
-          int altitude = frskyData.hub.gpsAltitude_bp;
+          int altitude = TELEMETRY_RELATIVE_GPS_ALT_BP;
           if (altitude > frskyData.hub.maxAltitude)
             frskyData.hub.maxAltitude = altitude;
           if (altitude < frskyData.hub.minAltitude)

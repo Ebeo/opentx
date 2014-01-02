@@ -107,6 +107,7 @@ PACK(struct FrskySerialData {
     int32_t  baroAltitudeOffset;
     int32_t  baroAltitude;
     int32_t  gpsAltitudeOffset;
+    int32_t  gpsAltitude;
     uint32_t gpsDistance;
 
     uint16_t vfas;             // 0x39  Added to FrSky protocol for home made sensors with a better precision
@@ -177,10 +178,9 @@ void resetTelemetry();
 
 #define TELEMETRY_GPS_SPEED_BP          frskyData.hub.gpsSpeed_bp
 #define TELEMETRY_GPS_SPEED_AP          frskyData.hub.gpsSpeed_ap
-#define TELEMETRY_GPS_SPEED_LOG	        frskyData.hub.gpsSpeed_bp < 0 ? '-' : ' ', abs(frskyData.hub.gpsSpeed_bp/1000), abs(frskyData.hub.gpsSpeed_bp%1000)
 
-#define TELEMETRY_ABSOLUTE_GPS_ALT      ((frskyData.hub.gpsAltitude_bp * 100) + frskyData.hub.gpsAltitude_ap)
-#define TELEMETRY_RELATIVE_GPS_ALT      (TELEMETRY_ABSOLUTE_GPS_ALT + frskyData.hub.gpsAltitudeOffset)
+#define TELEMETRY_ABSOLUTE_GPS_ALT      (frskyData.hub.gpsAltitude)
+#define TELEMETRY_RELATIVE_GPS_ALT      (frskyData.hub.gpsAltitude + frskyData.hub.gpsAltitudeOffset)
 #define TELEMETRY_RELATIVE_GPS_ALT_BP   (TELEMETRY_RELATIVE_GPS_ALT / 100)
 
 #define TELEMETRY_RELATIVE_BARO_ALT_BP  (frskyData.hub.baroAltitude / 100)
@@ -202,9 +202,9 @@ void resetTelemetry();
 #define TELEMETRY_BARO_ALT_FORMAT       "%c%d.%02d,"
 #define TELEMETRY_BARO_ALT_ARGS         frskyData.hub.baroAltitude < 0   ? '-' : ' ', abs(frskyData.hub.baroAltitude / 100), abs(frskyData.hub.baroAltitude % 100),
 #define TELEMETRY_GPS_ALT_FORMAT        "%c%d.%02d,"
-#define TELEMETRY_GPS_ALT_ARGS          frskyData.hub.gpsAltitude_bp < 0 ? '-' : ' ', abs(frskyData.hub.gpsAltitude_bp), abs(frskyData.hub.gpsAltitude_ap),
-#define TELEMETRY_GPS_SPEED_FORMAT      "%d.%02d,"
-#define TELEMETRY_GPS_SPEED_ARGS        TELEMETRY_GPS_SPEED_BP, TELEMETRY_GPS_SPEED_AP,
+#define TELEMETRY_GPS_ALT_ARGS          frskyData.hub.gpsAltitude < 0 ? '-' : ' ', abs(frskyData.hub.gpsAltitude / 100), abs(frskyData.hub.gpsAltitude % 100),
+#define TELEMETRY_GPS_SPEED_FORMAT      "%c%d.%02d,"
+#define TELEMETRY_GPS_SPEED_ARGS        frskyData.hub.gpsSpeed_bp < 0 ? '-' : ' ', abs(frskyData.hub.gpsSpeed_bp / 1000), abs(frskyData.hub.gpsSpeed_bp % 1000),
 #define TELEMETRY_CELLS_FORMAT          "%d.%d,%d.%02d,%d.%02d,%d.%02d,%d.%02d,%d.%02d,%d.%02d,"
 #define TELEMETRY_CELLS_ARGS            frskyData.hub.cellsSum / 10, frskyData.hub.cellsSum % 10, frskyData.hub.cellVolts[0]*2/100, frskyData.hub.cellVolts[0]*2%100, frskyData.hub.cellVolts[1]*2/100, frskyData.hub.cellVolts[1]*2%100, frskyData.hub.cellVolts[2]*2/100, frskyData.hub.cellVolts[2]*2%100, frskyData.hub.cellVolts[3]*2/100, frskyData.hub.cellVolts[3]*2%100, frskyData.hub.cellVolts[4]*2/100, frskyData.hub.cellVolts[4]*2%100, frskyData.hub.cellVolts[5]*2/100, frskyData.hub.cellVolts[5]*2%100,
 #define TELEMETRY_CURRENT_FORMAT        "%d.%d,"
