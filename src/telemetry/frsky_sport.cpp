@@ -223,12 +223,13 @@ void processHubPacket(uint8_t id, uint16_t value)
 
     case GPS_ALT_AP_ID:
       if (frskyData.hub.gpsFix) {
-        frskyData.hub.gpsAltitude_bp = frskyData.hub.gpsAltitude_bp * 100;
+        int32_t gpsAltitude = frskyData.hub.gpsAltitude_bp;
+        gpsAltitude *= 100;
         if (!frskyData.hub.gpsAltitudeOffset)
-          frskyData.hub.gpsAltitudeOffset = -frskyData.hub.gpsAltitude_bp;
-        frskyData.hub.gpsAltitude_bp += frskyData.hub.gpsAltitudeOffset;
+          frskyData.hub.gpsAltitudeOffset = -gpsAltitude;
+        frskyData.hub.gpsAltitude_bp = (gpsAltitude + frskyData.hub.gpsAltitudeOffset)/100;
         if (!frskyData.hub.baroAltitudeOffset) {
-          int altitude = frskyData.hub.gpsAltitude_bp / 100;
+          int altitude = frskyData.hub.gpsAltitude_bp;
           if (altitude > frskyData.hub.maxAltitude)
             frskyData.hub.maxAltitude = altitude;
           if (altitude < frskyData.hub.minAltitude)
@@ -415,15 +416,15 @@ void processSportPacket(uint8_t *packet)
         frskyData.hub.gpsCourse_ap = course % 100;
       }
       else if (appId >= GPS_ALT_FIRST_ID && appId <= GPS_ALT_LAST_ID) {
-        frskyData.hub.gpsAltitude_bp = SPORT_DATA_S32(packet);
-
+        int32_t gpsAltitude = SPORT_DATA_S32(packet);
         if (!frskyData.hub.gpsAltitudeOffset)
-          frskyData.hub.gpsAltitudeOffset = -frskyData.hub.gpsAltitude_bp;
-
-        frskyData.hub.gpsAltitude_bp += frskyData.hub.gpsAltitudeOffset;
+          frskyData.hub.gpsAltitudeOffset = -gpsAltitude;
+        gpsAltitude +=frskyData.hub.gpsAltitudeOffset;
+        frskyData.hub.gpsAltitude_bp = gpsAltitude/100;
+        frskyData.hub.gpsAltitude_ap = gpsAltitude%100;
 
         if (!frskyData.hub.baroAltitudeOffset) {
-          int altitude = frskyData.hub.gpsAltitude_bp / 100;
+          int altitude = frskyData.hub.gpsAltitude_bp;
           if (altitude > frskyData.hub.maxAltitude)
             frskyData.hub.maxAltitude = altitude;
           if (altitude < frskyData.hub.minAltitude)
@@ -432,7 +433,9 @@ void processSportPacket(uint8_t *packet)
 
         if (!frskyData.hub.pilotLatitude && !frskyData.hub.pilotLongitude) {
           // First received GPS position => Pilot GPS position
-          getGpsPilotPosition();
+	  if (frskyData.hub.gpsFix==1) {
+            getGpsPilotPosition();
+	  }
         }
         else if (frskyData.hub.gpsDistNeeded || g_menuStack[g_menuStackPtr] == menuTelemetryFrsky) {
           getGpsDistance();
@@ -465,7 +468,7 @@ void processSportPacket(uint8_t *packet)
             frskyData.hub.gpsLongitudeEW = 'W';
             break;
         }
-        if (frskyData.hub.gpsLatitude_bp && frskyData.hub.gpsLongitude_ap) {
+        if ((frskyData.hub.gpsLatitude_bp || frskyData.hub.gpsLatitude_ap) && (frskyData.hub.gpsLongitude_bp || frskyData.hub.gpsLongitude_ap)) {
           frskyData.hub.gpsFix = 1;
         }
         else if (frskyData.hub.gpsFix > 0) {

@@ -177,9 +177,8 @@ void resetTelemetry();
 #define TELEMETRY_GPS_SPEED_AP    frskyData.hub.gpsSpeed_ap
 #define TELEMETRY_GPS_SPEED_LOG	frskyData.hub.gpsSpeed_bp<0?'-':' ',abs(frskyData.hub.gpsSpeed_bp/1000),abs(frskyData.hub.gpsSpeed_bp%1000)
 
-#define TELEMETRY_GPS_ALT_AP      (frskyData.hub.gpsAltitude_bp%100)
-#define TELEMETRY_GPS_ALT_BP      (frskyData.hub.gpsAltitude_bp/100)
-#define TELEMETRY_GPS_ALT_LOG	  frskyData.hub.gpsAltitude_bp < 0 ? '-':' ',abs(frskyData.hub.gpsAltitude_bp/100),abs(frskyData.hub.gpsAltitude_bp%100)
+#define TELEMETRY_GPS_ALT_AP      frskyData.hub.gpsAltitude_ap
+#define TELEMETRY_GPS_ALT_BP      frskyData.hub.gpsAltitude_bp
 
 #define TELEMETRY_ALT_BP          (frskyData.hub.baroAltitude / 100)
 #define TELEMETRY_ALT_AP          (frskyData.hub.baroAltitude % 100)
