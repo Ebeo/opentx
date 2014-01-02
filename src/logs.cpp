@@ -214,8 +214,7 @@ void writeLogs()
 
 #if defined(FRSKY_HUB)
       if (IS_USR_PROTO_FRSKY_HUB()) {
-        int32_t gpsAltitude=((int32_t)frskyData.hub.gpsAltitude_bp*100)+(int32_t)frskyData.hub.gpsAltitude_ap-frskyData.hub.gpsAltitudeOffset;        
-        f_printf(&g_oLogFile, "%4d-%02d-%02d,%02d:%02d:%02d,%03d.%04d%c,%03d.%04d%c,%03d.%02d,%d.%02d," TELEMETRY_ALT_FORMAT TELEMETRY_ALT_FORMAT TELEMETRY_VSPEED_FORMAT "%d,%d,%d,%d," TELEMETRY_CELLS_FORMAT TELEMETRY_CURRENT_FORMAT "%d," TELEMETRY_VFAS_FORMAT "%d,%d,%d,",
+        f_printf(&g_oLogFile, "%4d-%02d-%02d,%02d:%02d:%02d,%03d.%04d%c,%03d.%04d%c,%03d.%02d," TELEMETRY_GPS_SPEED_FORMAT TELEMETRY_GPS_ALT_FORMAT TELEMETRY_BARO_ALT_FORMAT TELEMETRY_VSPEED_FORMAT "%d,%d,%d,%d," TELEMETRY_CELLS_FORMAT TELEMETRY_CURRENT_FORMAT "%d," TELEMETRY_VFAS_FORMAT "%d,%d,%d,",
             frskyData.hub.year+2000,
             frskyData.hub.month,
             frskyData.hub.day,
@@ -230,21 +229,18 @@ void writeLogs()
             frskyData.hub.gpsLatitudeNS ? frskyData.hub.gpsLatitudeNS : '-',
             frskyData.hub.gpsCourse_bp,
             frskyData.hub.gpsCourse_ap,
-            TELEMETRY_GPS_SPEED_BP,
-            TELEMETRY_GPS_SPEED_AP,
-            gpsAltitude < 0 ? '-' : ' ',
-            abs(gpsAltitude/100),
-            abs(gpsAltitude%100),
-            TELEMETRY_ALT,
-            TELEMETRY_VSPEED,
+            TELEMETRY_GPS_SPEED_ARGS
+            TELEMETRY_GPS_ALT_ARGS
+            TELEMETRY_BARO_ALT_ARGS
+            TELEMETRY_VSPEED_ARGS
             frskyData.hub.temperature1,
             frskyData.hub.temperature2,
             frskyData.hub.rpm,
             frskyData.hub.fuelLevel,
-            TELEMETRY_CELLS,
-            TELEMETRY_CURRENT,
+            TELEMETRY_CELLS_ARGS
+            TELEMETRY_CURRENT_ARGS
             frskyData.hub.currentConsumption,
-            TELEMETRY_VFAS,
+            TELEMETRY_VFAS_ARGS
             frskyData.hub.accelX,
             frskyData.hub.accelY,
             frskyData.hub.accelZ);
@@ -253,7 +249,7 @@ void writeLogs()
 
 #if defined(WS_HOW_HIGH)
       if (IS_USR_PROTO_WS_HOW_HIGH()) {
-        f_printf(&g_oLogFile, "%d,", TELEMETRY_ALT_BP);
+        f_printf(&g_oLogFile, "%d,", TELEMETRY_RELATIVE_BARO_ALT_BP);
       }
 #endif
 
