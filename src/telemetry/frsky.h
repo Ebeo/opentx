@@ -225,10 +225,10 @@ void resetTelemetry();
 #define TELEMETRY_GPS_SPEED_BP                  frskyData.hub.gpsSpeed_bp
 #define TELEMETRY_GPS_SPEED_AP                  frskyData.hub.gpsSpeed_ap
 
-#define TELEMETRY_BARO_ALT_FORMAT               "%d.%02d,"
-#define TELEMETRY_BARO_ALT_ARGS                 frskyData.hub.baroAltitude_bp, frskyData.hub.baroAltitude_ap,
-#define TELEMETRY_GPS_ALT_FORMAT                "%d.%02d,"
-#define TELEMETRY_GPS_ALT_ARGS                  frskyData.hub.gpsAltitude_bp, frskyData.hub.gpsAltitude_ap,
+#define TELEMETRY_BARO_ALT_FORMAT               "%d,"
+#define TELEMETRY_BARO_ALT_ARGS                 frskyData.hub.baroAltitude_bp,
+#define TELEMETRY_GPS_ALT_FORMAT                "%d,"
+#define TELEMETRY_GPS_ALT_ARGS                  frskyData.hub.gpsAltitude_bp,
 #define TELEMETRY_GPS_SPEED_FORMAT              "%d.%02d,"
 #define TELEMETRY_GPS_SPEED_ARGS                TELEMETRY_GPS_SPEED_BP, TELEMETRY_GPS_SPEED_AP,
 #define TELEMETRY_CELLS_FORMAT                  "%d.%d,%d.%02d,%d.%02d,%d.%02d,%d.%02d,%d.%02d,%d.%02d,"
