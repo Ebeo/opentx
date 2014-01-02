@@ -438,7 +438,9 @@ void processSportPacket(uint8_t *packet)
 	  }
         }
         else if (frskyData.hub.gpsDistNeeded || g_menuStack[g_menuStackPtr] == menuTelemetryFrsky) {
-          getGpsDistance();
+	  if (frskyData.hub.gpsFix==1) {
+            getGpsDistance();
+	  }
         }
       }
       else if (appId >= GPS_LONG_LATI_FIRST_ID && appId <= GPS_LONG_LATI_LAST_ID) {
@@ -468,7 +470,8 @@ void processSportPacket(uint8_t *packet)
             frskyData.hub.gpsLongitudeEW = 'W';
             break;
         }
-        if ((frskyData.hub.gpsLatitude_bp || frskyData.hub.gpsLatitude_ap) && (frskyData.hub.gpsLongitude_bp || frskyData.hub.gpsLongitude_ap)) {
+        
+        if ( frskyData.hub.gpsLatitudeNS && frskyData.hub.gpsLongitudeEW ) {
           frskyData.hub.gpsFix = 1;
         }
         else if (frskyData.hub.gpsFix > 0) {
