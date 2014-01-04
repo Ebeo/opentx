@@ -9,6 +9,19 @@
 
 <wiki:toc max_depth="2" />
 
+== 2834 / 29 Oct 2013 ==
+
+=== [**Tous] ===
+ * Correction d'un bug dans le mixeur lors de l'utilisation du ralenti avec un mix type Remplace
+ * Avertissement de changement des variables globales supprimé
+ * Inters virtuels remis à 0 lors d'un "Réinitialiser Vol"
+ * Lecture vocale de l'altitude sans décimale quand >= 10m
+ 
+=== [**Cartes avec SD] ===
+ * Vérification de la longueur des chemins d'accès
+
+----
+
 == 2768 / 20 Sep 2013 ==
 
 === [**Tous] ===

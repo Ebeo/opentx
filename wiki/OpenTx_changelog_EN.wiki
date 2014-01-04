@@ -9,6 +9,19 @@
 
 <wiki:toc max_depth="2" />
 
+== 2834 / Oct 29 2013 ==
+
+=== [**all] ===
+ * Mixer bug when a MULTIPLY mix used with a slow fixed
+ * GVAR popup removed
+ * Sticky virtual switches are reset when ResetFlight function is called
+ * Altitude played without decimal when >= 10m
+ 
+=== [**Boards with SD card] ===
+ * Check to avoid too long paths when playing SD files 
+
+----  
+
 == 2768 / Sep 20 2013 ==
 
 === [**all] ===
