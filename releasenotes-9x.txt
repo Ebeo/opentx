@@ -1,4 +1,9 @@
 <SVN CURRENT>
+[Arm Boards]
+<ul>
+<li>Audio freeze bug fixed
+<li>Aurora gimbals support
+</ul>
 
 <h2>2834 / 2013-10-29</h2>
 [Arm Boards]
@@ -10,7 +15,7 @@
 [all]
 <ul>
 <li>Mixer bug when a MULTIPLY mix used with a slow
-<li>I GVAR popup removed
+<li>GVAR popup removed
 <li>Sticky virtual switches are reset when ResetFlight function is called 
 </ul>
 
