@@ -4,6 +4,8 @@
 <li>New S.PORT sensors support
 <li>Audio freeze bug fixed
 <li>Telemetry corruption
+<li>A2 alarms reinstated in D16 mode for X8R2Analog sensor
+<li>Telemetry lost alarm no more triggered by a telemetry reset
 </ul>
 
 <h2>2834 / 2013-10-29</h2>
