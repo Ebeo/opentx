@@ -9,6 +9,22 @@
 
 <wiki:toc max_depth="2" />
 
+== 2923 / Jan 08 2014 ==
+
+=== [**ARM boards] ===
+ * Audio freeze bug fixed
+ * Aurora gimbals support
+ 
+=== [**!FrSky Taranis] ===
+ * DSM2 Support
+ * New S.PORT sensors support
+ * Audio freeze bug fixed
+ * Telemetry corruption
+ * A2 alarms reinstated in D16 mode for X8R2Analog sensor
+ * Telemetry lost alarm no more triggered by a telemetry reset
+
+----
+
 == 2834 / Oct 29 2013 ==
 
 === [**all] ===

@@ -9,6 +9,22 @@
 
 <wiki:toc max_depth="2" />
 
+== 2923 / 08 Jan 2014 ==
+
+=== [**Cartes ARM ] ===
+ * Correction d'un bug pouvant causer le blocage de l'audio
+ * Support des manches d'Aurora corrigé
+
+=== [**!FrSky Taranis] ===
+ * Support du DSM2
+ * Support pour le GPS S.PORT
+ * Correction d'un bug pouvant causer le blocage de l'audio
+ * Correction d'un bug pouvant causer la corruption de valeur de télémétrie
+ * Alarmes A2 réactivées en mode D16 pour le capteur X8R2Analog
+ * L'Alarme de télémétrie perdue n'est plus déclenchée lors d'une RAZ de la télémétrie 
+
+----
+
 == 2834 / 29 Oct 2013 ==
 
 === [**Tous] ===
