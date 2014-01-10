@@ -48,6 +48,7 @@ extern LanguagePack frLanguagePack;
 extern LanguagePack deLanguagePack;
 extern LanguagePack itLanguagePack;
 extern LanguagePack ptLanguagePack;
+extern LanguagePack plLanguagePack;
 extern LanguagePack skLanguagePack;
 extern LanguagePack seLanguagePack;
 
@@ -60,6 +61,7 @@ LanguagePack * languagePacks[] = {
   &deLanguagePack,
   &itLanguagePack,
   &ptLanguagePack,
+  &plLanguagePack,
   &skLanguagePack,
   &seLanguagePack,
   NULL
@@ -998,7 +1000,7 @@ void menuGeneralVersion(uint8_t event)
   lcd_putsLeft(3*FH, stamp2);
   lcd_putsLeft(4*FH, stamp3);
 #if defined (PCBTARANIS)
-lcd_putsLeft(5*FH, "VERS: opentx-x9d-v1.1.02");
+lcd_putsLeft(5*FH, "VERS: opentx-x9d-v1.1.03");
 #elif defined(PCBSKY9X) && !defined(REVA)
   if (Coproc_valid == 1) {
      lcd_putsLeft(5*FH, PSTR("CoPr:"));

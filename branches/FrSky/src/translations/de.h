@@ -238,19 +238,19 @@
   #define LEN_VUNITSSYSTEM     TR("\006", "\010")
   #define TR_VUNITSSYSTEM      TR("Metrik""Imper.", "Metrisch\0 ""Imperial")
   #define LEN_VTELEMUNIT_NORM  "\003"
-  #define TR_VTELEMUNIT_NORM   "v\0 ""A\0 ""m/s""-\0 ""kmh""m\0 ""@\0 ""%\0 ""mA\0""mAh""W\0 "
+  #define TR_VTELEMUNIT_NORM   "V\0 ""A\0 ""m/s""-\0 ""kmh""m\0 ""@\0 ""%\0 ""mA\0""mAh""W\0 "
   #define LEN_VTELEMUNIT_IMP   "\003"
-  #define TR_VTELEMUNIT_IMP    "v\0 ""A\0 ""m/s""-\0 ""kts""ft\0""@\0 ""%\0 ""mA\0""mAh""W\0 "
+  #define TR_VTELEMUNIT_IMP    "V\0 ""A\0 ""m/s""-\0 ""kts""ft\0""@\0 ""%\0 ""mA\0""mAh""W\0 "
 #else
   #if defined(IMPERIAL_UNITS)
     #define LENGTH_UNIT        "ft\0"
     #define SPEED_UNIT         "kts"
   #else
     #define LENGTH_UNIT        "m\0 "
-    #define SPEED_UNIT         "kmh"
+    #define SPEED_UNIT         "Kmh"
   #endif
   #define LEN_VTELEMUNIT       "\003"
-  #define TR_VTELEMUNIT        "v\0 ""A\0 ""m/s""-\0 " SPEED_UNIT LENGTH_UNIT "@\0 ""%\0 ""mA\0""mAh""W\0 "
+  #define TR_VTELEMUNIT        "V\0 ""A\0 ""m/s""-\0 " SPEED_UNIT LENGTH_UNIT "@\0 ""%\0 ""mA\0""mAh""W\0 "
 #endif
 
 #define STR_V                  (STR_VTELEMUNIT+1)
@@ -350,6 +350,15 @@
 
 #define LEN_VFAILSAFE          "\011"
 #define TR_VFAILSAFE           "Hold\0    ""Custom\0  ""No pulses"
+
+#if defined(MAVLINK)
+  #define LEN_MAVLINK_BAUDS		"\006"
+  #define TR_MAVLINK_BAUDS		"4800  ""9600  ""14400 ""19200 ""38400 ""57600 ""76800 ""115200"
+  #define LEN_MAVLINK_AC_MODES	"\011"
+  #define TR_MAVLINK_AC_MODES	"Stabilize""Acro     ""Alt Hold ""Auto     ""Guided   ""Loiter   ""RTL      ""Circle   ""Pos Hold ""Land     ""OF Loiter""Toy A    ""Toy M    ""INVALID  "
+  #define LEN_MAVLINK_AP_MODES	"\015"
+  #define TR_MAVLINK_AP_MODES	"Manual       ""Circle       ""Stabilize    ""Training     ""Fly by Wire A""Fly by Wire A""Auto         ""RTL          ""Loiter       ""Guided       ""Initialising ""INVALID      "
+#endif
 
 // ZERO TERMINATED STRINGS
 #define INDENT                 "\001"
@@ -620,10 +629,11 @@
 #define TR_EDIT                "Zeile Editieren"
 #define TR_INSERT_BEFORE       "Neue Zeile davor"
 #define TR_INSERT_AFTER        "Neue Zeile danach"
-#define TR_COPY                "Zeile Kopieren"
-#define TR_MOVE                "Zeile Verschieben"
-#define TR_PASTE               "Paste"
-#define TR_DELETE              "Zeile L\203schen"
+#define TR_COPY                "Zeile kopieren"
+#define TR_MOVE                "Zeile verschieben"
+#define TR_PASTE               "Zeile einf\205gen"
+#define TR_DELETE              "Zeile l\203schen"
+#define TR_INSERT              "Neue Zeile"
 #define TR_RESET_FLIGHT        "Reset Flugdaten"
 #define TR_RESET_TIMER1        "Reset Timer1"
 #define TR_RESET_TIMER2        "Reset Timer2"
@@ -639,7 +649,7 @@
 #define TR_MODULE_RANGE        "[Range]"
 #define TR_RESET               "[Reset]"
 #define TR_SET                 "[Set]"
-#define TR_TRAINER             "----Trainer Buchse Einst.------" //DSC Buchse Funktion
+#define TR_TRAINER             "----DSC Buchse PPM In/Out------" //DSC Buchse Funktion
 #define TR_ANTENNAPROBLEM      CENTER "TX Antennen Problem!"
 #define TR_MODELIDUSED         TR("ID schon benutzt","Modell ID schon benutzt")
 #define TR_MODULE              INDENT "Modul-Typ"
@@ -647,9 +657,35 @@
 #define TR_LOWALARM            INDENT "Low Alarm"
 #define TR_CRITICALALARM       INDENT "Kritisch Alarm"
 
+#if defined(MAVLINK)
+  #define TR_MAVLINK_RC_RSSI_SCALE_LABEL   "Max RSSI"
+  #define TR_MAVLINK_PC_RSSI_EN_LABEL      "PC RSSI EN"
+  #define TR_MAVMENUSETUP_TITLE            "Mavlink Setup"
+  #define TR_MAVLINK_BAUD_LABEL            "Baudrate"
+  #define TR_MAVLINK_INFOS                 "INFOS"
+  #define TR_MAVLINK_MODE                  "MODE"
+  #define TR_MAVLINK_CUR_MODE              "Current Mode"
+  #define TR_MAVLINK_ARMED                 "Armed"
+  #define TR_MAVLINK_BAT_MENU_TITLE        "BAT RSSI"
+  #define TR_MAVLINK_BATTERY_LABEL         "Flight Battery status"
+  #define TR_MAVLINK_RC_RSSI_LABEL         "RC RSSI"
+  #define TR_MAVLINK_PC_RSSI_LABEL         "PC RSSI"
+  #define TR_MAVLINK_NAV_MENU_TITLE        "NAV"
+  #define TR_MAVLINK_COURSE                "Course"
+  #define TR_MAVLINK_HEADING               "Heading"
+  #define TR_MAVLINK_BEARING               "Bearing"
+  #define TR_MAVLINK_ALTITUDE              "Altitude"
+  #define TR_MAVLINK_GPS                   "GPS"
+  #define TR_MAVLINK_NO_FIX                "NO Fix"
+  #define TR_MAVLINK_SAT                   "SAT"
+  #define TR_MAVLINK_HDOP                  "HDOP"
+  #define TR_MAVLINK_LAT                   "LAT"
+  #define TR_MAVLINK_LON                   "LON"
+#endif
+
 // Taranis column headers
 #define TR_PHASES_HEADERS      { " Name ", " Schalter ", " Trimmung ", " Fade In ", " Fade Out " }
-#define TR_LIMITS_HEADERS      { " Name ", " Offset ", " Min ", " Max ", " Richtung ", " PPM Mitte ", " Symmetrisch " }
+#define TR_LIMITS_HEADERS      { " Name ", " Subtrim ", " Min ", " Max ", " Richtung ", " PPM Mitte ", " Subtrim Mode " }
 #define TR_CSW_HEADERS         { " Funktion ", " Var1 ", " Var2 ", " UND Schalter ", " Dauer ", " Delay " }
 
 //Taranis About screen
@@ -704,7 +740,7 @@
 #define TR_CHR_TOGGLE 't' //Taste als togglefunktion = Ein Aus Ein 
 #define TR_CHR_HOUR   'h' //Stunden
 
-#define TR_BEEP_VOLUME         "Beep Volume"
-#define TR_WAV_VOLUME          "Wav Volume"
-#define TR_VARIO_VOLUME        "Vario Volume"
-#define TR_BG_VOLUME           "Bg Volume"
+#define TR_BEEP_VOLUME         "Beep Lautst"
+#define TR_WAV_VOLUME          "Wav Lautst"
+#define TR_VARIO_VOLUME        "Vario Lautst"
+#define TR_BG_VOLUME           "Bg Lautst"

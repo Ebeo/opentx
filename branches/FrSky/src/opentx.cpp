@@ -1016,11 +1016,6 @@ bool getSwitch(int8_t swtch)
             if ((!TELEMETRY_STREAMING() && cs->v1 >= MIXSRC_FIRST_TELEM+TELEM_FIRST_STREAMED_VALUE-1) || IS_FAI_FORBIDDEN(cs->v1-1))
               return swtch > 0 ? false : true;
               	
-#if defined (PCBTARANIS)
-          if (cs->v1 == MIXSRC_FIRST_TELEM+TELEM_A2-1 && g_model.moduleData[INTERNAL_MODULE].rfProtocol == RF_PROTO_X16)
-            return swtch > 0 ? false : true;
-#endif
-
             y = convertCswTelemValue(cs);
 
 #if defined(FRSKY_HUB) && defined(GAUGES)
@@ -1308,9 +1303,6 @@ void incRotaryEncoder(uint8_t idx, int8_t inc)
 #endif
 
 #if defined(GVARS)
-uint8_t s_gvar_timer = 0;
-uint8_t s_gvar_last = 0;
-
 #if defined(PCBSTD)
 int16_t getGVarValue(int16_t x, int16_t min, int16_t max)
 {
@@ -1334,8 +1326,6 @@ void setGVarValue(uint8_t idx, int8_t value)
   if (GVAR_VALUE(idx, -1) != value) {
     GVAR_VALUE(idx, -1) = value;
     eeDirty(EE_MODEL);
-    s_gvar_last = idx;
-    s_gvar_timer = GVAR_DISPLAY_TIME;
   }
 }
 #else
@@ -1343,9 +1333,9 @@ uint8_t getGVarFlightPhase(uint8_t phase, uint8_t idx)
 {
   for (uint8_t i=0; i<MAX_PHASES; i++) {
     if (phase == 0) return 0;
-    int16_t trim = GVAR_VALUE(idx, phase); // TODO phase at the end everywhere to be consistent!
-    if (trim <= GVAR_MAX) return phase;
-    uint8_t result = trim-GVAR_MAX-1;
+    int16_t val = GVAR_VALUE(idx, phase); // TODO phase at the end everywhere to be consistent!
+    if (val <= GVAR_MAX) return phase;
+    uint8_t result = val-GVAR_MAX-1;
     if (result >= phase) result++;
     phase = result;
   }
@@ -1375,8 +1365,6 @@ void setGVarValue(uint8_t idx, int16_t value, int8_t phase)
   if (GVAR_VALUE(idx, phase) != value) {
     GVAR_VALUE(idx, phase) = value;
     eeDirty(EE_MODEL);
-    s_gvar_last = idx;
-    s_gvar_timer = GVAR_DISPLAY_TIME;
   }
 }
 #endif
@@ -1571,7 +1559,6 @@ inline void Splash()
 
 void doSplash()
 {
-  //bool secondSplash ;
   if (SPLASH_NEEDED()) {
     Splash();
 
@@ -1582,7 +1569,7 @@ void doSplash()
 #if defined(PCBSTD)
     lcdSetContrast();
 #elif defined(PCBTARANIS)
-bool secondSplash = false;
+    bool secondSplash = false;
 #else
     tmr10ms_t curTime = get_tmr10ms() + 10;
     uint8_t contrast = 10;
@@ -1893,8 +1880,6 @@ uint8_t checkTrim(uint8_t event)
     if (TRIM_REUSED()) {
       GVAR_VALUE(trimGvar[idx], phase) = after;
       eeDirty(EE_MODEL);
-      s_gvar_last = trimGvar[idx];
-      s_gvar_timer = GVAR_DISPLAY_TIME;
     }
     else {
       setTrimValue(phase, idx, after);
@@ -2172,6 +2157,8 @@ void resetAll()
 #endif
   for (uint8_t i=0; i<NUM_CSW; i++)
     csLastValue[i] = CS_LAST_VALUE_INIT;
+
+  s_last_switch_value = 0;
 
   RESET_THR_TRACE();
 }
@@ -2522,16 +2509,14 @@ void evalFunctions()
   static rotenc_t rePreviousValues[ROTARY_ENCODERS];
 #endif
 
-  for (uint8_t i=0; i<NUM_CHNOUT; i++)
+  for (uint8_t i=0; i<NUM_CHNOUT; i++) {
     safetyCh[i] = -128; // not defined
+  }
 
 #if defined(GVARS)
-  for (uint8_t i=0; i<4; i++)
+  for (uint8_t i=0; i<NUM_STICKS; i++) {
     trimGvar[i] = -1;
-#endif
-
-#if !defined(PCBSTD)
-  uint8_t mSwitchDurationIncremented = 0;
+  }
 #endif
 
   for (uint8_t i=0; i<NUM_CFN; i++) {
@@ -2551,15 +2536,11 @@ void evalFunctions()
       uint8_t short_long = 0;
       uint8_t mswitch = 0;
 
-      if (swtch == SWSRC_TRAINER_LONG) {
-        short_long = 2;
-        swtch = SWSRC_TRAINER;
-        mswitch = 0;
-      }
-      else if (swtch == SWSRC_TRAINER_SHORT) {
-        short_long = 1;
-        swtch = SWSRC_TRAINER;
-        mswitch = 0;
+      if (swtch >= SWSRC_TRAINER_SHORT) {
+        swtch -= SWSRC_TRAINER_SHORT;
+        mswitch = (swtch >> 1);
+        short_long = 1 + (swtch & 1);
+        swtch = SWSRC_TRAINER + mswitch;
       }
       else
 
@@ -2582,10 +2563,6 @@ void evalFunctions()
       bool active = getSwitch(swtch);
       if (active) newActiveSwitches |= switch_mask;
       if (momentary || short_long) {
-
-#if !defined(PCBSTD)
-        bool swState = active;
-#endif
 
         if (MOMENTARY_START_TEST()) {
 
@@ -2614,18 +2591,6 @@ void evalFunctions()
           active = (activeFnSwitches & switch_mask);
           momentary = false;
         }
-#if !defined(PCBSTD)
-        if (short_long && !(mSwitchDurationIncremented & (1<<mswitch))) {
-          mSwitchDurationIncremented |= (1<<mswitch);
-          if (swState) {
-            if (mSwitchDuration[mswitch] < 255)
-              mSwitchDuration[mswitch]++;
-          }
-          else {
-            mSwitchDuration[mswitch] = 0;
-          }
-        }
-#endif
       }
 #if !defined(CPUARM)
       else if (CFN_FUNC(sd) == FUNC_PLAY_BOTH) {
@@ -2742,7 +2707,7 @@ void evalFunctions()
               if (CFN_FUNC(sd) == FUNC_PLAY_TRACK && param > 250)
                 param = GVAR_VALUE(param-251, getGVarFlightPhase(s_perout_flight_phase, param-251));
 #endif
-              PUSH_CUSTOM_PROMPT(active ? param : param+1, i+1);
+              PUSH_CUSTOM_PROMPT((active||short_long) ? param : param+1, i+1);
             }
           }
         }
@@ -2821,9 +2786,22 @@ void evalFunctions()
   activeFnSwitches = newActiveFnSwitches;
   activeFunctions  = newActiveFunctions;
 
+#if !defined(PCBSTD)
+  for (int i=0; i<1+NUM_ROTARY_ENCODERS; i++) {
+    if (getSwitch(SWSRC_TRAINER+i)) {
+      if (mSwitchDuration[i] < 255)
+        mSwitchDuration[i]++;
+    }
+    else {
+      mSwitchDuration[i] = 0;
+    }
+  }
+#endif
+
 #if defined(ROTARY_ENCODERS) && defined(GVARS)
-  for (uint8_t i=0; i<ROTARY_ENCODERS; i++)
+  for (uint8_t i=0; i<ROTARY_ENCODERS; i++) {
     rePreviousValues[i] = (g_rotenc[i] / ROTARY_ENCODER_GRANULARITY);
+  }
 #endif
 }
 
@@ -2912,8 +2890,6 @@ void perOut(uint8_t mode, uint8_t tick10ms)
 
   do {
 
-    // TRACE("[pass %d]", pass);
-
     bitfield_channels_t passDirtyChannels = 0;
 
     for (uint8_t i=0; i<MAX_MIXERS; i++) {
@@ -2989,7 +2965,7 @@ void perOut(uint8_t mode, uint8_t tick10ms)
       else if (!mixEnabled) {
         if (md->speedDown && md->mltpx!=MLTPX_REP) {
           if (mixCondition) {
-            v = 0;
+            v = (md->mltpx == MLTPX_ADD ? 0 : RESX);
             apply_offset_and_curve = false;
           }
         }
@@ -3045,16 +3021,16 @@ void perOut(uint8_t mode, uint8_t tick10ms)
             int32_t rate = (int32_t) tick10ms << (DEL_MULT_SHIFT+11);  // = DEL_MULT*2048*tick10ms
             // rate equals a full range for one second; if less time is passed rate is accordingly smaller
             // if one second passed, rate would be 2048 (full motion)*256(recalculated weight)*100(100 ticks needed for one second)
-            int32_t currentValue=((int32_t) v<<DEL_MULT_SHIFT);
-            if (diff>0) {
-              if (md->speedUp>0) {
+            int32_t currentValue = ((int32_t) v<<DEL_MULT_SHIFT);
+            if (diff > 0) {
+              if (md->speedUp > 0) {
                 // if a speed upwards is defined recalculate the new value according configured speed; the higher the speed the smaller the add value is
                 int32_t newValue = tact+rate/((int16_t)(100/SLOW_STEP)*md->speedUp);
                 if (newValue<currentValue) currentValue = newValue; // Endposition; prevent toggling around the destination
               }
             }
             else {  // if is <0 because ==0 is not possible
-              if (md->speedDown>0) {
+              if (md->speedDown > 0) {
                 // see explanation in speedUp
                 int32_t newValue = tact-rate/((int16_t)(100/SLOW_STEP)*md->speedDown);
                 if (newValue>currentValue) currentValue = newValue; // Endposition; prevent toggling around the destination
@@ -4072,35 +4048,6 @@ ISR(TIMER3_CAPT_vect) // G: High frequency noise can cause stack overflo with IS
   cli(); // disable other interrupts for stack pops before this function's RETI
   RESUME_PPMIN_INTERRUPT();
 }
-
-/*
-// gruvin: Fuse declarations work if we use the .elf file for AVR Studio (v4)
-// instead of the Intel .hex files.  They should also work with AVRDUDE v5.10
-// (reading from the .hex file), since a bug relating to Intel HEX file record
-// interpretation was fixed. However, I leave these commented out, just in case
-// it causes trouble for others.
-#if defined (PCBGRUVIN9X)
-// See fuses_2561.txt
-  FUSES =
-  {
-    // BOD=4.3V, WDT OFF (enabled in code), Boot Flash 4096 bytes at 0x1F000,
-    // JTAG and OCD enabled, EESAVE enabled, BOOTRST/CKDIV8/CKOUT disabled,
-    // Full swing Xtal oscillator. Start-up 16K clks + 0ms. BOD enabled.
-    0xD7, // .low
-    0x11, // .high
-    0xFC  // .extended
-  };
-#else
-  FUSES =
-  {
-    // G: Changed 2011-07-04 to include EESAVE. Tested OK on stock 9X
-    0x1F, // LFUSE
-    0x11, // HFUSE
-    0xFF  // EFUSE
-  };
-#endif
-*/
-
 #endif
 
 /*
@@ -4601,4 +4548,3 @@ int main(void)
 #endif
 }
 #endif // !SIMU
-

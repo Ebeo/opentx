@@ -55,6 +55,8 @@
 #elif defined(TRANSLATIONS_ES)
 #include "translations/es.h"
 #define LEN_SPECIAL_CHARS 0
+#elif defined(TRANSLATIONS_PL)
+#include "translations/pl.h"
 #elif defined(TRANSLATIONS_PT)
 #include "translations/pt.h"
 #define LEN_SPECIAL_CHARS 0
@@ -143,7 +145,7 @@ extern const pm_char STR_OPEN9X[];
 #define OFS_VSRCRAW            (OFS_VSWITCHES + sizeof(TR_VSWITCHES))
 #define OFS_VTMRMODES          (OFS_VSRCRAW + sizeof(TR_VSRCRAW))
 #define OFS_DATETIME           (OFS_VTMRMODES + sizeof(TR_VTMRMODES))
-#if defined(PCBGRUVIN9X) || defined(CPUARM)
+#if defined(CPUM2560) || defined(CPUARM)
   #define OFS_VLCD             (OFS_DATETIME + sizeof(TR_DATETIME))
 #else
   #define OFS_VLCD             (OFS_DATETIME)
@@ -169,9 +171,16 @@ extern const pm_char STR_OPEN9X[];
   #define OFS_VTRAINERMODES    (OFS_VFAILSAFE)
 #endif
 #if defined(PCBTARANIS)
-  #define OFS_SPARE            (OFS_VTRAINERMODES + sizeof(TR_VTRAINERMODES))
+  #define OFS_MAVLINK_BAUDS	(OFS_VTRAINERMODES + sizeof(TR_VTRAINERMODES))
 #else
-  #define OFS_SPARE            (OFS_VTRAINERMODES)
+  #define OFS_MAVLINK_BAUDS	(OFS_VTRAINERMODES)
+#endif
+#if defined(MAVLINK)
+  #define OFS_MAVLINK_AC_MODES	(OFS_MAVLINK_BAUDS + sizeof(TR_MAVLINK_BAUDS))
+  #define OFS_MAVLINK_AP_MODES	(OFS_MAVLINK_AC_MODES + sizeof(TR_MAVLINK_AC_MODES))
+  #define OFS_SPARE		(OFS_MAVLINK_AP_MODES + sizeof(TR_MAVLINK_AP_MODES))
+#else
+  #define OFS_SPARE				(OFS_MAVLINK_BAUDS)
 #endif
 
 #define STR_OFFON              (STR_OPEN9X + OFS_OFFON)
@@ -237,7 +246,7 @@ extern const pm_char STR_OPEN9X[];
   #define STR_VRENCODERS       (STR_OPEN9X + OFS_VRENCODERS)
 #endif
 
-#if defined(PCBGRUVIN9X) || defined(CPUARM)
+#if defined(CPUM2560) || defined(CPUARM)
 #define STR_DATETIME           (STR_OPEN9X + OFS_DATETIME)
 #endif
 
@@ -255,6 +264,12 @@ extern const pm_char STR_OPEN9X[];
   #define STR_VTRAINERMODES    (STR_OPEN9X + OFS_VTRAINERMODES)
 #endif
 
+#if defined(MAVLINK)
+  #define STR_MAVLINK_BAUDS		(STR_OPEN9X + OFS_MAVLINK_BAUDS)
+  #define STR_MAVLINK_AC_MODES	(STR_OPEN9X + OFS_MAVLINK_AC_MODES)
+  #define STR_MAVLINK_AP_MODES	(STR_OPEN9X + OFS_MAVLINK_AP_MODES)
+#endif
+  
 // The 0-terminated-strings
 #define NO_INDENT(x) (x)+LEN_INDENT
 
@@ -456,7 +471,7 @@ extern const pm_char STR_LATITUDE[];
 extern const pm_char STR_LONGITUDE[];
 #endif
 
-#if defined(CPUARM) || defined(PCBGRUVIN9X)
+#if defined(CPUARM) || defined(CPUM2560)
 extern const pm_char STR_SHUTDOWN[];
 #endif
 
@@ -581,6 +596,7 @@ extern const pm_char STR_OWN[];
 extern const pm_char STR_ROTARY_ENCODER[];
 extern const pm_char STR_DATE[];
 extern const pm_char STR_CHANNELS_MONITOR[];
+extern const pm_char STR_PATH_TOO_LONG[];
 
 #if defined(VOICE) && defined(CPUARM)
   struct LanguagePack {
@@ -638,6 +654,32 @@ extern const pm_char STR_CHANNELS_MONITOR[];
 
 #if defined(PCBTARANIS) || defined(DSM2)
   extern const pm_char STR_MODULE_RANGE[];
+#endif
+
+#if defined(MAVLINK)
+  extern const pm_char STR_MAVLINK_RC_RSSI_SCALE_LABEL[];
+  extern const pm_char STR_MAVLINK_PC_RSSI_EN_LABEL[];
+  extern const pm_char STR_MAVMENUSETUP_TITLE[];
+  extern const pm_char STR_MAVLINK_BAUD_LABEL[];
+  extern const pm_char STR_MAVLINK_INFOS[];
+  extern const pm_char STR_MAVLINK_MODE[];
+  extern const pm_char STR_MAVLINK_CUR_MODE[];
+  extern const pm_char STR_MAVLINK_ARMED[];
+  extern const pm_char STR_MAVLINK_BAT_MENU_TITLE[];
+  extern const pm_char STR_MAVLINK_BATTERY_LABEL[];
+  extern const pm_char STR_MAVLINK_RC_RSSI_LABEL[];
+  extern const pm_char STR_MAVLINK_PC_RSSI_LABEL[];
+  extern const pm_char STR_MAVLINK_NAV_MENU_TITLE[];
+  extern const pm_char STR_MAVLINK_COURSE[];
+  extern const pm_char STR_MAVLINK_HEADING[];
+  extern const pm_char STR_MAVLINK_BEARING[];
+  extern const pm_char STR_MAVLINK_ALTITUDE[];
+  extern const pm_char STR_MAVLINK_GPS[];
+  extern const pm_char STR_MAVLINK_NO_FIX[];
+  extern const pm_char STR_MAVLINK_SAT[];
+  extern const pm_char STR_MAVLINK_HDOP[];
+  extern const pm_char STR_MAVLINK_LAT[];
+  extern const pm_char STR_MAVLINK_LON[];
 #endif
 
 #if !defined(CPUM64)
