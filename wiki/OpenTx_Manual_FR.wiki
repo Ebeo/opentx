@@ -1,5 +1,4 @@
 #summary Manuel d'openTx en français
-#labels Featured
 
 <wiki:comment>
 TODO: 
