@@ -107,7 +107,6 @@ PACK(struct FrskySerialData {
     int32_t  baroAltitudeOffset;
     int32_t  baroAltitude;
     int32_t  gpsAltitudeOffset;
-    int32_t  gpsAltitude;
     uint32_t gpsDistance;
 
     uint16_t vfas;             // 0x39  Added to FrSky protocol for home made sensors with a better precision
@@ -128,6 +127,7 @@ PACK(struct FrskySerialData {
     uint16_t maxPower;
     /* end */
 
+    int32_t  gpsAltitude;
     uint8_t  gpsDistNeeded;
     int8_t   gpsFix;           // -1=never fixed, 0=fix lost, 1=fixed
 
