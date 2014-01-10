@@ -1,5 +1,4 @@
 #summary openTx for FrSky radios
-#labels Featured
 
 <wiki:comment>
 TODO: 
