@@ -1,5 +1,4 @@
 #summary openTx English changelog
-#labels Featured
 
 <wiki:comment>
 
