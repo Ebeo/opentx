@@ -311,17 +311,17 @@
 #endif
 
 #if defined(CPUARM)
-  #define TR_CUSTOMSW          "LB1""LB2""LB3""LB4""LB5""LB6""LB7""LB8""LB9""LBA""LBB""LBC""LBD""LBE""LBF""LBG""LBH""LBI""LBJ""LBK""LBL""LBM""LBN""LBO""LBP""LBQ""LBR""LBS""LBT""LBU""LBV""LBW"
+  #define TR_CUSTOMSW          "CS1""CS2""CS3""CS4""CS5""CS6""CS7""CS8""CS9""CSA""CSB""CSC""CSD""CSE""CSF""CSG""CSH""CSI""CSJ""CSK""CSL""CSM""CSN""CSO""CSP""CSQ""CSR""CSS""CST""CSU""CSV""CSW"
 #elif defined(PCBGRUVIN9X) || defined(CPUM2561) || defined(CPUM128)
-  #define TR_CUSTOMSW          "LB1""LB2""LB3""LB4""LB5""LB6""LB7""LB8""LB9""LBA""LBB""LBC""LBD""LBE""LBF"
+  #define TR_CUSTOMSW          "CS1""CS2""CS3""CS4""CS5""CS6""CS7""CS8""CS9""CSA""CSB""CSC""CSD""CSE""CSF"
 #else
-  #define TR_CUSTOMSW          "LB1""LB2""LB3""LB4""LB5""LB6""LB7""LB8""LB9""LBA""LBB""LBC"
+  #define TR_CUSTOMSW          "CS1""CS2""CS3""CS4""CS5""CS6""CS7""CS8""CS9""CSA""CSB""CSC"
 #endif
 
 #if defined(PCBTARANIS)
-  #define TR_VSWITCHES         "SA\300""SA-""SA\301""SB\300""SB-""SB\301""SC\300""SC-""SC\301""SD\300""SD-""SD\301""SE\300""SE-""SE\301""SF\300""SF\301""SG\300""SG-""SG\301""SH\300""SH\301" TR_CUSTOMSW " P\200"
+  #define TR_VSWITCHES         "SA\300""SA-""SA\301""SB\300""SB-""SB\301""SC\300""SC-""SC\301""SD\300""SD-""SD\301""SE\300""SE-""SE\301""SF\300""SF\301""SG\300""SG-""SG\301""SH\300""SH\301" TR_CUSTOMSW "One"
 #else
-  #define TR_VSWITCHES         TR_9X_3POS_SWITCHES "GAS""SID""HJD""SKE""LAN""TRN" TR_CUSTOMSW " P\200"
+  #define TR_VSWITCHES         TR_9X_3POS_SWITCHES "THR""RUD""ELE""AIL""GEA""TRN" TR_CUSTOMSW "One"
 #endif
 
 #if defined(PCBSKY9X)
@@ -350,6 +350,15 @@
 
 #define LEN_VFAILSAFE          "\011"
 #define TR_VFAILSAFE           "H\200ll\0    ""Special\0 ""Pulsfritt"
+
+#if defined(MAVLINK)
+  #define LEN_MAVLINK_BAUDS		"\006"
+  #define TR_MAVLINK_BAUDS		"4800  ""9600  ""14400 ""19200 ""38400 ""57600 ""76800 ""115200"
+  #define LEN_MAVLINK_AC_MODES	"\011"
+  #define TR_MAVLINK_AC_MODES	"Stabil   ""Akrobat  ""L\200s H\202jd ""Automat  ""Guidad   ""Hovra    ""Flyg Hem ""Cirkla   ""H\200ll Pos.""Landa    ""OF Hovra ""Leksak A ""Leksak M ""OGILTIG  "
+  #define LEN_MAVLINK_AP_MODES	"\015"
+  #define TR_MAVLINK_AP_MODES	"Manuell      ""Cirkla       ""Stabilisera  ""\205vning       ""Fly by Wire A""Fly by Wire A""Automatisk   ""Flyg Hem     ""Hovra        ""Guidad       ""Initialiserar""OGILTIG      "
+#endif
 
 // ZERO TERMINATED STRINGS
 #define INDENT                 "\001"
@@ -646,6 +655,34 @@
 #define TR_CHANNELRANGE        INDENT "Kanalomr\200de"
 #define TR_LOWALARM            INDENT "L\200g-alarm"
 #define TR_CRITICALALARM       INDENT "Kritiskt alarm"
+
+#if defined(MAVLINK)
+  #define TR_MAVLINK_RC_RSSI_SCALE_LABEL	"Max RSSI"
+  #define TR_MAVLINK_PC_RSSI_EN_LABEL		"PC RSSI EN"
+  #define TR_MAVMENUSETUP_TITLE				"MavlinkInst\201llningar"
+  #define TR_MAVLINK_BAUD_LABEL				"Baudrate"
+  #define TR_MAVLINK_INFOS					"INFOS"
+  #define TR_MAVLINK_MODE					"L\204GE"
+  #define TR_MAVLINK_CUR_MODE				"Nuvarande L\201ge"
+  #define TR_MAVLINK_ARMED					"Os\201krad"
+  #define TR_MAVLINK_BAT_MENU_TITLE			"BAT RSSI"
+  #define TR_MAVLINK_BATTERY_LABEL			"Status f\202r flygbatteri"
+  #define TR_MAVLINK_RC_RSSI_LABEL			"RC RSSI"
+  #define TR_MAVLINK_PC_RSSI_LABEL			"PC RSSI"
+  #define TR_MAVLINK_NAV_MENU_TITLE			"NAV"
+  #define TR_MAVLINK_COURSE					"Kurs"
+  #define TR_MAVLINK_HEADING				"Riktning"
+  #define TR_MAVLINK_BEARING				"B\201ring"
+  #define TR_MAVLINK_ALTITUDE				"H\202jd"
+  #define TR_MAVLINK_GPS					"GPS"
+  #define TR_MAVLINK_NO_FIX					"NO Fix"
+  #define TR_MAVLINK_SAT					"SAT"
+  #define TR_MAVLINK_HDOP					"HDOP"
+  #define TR_MAVLINK_LAT					"LAT"
+  #define TR_MAVLINK_LON					"LON"
+#endif
+
+
 
 // Taranis column headers
 #define TR_PHASES_HEADERS      { " Namn ", " Brytare ", " Trimmar ", " Tona Upp ", " Tona Ned " }

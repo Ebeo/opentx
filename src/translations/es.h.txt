@@ -164,14 +164,14 @@
   #if defined(PCBSKY9X)
     #define TR_PLAY_TRACK      "Oir\0     "
   #else
-    #define TR_PLAY_TRACK      "Oir pista "
+    #define TR_PLAY_TRACK      "Oir pista\0"
   #endif
   #define TR_PLAY_BOTH         "Oir Ambos\0"
   #define TR_PLAY_VALUE        "Oir valor\0"
 #else
-  #define TR_PLAY_TRACK        "[Oir pista]"
-  #define TR_PLAY_BOTH         "[Oir Ambos]"
-  #define TR_PLAY_VALUE        "[Oir Valor]"
+  #define TR_PLAY_TRACK        "[OirPista]"
+  #define TR_PLAY_BOTH         "[OirAmbos]"
+  #define TR_PLAY_VALUE        "[OirValor]"
 #endif
 
 #define TR_CFN_VOLUME          "Volumen\0   "
@@ -350,6 +350,15 @@
 
 #define LEN_VFAILSAFE          "\011"
 #define TR_VFAILSAFE           "Guardar\0 ""Adaptar\0 ""Sin pulsos"
+
+#if defined(MAVLINK)
+  #define LEN_MAVLINK_BAUDS		"\006"
+  #define TR_MAVLINK_BAUDS		"4800  ""9600  ""14400 ""19200 ""38400 ""57600 ""76800 ""115200"
+  #define LEN_MAVLINK_AC_MODES	"\011"
+  #define TR_MAVLINK_AC_MODES	"Estabilizar""Acrobat. ""Alt Hold ""Auto     ""Guiado   ""Loiter   ""RTL      ""Circulo  ""Pos Hold ""Tierra   ""OF Loiter""Toy A    ""Toy M    ""INVALIDO "
+  #define LEN_MAVLINK_AP_MODES	"\015"
+  #define TR_MAVLINK_AP_MODES	"Manual       ""Circulo       ""Estabilizar   ""Entrenamiento""Fly by Wire A""Fly by Wire A""Auto         ""RTL          ""Loiter       ""Guiado       ""Inicialisando""INVALID      "
+#endif
 
 // ZERO TERMINATED STRINGS
 #define INDENT                 "\001"
@@ -647,6 +656,32 @@
 #define TR_LOWALARM            INDENT "Alarma baja"
 #define TR_CRITICALALARM       INDENT "Alarma Critica"
 
+#if defined(MAVLINK)
+  #define TR_MAVLINK_RC_RSSI_SCALE_LABEL	"Max RSSI"
+  #define TR_MAVLINK_PC_RSSI_EN_LABEL		"PC RSSI EN"
+  #define TR_MAVMENUSETUP_TITLE				"Mavlink Setup"
+  #define TR_MAVLINK_BAUD_LABEL				"Baudrate"
+  #define TR_MAVLINK_INFOS					"INFOS"
+  #define TR_MAVLINK_MODE					"MODO"
+  #define TR_MAVLINK_CUR_MODE				"Modo actual"
+  #define TR_MAVLINK_ARMED					"Armad0"
+  #define TR_MAVLINK_BAT_MENU_TITLE			"BAT RSSI"
+  #define TR_MAVLINK_BATTERY_LABEL			"Estado Bateria de vuelo"
+  #define TR_MAVLINK_RC_RSSI_LABEL			"RC RSSI"
+  #define TR_MAVLINK_PC_RSSI_LABEL			"PC RSSI"
+  #define TR_MAVLINK_NAV_MENU_TITLE			"NAV"
+  #define TR_MAVLINK_COURSE					"Carrera"
+  #define TR_MAVLINK_HEADING				"Titulo"
+  #define TR_MAVLINK_BEARING				"Soporte"
+  #define TR_MAVLINK_ALTITUDE				"Altitud"
+  #define TR_MAVLINK_GPS					"GPS"
+  #define TR_MAVLINK_NO_FIX					"NO Fix"
+  #define TR_MAVLINK_SAT					"SAT"
+  #define TR_MAVLINK_HDOP					"HDOP"
+  #define TR_MAVLINK_LAT					"LAT"
+  #define TR_MAVLINK_LON					"LON"
+#endif
+
 // Taranis column headers
 #define TR_PHASES_HEADERS      { " Nombre ", " Interrup.", " Trims ", " Aparecer ", " Desparecer " }
 #define TR_LIMITS_HEADERS      { " Nombre ", " Compensacion", " Min ", " Max ", " Direccion ", " Centrado PPM ", " Simetrica " }
@@ -682,15 +717,15 @@
 #define TR_ABOUT_ROB_2         "openrcforums webmaster"
 
 #define TR_ABOUT_MARTIN_1      "Martin Hotar"
-#define TR_ABOUT_MARTIN_2      "Disegno grafico"
+#define TR_ABOUT_MARTIN_2      "Dise\201no grafico"
 
 #if defined(PCBTARANIS)
   #define TR_ABOUT_HARDWARE_1  "FrSky"
-  #define TR_ABOUT_HARDWARE_2  "Productor disegno de hardware"
+  #define TR_ABOUT_HARDWARE_2  "Productor dise\201o de hardware"
   #define TR_ABOUT_HARDWARE_3  "Firmware contributor"
 #else
   #define TR_ABOUT_HARDWARE_1  "Brent Nelson"
-  #define TR_ABOUT_HARDWARE_2  "Sky9x designer/producer"
+  #define TR_ABOUT_HARDWARE_2  "Sky9x dise\201ador/productor"
   #define TR_ABOUT_HARDWARE_3  ""
 #endif
 
@@ -704,7 +739,7 @@
 #define TR_CHR_TOGGLE 't'
 #define TR_CHR_HOUR   'h'
 
-#define TR_BEEP_VOLUME         "Beep Volume"
-#define TR_WAV_VOLUME          "Wav Volume"
-#define TR_VARIO_VOLUME        "Vario Volume"
-#define TR_BG_VOLUME           "Bg Volume"
+#define TR_BEEP_VOLUME         "Volumen Beep"
+#define TR_WAV_VOLUME          "Volumen Wav"
+#define TR_VARIO_VOLUME        "Volumen Vario"
+#define TR_BG_VOLUME           "Volumen Bg"

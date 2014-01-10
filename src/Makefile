@@ -204,7 +204,7 @@ TX_CADDY = NO
 IRPROTOS = NO
 
 # TRANSLATIONS
-# Values = cz, de, en, fr, it, se, es, pt
+# Values = cz, de, en, fr, it, se, es, pt, pl
 TRANSLATIONS = EN
 
 # TTS
@@ -502,16 +502,12 @@ ifeq ($(PCB), MEGA2560)
   CPPSRC += audio_avr.cpp haptic.cpp
 
   ifeq ($(SDCARD), YES)
+    EXTRABOARDSRC += FatFs/ff.c FatFs/fattime.c FatFs/option/ccsbcs.c targets/gruvin9x/diskio.cpp 
     CPPDEFS += -DRTCLOCK
     CPPSRC += rtc.cpp targets/gruvin9x/rtc_driver.cpp 
     EXTRABOARDSRC += FatFs/ff.c FatFs/fattime.c FatFs/option/ccsbcs.c targets/gruvin9x/diskio.cpp
   endif
-    
-  ifeq ($(VOICE), YES)
-    CPPSRC += targets/gruvin9x/somo14d.cpp
-    CPPDEFS += -DVOICE
-  endif
-  
+
   # Enable extra rotary encoders (Gruvin9x board only)
   # Values = YES, NO
   ROTARY_ENCODERS = 2
@@ -615,6 +611,7 @@ ifeq ($(PCB), TARANIS)
   SRC += targets/taranis/STM32F2xx_StdPeriph_Lib_V1.1.0/Libraries/CMSIS/Device/ST/STM32F2xx/Source/Templates/system_stm32f2xx.c
   SRC += targets/taranis/STM32F2xx_StdPeriph_Lib_V1.1.0/Libraries/STM32F2xx_StdPeriph_Driver/src/misc.c
   SRC += targets/taranis/STM32F2xx_StdPeriph_Lib_V1.1.0/Libraries/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_gpio.c
+  SRC += targets/taranis/STM32F2xx_StdPeriph_Lib_V1.1.0/Libraries/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_dbgmcu.c
   SRC += targets/taranis/STM32F2xx_StdPeriph_Lib_V1.1.0/Libraries/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_rcc.c
   SRC += targets/taranis/STM32F2xx_StdPeriph_Lib_V1.1.0/Libraries/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_spi.c
   SRC += targets/taranis/STM32F2xx_StdPeriph_Lib_V1.1.0/Libraries/STM32F2xx_StdPeriph_Driver/src/stm32f2xx_dma.c
@@ -685,7 +682,7 @@ TARGET = opentx
 
 # List C++ source files here. (C dependencies are automatically generated.)
 ifeq ($(PCB), $(filter $(PCB), SKY9X TARANIS))
-  TTS_SRC = translations/tts_cz.cpp translations/tts_de.cpp translations/tts_en.cpp translations/tts_es.cpp translations/tts_fr.cpp translations/tts_it.cpp translations/tts_pt.cpp translations/tts_sk.cpp translations/tts_se.cpp
+  TTS_SRC = translations/tts_cz.cpp translations/tts_de.cpp translations/tts_en.cpp translations/tts_es.cpp translations/tts_fr.cpp translations/tts_it.cpp translations/tts_pl.cpp translations/tts_pt.cpp translations/tts_sk.cpp translations/tts_se.cpp
 else
   STD_TTS_SRC = translations/tts_$(shell sh -c "echo $(TTS) | tr '[:upper:]' '[:lower:]'").cpp
   TTS_SRC = $(shell sh -c "if test -f $(STD_TTS_SRC); then echo $(STD_TTS_SRC); else echo translations/tts_en.cpp; fi")
@@ -1110,7 +1107,7 @@ taranis-stamp:
 	@echo "#define SVN_VERS \"opentx-r$(SVNREV)\"" >> stamp-opentx-taranis.txt
 	@cat stamp-opentx-taranis.txt
 
-translations/se.h: translations/cz.h.txt translations/de.h.txt translations/es.h.txt translations/fr.h.txt translations/it.h.txt translations/pt.h.txt translations/se.h.txt 
+translations/se.h: translations/cz.h.txt translations/de.h.txt translations/es.h.txt translations/fr.h.txt translations/it.h.txt translations/pt.h.txt translations/pl.h.txt translations/se.h.txt 
 	@echo
 	@echo "Create language specific header files"
 	@echo "Czech"
@@ -1123,6 +1120,8 @@ translations/se.h: translations/cz.h.txt translations/de.h.txt translations/es.h
 	$(TRANSLATE) translations/fr.h.txt translations/fr.h fr
 	@echo "Italian"
 	$(TRANSLATE) translations/it.h.txt translations/it.h it
+	@echo "Polish"
+	$(TRANSLATE) translations/pl.h.txt translations/pl.h pl
 	@echo "Portugese"
 	$(TRANSLATE) translations/pt.h.txt translations/pt.h pt
 	@echo "Swedish"
@@ -1140,7 +1139,6 @@ bitmaps/sticks.lbm: bitmaps/sticks_4x1.xbm bitmaps/splash_9x.xbm bitmaps/splash_
 	$(IMG2LBM) bitmaps/sticks_4x1.xbm bitmaps/sticks.lbm img 4
 	$(IMG2LBM) bitmaps/splash_9x.xbm bitmaps/splash_9x.lbm img
 	$(IMG2LBM) bitmaps/splash_taranis.png bitmaps/splash_taranis.lbm bmp
-	$(IMG2LBM) bitmaps/splash_frsky.bmp bitmaps/splash_frsky.lbm bmp
 	$(IMG2LBM) bitmaps/logo_taranis.bmp bitmaps/logo_taranis.lbm bmp
 	$(IMG2LBM) bitmaps/icons.png bitmaps/icons.lbm bmp
 	$(IMG2LBM) bitmaps/asterisk.xbm bitmaps/asterisk.lbm img
