@@ -1,5 +1,4 @@
 #summary Historique des changements d'OpenTx en français
-#labels Featured
 
 <wiki:comment>
 
