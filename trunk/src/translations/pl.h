@@ -691,7 +691,7 @@
 
 // Taranis column headers
 #define TR_PHASES_HEADERS      { " Nazwa ", " Prze\203\200cznik ", " Trymery ", " Pojawianie si\202  ", " Zanikanie " }
-#define TR_LIMITS_HEADERS      { " Nazwa ", " Subtrim ", " Min ", " Max ", " Kierunek ", " Krzywa ", " \217rodek PPM ", " Tryb subtrim " }
+#define TR_LIMITS_HEADERS      { " Nazwa ", " Subtrim ", " Min ", " Max ", " Kierunek ", "\217rodek PPM ", " Tryb subtrim " }
 #define TR_CSW_HEADERS         { " Funkcja ", " Param. 1 ", " Param 2 ", " AND Prze\203\200cznik ", " Czas trwania ", " Op\205\210nienie " }
 
 //Taranis About screen
