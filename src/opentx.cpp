@@ -3192,15 +3192,6 @@ void doMixerCalculations()
     s_last_phase = phase;
   }
 
-  if (tick10ms) {
-#if defined(CPUARM)
-    requiredSpeakerVolume = g_eeGeneral.speakerVolume + VOLUME_LEVEL_DEF;
-#endif
-
-    // the reason this needs to be done before limits is the applyLimit function; it checks for safety switches which would be not initialized otherwise
-    evalFunctions();
-  }
-
   int32_t weight = 0;
   if (s_fade_flight_phases) {
     memclear(sum_chans512, sizeof(sum_chans512));
@@ -3223,6 +3214,16 @@ void doMixerCalculations()
     perOut(e_perout_mode_normal, tick10ms);
   }
   
+  //========== FUNCTIONS ===============
+  // must be done after mixing because some functions use the inputs/channels values
+  // must be done before limits because of the applyLimit function: it checks for safety switches which would be not initialized otherwise
+  if (tick10ms) {
+#if defined(CPUARM)
+    requiredSpeakerVolume = g_eeGeneral.speakerVolume + VOLUME_LEVEL_DEF;
+#endif
+    evalFunctions();
+  }
+
   //========== LIMITS ===============
   for (uint8_t i=0; i<NUM_CHNOUT; i++) {
     // chans[i] holds data from mixer.   chans[i] = v*weight => 1024*256
