@@ -2820,7 +2820,7 @@ void gvarWeightItem(xcoord_t x, uint8_t y, MixData *md, uint8_t attr, uint8_t ev
 {
   u_int8int16_t weight;
   MD_WEIGHT_TO_UNION(md, weight);
-  weight.word = gvarMenuItem(x, y, weight.word, GV_RANGELARGE_NEG, GV_RANGELARGE, attr, event);
+  weight.word = gvarMenuItem(x, y, weight.word, -500, 500, attr, event);
   MD_UNION_TO_WEIGHT(weight, md);
 }
 
