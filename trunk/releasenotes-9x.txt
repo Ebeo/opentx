@@ -1,4 +1,16 @@
 <SVN CURRENT>
+[Arm Boards]
+<ul>
+<li>Wav files played even in silent mode
+<li>GPS support had broken VFAS
+</ul>
+
+[all]
+<ul>
+<li>Custom function triggered by a CSW based on analog triggering erroneously at powerup
+<li>Problem with mixer weight field when !GVARS
+<li>PPM5 was broken
+</ul>
 
 <h2>2923 / 2014-01-08</h2>
 [Arm Boards]
