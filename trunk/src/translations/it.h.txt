@@ -196,11 +196,11 @@
 #endif
 
 #if defined(CPUARM)
-  #define TR_VFSWFUNC      "Blocco\0      ""Maestro \0    ""Trim Instant " TR_SOUND TR_HAPTIC "Azzera\0      " TR_VVARIO TR_PLAY_TRACK TR_PLAY_VALUE TR_SDCLOGS TR_CFN_VOLUME "Retroillum.\0 " TR_CFN_BG_MUSIC TR_CFN_ADJUST_GVAR TR_CFN_TEST
+  #define TR_VFSWFUNC      "Blocco\0      ""Maestro\0     ""Trim Instant " TR_SOUND TR_HAPTIC "Azzera\0      " TR_VVARIO TR_PLAY_TRACK TR_PLAY_VALUE TR_SDCLOGS TR_CFN_VOLUME "Retroillum.\0 " TR_CFN_BG_MUSIC TR_CFN_ADJUST_GVAR TR_CFN_TEST
 #elif defined(PCBGRUVIN9X)
-  #define TR_VFSWFUNC      "Blocco\0      ""Maestro \0    ""Trim Instant " TR_SOUND TR_HAPTIC "Azzera\0      " TR_VVARIO TR_PLAY_TRACK TR_PLAY_BOTH TR_PLAY_VALUE TR_SDCLOGS "Retroillum.\0 " TR_CFN_ADJUST_GVAR TR_CFN_TEST
+  #define TR_VFSWFUNC      "Blocco\0      ""Maestro\0     ""Trim Instant " TR_SOUND TR_HAPTIC "Azzera\0      " TR_VVARIO TR_PLAY_TRACK TR_PLAY_BOTH TR_PLAY_VALUE TR_SDCLOGS "Retroillum.\0 " TR_CFN_ADJUST_GVAR TR_CFN_TEST
 #else
-  #define TR_VFSWFUNC      "Blocco\0      ""Maestro \0    ""Trim Instant " TR_SOUND TR_HAPTIC "Azzera\0      " TR_VVARIO TR_PLAY_TRACK TR_PLAY_BOTH TR_PLAY_VALUE "Retroillum.\0 " TR_CFN_ADJUST_GVAR TR_CFN_TEST
+  #define TR_VFSWFUNC      "Blocco\0      ""Maestro\0     ""Trim Instant " TR_SOUND TR_HAPTIC "Azzera\0      " TR_VVARIO TR_PLAY_TRACK TR_PLAY_BOTH TR_PLAY_VALUE "Retroillum.\0 " TR_CFN_ADJUST_GVAR TR_CFN_TEST
 #endif
 
 #define LEN_VFSWRESET      "\006"
