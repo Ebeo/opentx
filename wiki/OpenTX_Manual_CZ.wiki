@@ -1,6 +1,6 @@
 #summary openTx Czech Manual (Stub, not to be filled)
 
-= O tomto manuálu =
+= O českém manuálu =
 
 Poté, co jsem, víceméně z nouze, vytvořil anglický překlad původního francouzského manuálu (neuměje vůbec francouzsky ani dobře anglicky) a ten se začal (provizorně) šířit jako oficiální anglický manuál ze stránek projektu openTx, začal jsem na popud několika zainteresovaných lidí pracovat na české verzi manuálu. 
 
