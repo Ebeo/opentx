@@ -1,4 +1,4 @@
-#summary openTx Czech Manual (Stub, not to be filled)
+#summary openTx Czech Manual (Stub, no longer maintained)
 
 = O českém manuálu =
 
