@@ -22,5 +22,5 @@ Stejně jako původní francouzská a přeložená anglická, je i tato (česká
 
 = Ukončení prací a přechod na nové stránky =
 
-Protože udržování wiki na code.google.com má některé problémy a jeden z potenciálních autorů české wiki věnované OpenTx (a spoluautor firmware a Companion)  je vlastníkem domény opentx.cz, rozhodli jsme se vytvořit českou wiki o OpenTx (tedy nejen referenční manuál) na adrese:
+Protože udržování wiki na code.google.com má některé problémy a na novém webu OpenTx není možnost provozu wiki, rozhodli jsme se práce na tomto projektu ukončit. Jeden z potenciálních autorů české wiki věnované OpenTx (a spoluautor firmware a Companion)  je vlastníkem domény opentx.cz, rozhodli jsme se proto vytvořit českou wiki o OpenTx (tedy nejen referenční manuál) na adrese:
  http://www.opentx.cz
