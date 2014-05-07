@@ -4,9 +4,11 @@
 
 Poté, co jsem, víceméně z nouze, vytvořil anglický překlad původního francouzského manuálu (neuměje vůbec francouzsky ani dobře anglicky) a ten se začal (provizorně) šířit jako oficiální anglický manuál ze stránek projektu openTx, začal jsem na popud několika zainteresovaných lidí pracovat na české verzi manuálu. 
 
-Česká verze vychází ze mnou průběžně aktualizované anglické verze s doplněním některých informací a postřehů, na které jsem mezitím narazil při používání vysílače s firmware openTx a při psaní manuálu. Od původního francouzského se proto již značně odchyluje.
+Česká verze vycházela ze mnou původně průběžně aktualizované anglické verze s doplněním některých informací a postřehů, na které jsem mezitím narazil při používání vysílače s firmware openTx a při psaní manuálu. Od původního francouzského se proto již značně odchyluje.
 
-[http://code.google.com/p/opentx/downloads/detail?name=openTx%20Manual%20CZ.pdf Tisknutelná verze] tohoto manuálu je k dispozici (ve formátu PDF) na webu projektu openTx v sekci download.
+Anglickou verzi již neudržuji, neboť nebyla zařazena do projektu OpenTx, takže o ni asi není zájem.
+
+[http://code.google.com/p/opentx/downloads/detail?name=openTx%20Manual%20CZ.pdf Tisknutelná verze] českého manuálu je k dispozici (ve formátu PDF) na webu projektu openTx v sekci download.
 
 Protože udržování tohoto manuálu v aktuálním stavu a jeho rozšiřování o další potřebné kapitoly (hlavně chybí jednoduché i komplexnější příklady použití) je již nad síly jednotlivce, rozhodl jsem se pokusit se umožnit udržování a rozvoj tím, že text zveřejním jako základ obsahu stránky Wiki manuálu. 
 
