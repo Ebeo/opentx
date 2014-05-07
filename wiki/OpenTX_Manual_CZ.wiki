@@ -20,7 +20,7 @@ Stejně jako původní francouzská a přeložená anglická, je i tato (česká
 
 [http://code.google.com/p/opentx/people/detail?u=ztrojanek Zdeněk] Trojánek
 
-= Přesměrování na nové stránky =
+= Ukončení prací a přechod na nové stránky =
 
 Protože udržování wiki na code.google.com má některé problémy a jeden z potenciálních autorů české wiki věnované OpenTx (a spoluautor firmware a Companion)  je vlastníkem domény opentx.cz, rozhodli jsme se vytvořit českou wiki o OpenTx (tedy nejen referenční manuál) na adrese:
  http://www.opentx.cz
