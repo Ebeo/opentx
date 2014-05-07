@@ -6,7 +6,7 @@ Poté, co jsem, víceméně z nouze, vytvořil anglický překlad původního fr
 
 Česká verze vycházela ze mnou původně průběžně aktualizované anglické verze s doplněním některých informací a postřehů, na které jsem mezitím narazil při používání vysílače s firmware openTx a při psaní manuálu. Od původního francouzského se proto již značně odchyluje.
 
-Anglickou verzi již neudržuji, neboť nebyla zařazena do projektu OpenTx,  takže o ni asi není zájem.
+Anglickou verzi již neudržuji, neboť nebyla zařazena do projektu OpenTx, takže o ni asi není zájem.
 
 [http://code.google.com/p/opentx/downloads/detail?name=openTx%20Manual%20CZ.pdf Tisknutelná verze] českého manuálu je k dispozici (ve formátu PDF) na webu projektu openTx v sekci download.
 
